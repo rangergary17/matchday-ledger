@@ -1,0 +1,108 @@
+{
+  "number": 28,
+  "topic": "Cost of Capital",
+  "opponent": "Hollowmere Town",
+  "talk": "Money isn't free. Lenders want interest and owners want a return, and the blend of what they want is your cost of capital. A project is only worth doing if it earns more than that.",
+  "terms": [
+    {
+      "term": "Cost of capital",
+      "meaning": "The return lenders and owners expect for funding you."
+    },
+    {
+      "term": "Hurdle rate",
+      "meaning": "The minimum return a project must beat."
+    },
+    {
+      "term": "Debt and equity",
+      "meaning": "Borrowed money, and money from owners who want a share of the profits."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "The club is funded by $6M of loans at 6% a year and $4M from owners who expect 16% a year. What's the blended cost of capital?",
+      "options": [
+        "6%",
+        "10%",
+        "11%",
+        "22%"
+      ],
+      "answer": 1,
+      "hint": "Work out the yearly cost of each in dollars, then divide by the total.",
+      "working": [
+        "Loans: $6M x 6% = $0.36M a year.",
+        "Owners: $4M x 16% = $0.64M a year.",
+        "$0.36M + $0.64M = $1M a year, on $6M + $4M = $10M.",
+        "$1M / $10M = 10%."
+      ],
+      "whyNot": [
+        "6% is only the loans. Owners' money costs 16%.",
+        null,
+        "(6% + 16%) / 2 = 11% treats both as the same size. There's more loan money, so the blend leans toward 6%.",
+        "6% + 16% = 22% adds the rates together. Blend them by how much money each one provides."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "debt": 6000000,
+          "debtRate": 0.06,
+          "equity": 4000000,
+          "equityRate": 0.16
+        },
+        "formula": "(debt * debtRate + equity * equityRate) / (debt + equity)"
+      }
+    },
+    {
+      "prompt": "A new training ground costs $5M and should make $400,000 a year. Should you build it?",
+      "options": [
+        "No, 8% is below the 10% cost of capital",
+        "Yes, it makes a profit",
+        "Yes, 8% beats the 6% loan rate",
+        "No, it costs $5M"
+      ],
+      "answer": 0,
+      "hint": "Turn the profit into a yearly return and compare.",
+      "working": [
+        "$400,000 / $5M = 8% a year.",
+        "Your money costs 10%, and 8% - 10% = -2%.",
+        "It shows a profit, but it earns less than the money costs."
+      ],
+      "whyNot": [
+        null,
+        "It does make $400,000 a year, but the $5M to build it costs $5M x 10% = $500,000 a year. You'd fall short.",
+        "The club isn't funded by loans alone. Owners' money costs 16%, so the blend, 10%, is the bar to beat.",
+        "Cost alone doesn't decide it. A $5M project would be worth it if it earned more than 10% a year."
+      ],
+      "kind": "concept"
+    },
+    {
+      "prompt": "What yearly profit would the $5M training ground need just to match the cost of capital?",
+      "options": [
+        "$300,000",
+        "$400,000",
+        "$500,000",
+        "$800,000"
+      ],
+      "answer": 2,
+      "hint": "Cost x the blended rate.",
+      "working": [
+        "$5M x 10% = $500,000 a year.",
+        "That's $500,000 - $400,000 = $100,000 more than the plan."
+      ],
+      "whyNot": [
+        "$5M x 6% = $300,000 uses the loan rate. Owners' money costs more, so the blend is 10%.",
+        "$400,000 is what it's expected to make. That's below the bar.",
+        null,
+        "$5M x 16% = $800,000 uses the owners' rate. The blended rate is 10%."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "cost": 5000000,
+          "rate": 0.1
+        },
+        "formula": "cost * rate"
+      }
+    }
+  ],
+  "takeaway": "A project has to beat what your money costs, not just break even."
+}

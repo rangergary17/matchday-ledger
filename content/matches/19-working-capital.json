@@ -1,0 +1,106 @@
+{
+  "number": 19,
+  "topic": "Working Capital",
+  "opponent": "Pinecliff Town",
+  "talk": "Working capital is the cash tied up in running the club day to day: what you're owed and what you hold in stock, minus what you owe others. The more of it you need, the less cash sits in the bank. A growing business can run short of cash even when it's profitable, because growth ties up more of it.",
+  "terms": [
+    {
+      "term": "Working capital",
+      "meaning": "Money owed to you, plus stock, minus money you owe."
+    },
+    {
+      "term": "Receivables",
+      "meaning": "Money customers owe you."
+    },
+    {
+      "term": "Payables",
+      "meaning": "Money you owe suppliers."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "Sponsors owe you $400,000. Shop stock is worth $100,000. You owe suppliers $250,000. What's your working capital?",
+      "options": [
+        "$150,000",
+        "$250,000",
+        "$500,000",
+        "$750,000"
+      ],
+      "answer": 1,
+      "hint": "Owed to you, plus stock, minus what you owe.",
+      "working": [
+        "$400,000 + $100,000 - $250,000 = $250,000."
+      ],
+      "whyNot": [
+        "$400,000 - $250,000 = $150,000 forgets the $100,000 of stock sitting in the shop.",
+        null,
+        "$400,000 + $100,000 = $500,000 forgets the $250,000 you owe suppliers.",
+        "$400,000 + $100,000 + $250,000 = $750,000 adds what you owe. Money you owe takes away from working capital."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "owed": 400000,
+          "stock": 100000,
+          "payables": 250000
+        },
+        "formula": "owed + stock - payables"
+      }
+    },
+    {
+      "prompt": "A new sponsor deal adds $200,000 to what you're owed (they pay in 90 days). You also buy $50,000 of extra kit on credit. Starting from $250,000, what's working capital now?",
+      "options": [
+        "$200,000",
+        "$400,000",
+        "$450,000",
+        "$500,000"
+      ],
+      "answer": 2,
+      "hint": "The kit adds stock and adds money owed.",
+      "working": [
+        "What you're owed goes up $200,000.",
+        "The kit adds $50,000 of stock and $50,000 you owe, so it cancels out.",
+        "$250,000 + $200,000 + $50,000 - $50,000 = $450,000."
+      ],
+      "whyNot": [
+        "$200,000 is just the new sponsor money. Add it to the $250,000 you already had.",
+        "$250,000 + $200,000 - $50,000 = $400,000 counts the money owed for the kit but not the kit itself. Both go up by $50,000.",
+        null,
+        "$250,000 + $200,000 + $50,000 = $500,000 counts the kit but not the $50,000 you owe for it."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "start": 250000,
+          "deal": 200000,
+          "kit": 50000
+        },
+        "formula": "start + deal + kit - kit"
+      }
+    },
+    {
+      "prompt": "The sponsor deal is profitable, but the $200,000 won't arrive for 90 days. What does that mean for cash today?",
+      "options": [
+        "Cash is unchanged, but $200,000 is tied up",
+        "Cash is up $200,000",
+        "Cash is down $200,000",
+        "Profit and cash are the same"
+      ],
+      "answer": 0,
+      "hint": "Has any money actually moved?",
+      "working": [
+        "Nothing has been paid yet, so no cash has arrived.",
+        "The $200,000 is profit on paper, but it's tied up in money owed for 90 days.",
+        "That's why growing clubs run short of cash: the bills arrive before the money does."
+      ],
+      "whyNot": [
+        null,
+        "The sponsor hasn't paid yet. You can't spend money that's still owed to you.",
+        "No cash has left the bank either. It just hasn't arrived yet.",
+        "Profit counts the deal now. Cash counts it when the money lands in 90 days."
+      ],
+      "kind": "concept"
+    }
+  ],
+  "takeaway": "Growth eats cash. Watch what's owed to you and what's sitting on shelves."
+}

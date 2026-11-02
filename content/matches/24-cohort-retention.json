@@ -1,0 +1,104 @@
+{
+  "number": 24,
+  "topic": "Cohort Retention",
+  "opponent": "Bramblewood City",
+  "talk": "A cohort is a group of customers who joined at the same time, like everyone who bought their first season ticket last summer. Tracking each group separately shows whether you're getting better at keeping people. A single overall number can hide a problem.",
+  "terms": [
+    {
+      "term": "Cohort",
+      "meaning": "A group of customers who started at the same time."
+    },
+    {
+      "term": "Retention rate",
+      "meaning": "Share of a cohort still with you after a set time."
+    },
+    {
+      "term": "Drop-off",
+      "meaning": "How many leave between one period and the next."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "Last summer 1,000 fans bought their first season ticket. This year 700 of them renewed. What's the first-year retention rate?",
+      "options": [
+        "0.7%",
+        "30%",
+        "70%",
+        "About 143%"
+      ],
+      "answer": 2,
+      "hint": "Renewals divided by the starting group.",
+      "working": [
+        "700 / 1,000 = 70% stayed."
+      ],
+      "whyNot": [
+        "700 / 1,000 = 70%, not 0.7%. The decimal slipped two places.",
+        "1,000 - 700 = 300 left, and 300 / 1,000 = 30%. That's the share who left. Retention is who stayed.",
+        null,
+        "1,000 / 700 = about 143% divides the wrong way round. Retention is renewals divided by the starting group."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "start": 1000,
+          "renewed": 700
+        },
+        "formula": "renewed / start"
+      }
+    },
+    {
+      "prompt": "In year 2, 70% of that cohort renewed again. How many of the original 1,000 are left after two renewals?",
+      "options": [
+        "400",
+        "490",
+        "560",
+        "700"
+      ],
+      "answer": 1,
+      "hint": "70% of 1,000, then 70% of what's left.",
+      "working": [
+        "Year 1: 1,000 x 70% = 700.",
+        "Year 2: 700 x 70% = 490.",
+        "Keeping 70% a year still loses about half the group in two years."
+      ],
+      "whyNot": [
+        "1,000 - 300 - 300 = 400 takes 300 off each year. But in year 2 the 30% comes off 700, not 1,000.",
+        null,
+        "560 is too high. Year 2 starts from 700, and 30% of them leave too: 700 x 70% = 490.",
+        "700 is after one year. Year 2 loses another 30% of them."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "start": 1000,
+          "keep": 0.7
+        },
+        "formula": "start * keep * keep"
+      }
+    },
+    {
+      "prompt": "Two cohorts after one year. Last year's: 1,000 started, 700 renewed. This year's: 2,000 started, 1,200 renewed. Total renewals went up from 700 to 1,200. Is retention getting better or worse?",
+      "options": [
+        "Worse, it fell from 70% to 60%",
+        "Better, renewals went up by 500",
+        "Better, it rose to 60%",
+        "The same"
+      ],
+      "answer": 0,
+      "hint": "Compare the rates, not the totals.",
+      "working": [
+        "Last year: 700 / 1,000 = 70%.",
+        "This year: 1,200 / 2,000 = 60%.",
+        "1,200 - 700 = 500 more renewals, but only because twice as many fans joined. The share staying fell 10 points."
+      ],
+      "whyNot": [
+        null,
+        "More renewals came from a bigger group joining. As a share, fewer stayed: 60% against 70%.",
+        "60% is lower than last year's 70%, so it got worse, not better.",
+        "70% and 60% aren't the same. One more fan in every ten left this year."
+      ],
+      "kind": "concept"
+    }
+  ],
+  "takeaway": "Track each group of new customers on its own. Totals can grow while retention gets worse."
+}

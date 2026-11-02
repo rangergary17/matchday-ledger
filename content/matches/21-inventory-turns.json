@@ -1,0 +1,109 @@
+{
+  "number": 21,
+  "topic": "Inventory Turns",
+  "opponent": "Quarrytown Athletic",
+  "talk": "Inventory turns count how many times a year you sell through your stock. Stock on a shelf is cash you can't spend, and it can go out of fashion. More turns means less cash stuck and fresher shelves.",
+  "terms": [
+    {
+      "term": "Inventory",
+      "meaning": "Stock you've paid for but not sold yet."
+    },
+    {
+      "term": "Inventory turns",
+      "meaning": "Cost of the stock sold in a year divided by the average stock you hold."
+    },
+    {
+      "term": "Days of stock",
+      "meaning": "How many days your stock would last at the current pace."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "Over the year the shop sold stock that cost $600,000. On average you hold $150,000 of stock. How many times a year does stock turn?",
+      "options": [
+        "2 times",
+        "4 times",
+        "6 times",
+        "9 times"
+      ],
+      "answer": 1,
+      "hint": "Stock sold in a year divided by average stock.",
+      "working": [
+        "$600,000 / $150,000 = 4 turns a year."
+      ],
+      "whyNot": [
+        "At 2 turns you'd only sell 2 x $150,000 = $300,000 of stock a year. You sold $600,000.",
+        null,
+        "6 turns would mean selling 6 x $150,000 = $900,000 of stock. You sold $600,000.",
+        "9 turns would mean selling 9 x $150,000 = $1.35M of stock. Far more than the $600,000 you sold."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "sold": 600000,
+          "avg": 150000
+        },
+        "formula": "sold / avg"
+      }
+    },
+    {
+      "prompt": "Stock turns 4 times a year. Roughly how many days does a typical item sit on the shelf? (Use 365 days.)",
+      "options": [
+        "About 30 days",
+        "About 60 days",
+        "About 91 days",
+        "About 365 days"
+      ],
+      "answer": 2,
+      "hint": "Days in a year divided by turns.",
+      "working": [
+        "365 / 4 = about 91 days."
+      ],
+      "whyNot": [
+        "30 days on the shelf would mean 365 / 30 = about 12 turns a year. You only turn 4 times.",
+        "60 days would mean 365 / 60 = about 6 turns. You turn 4 times.",
+        null,
+        "365 days means stock turns once a year. Yours turns 4 times, so each item sits about a quarter of that."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "days": 365,
+          "turns": 4
+        },
+        "formula": "days / turns"
+      }
+    },
+    {
+      "prompt": "You cut average stock to $100,000 and still sell $600,000 a year. How much cash does that free up?",
+      "options": [
+        "$50,000",
+        "$100,000",
+        "$150,000",
+        "$600,000"
+      ],
+      "answer": 0,
+      "hint": "Old stock level minus new stock level.",
+      "working": [
+        "$150,000 - $100,000 = $50,000 less cash sitting on shelves.",
+        "New turns: $600,000 / $100,000 = 6 a year.",
+        "Same sales, $50,000 back in the bank."
+      ],
+      "whyNot": [
+        null,
+        "$100,000 is the new stock level, not the cash freed. You freed the drop: $150,000 - $100,000 = $50,000.",
+        "$150,000 was the old stock level. You still hold $100,000 of it.",
+        "$600,000 is a year of stock sold. Sales didn't change, only how much sits on the shelf."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "old": 150000,
+          "now": 100000
+        },
+        "formula": "old - now"
+      }
+    }
+  ],
+  "takeaway": "Stock on a shelf is cash you can't spend. Turn it faster."
+}

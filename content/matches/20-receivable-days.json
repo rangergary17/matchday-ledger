@@ -1,0 +1,107 @@
+{
+  "number": 20,
+  "topic": "Receivable Days",
+  "opponent": "Silverbeck Rangers",
+  "talk": "Receivable days tell you how long, on average, customers take to pay you. The longer it is, the more of your cash is sitting in other people's bank accounts. Getting paid faster is one of the cheapest ways to find cash.",
+  "terms": [
+    {
+      "term": "Accounts receivable",
+      "meaning": "Money customers owe you for things already delivered."
+    },
+    {
+      "term": "Receivable days",
+      "meaning": "Average days it takes to get paid. Also called DSO (days sales outstanding)."
+    },
+    {
+      "term": "Payment terms",
+      "meaning": "How long you give customers to pay, like 30 days."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "Corporate hospitality sells $3.65M a year (365 days). Right now customers owe you $600,000. On average, how many days do they take to pay?",
+      "options": [
+        "30 days",
+        "45 days",
+        "60 days",
+        "600 days"
+      ],
+      "answer": 2,
+      "hint": "Work out a day of sales first.",
+      "working": [
+        "$3.65M / 365 = $10,000 of sales a day.",
+        "$600,000 / $10,000 = 60 days."
+      ],
+      "whyNot": [
+        "After 30 days customers would only owe 30 x $10,000 = $300,000. They owe twice that.",
+        "45 x $10,000 = $450,000. Customers owe more than that, $600,000.",
+        null,
+        "600 comes from reading $600,000 as days. Divide what's owed by a day of sales: $600,000 / $10,000 = 60 days."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "sales": 3650000,
+          "days": 365,
+          "owed": 600000
+        },
+        "formula": "owed / (sales / days)"
+      }
+    },
+    {
+      "prompt": "You cut receivable days from 60 to 45. Sales stay at $10,000 a day. How much cash does that free up?",
+      "options": [
+        "$15,000",
+        "$150,000",
+        "$450,000",
+        "$600,000"
+      ],
+      "answer": 1,
+      "hint": "Days saved x a day of sales.",
+      "working": [
+        "60 - 45 = 15 days faster.",
+        "15 x $10,000 = $150,000 of cash freed up.",
+        "Same sales, same profit, $150,000 more in the bank."
+      ],
+      "whyNot": [
+        "$15,000 is too small by 10 times. Each day is worth $10,000: 15 x $10,000 = $150,000.",
+        null,
+        "45 x $10,000 = $450,000 is what customers still owe at 45 days. The cash freed is the drop: $600,000 - $450,000 = $150,000.",
+        "$600,000 is everything owed today. You've only sped up by 15 days, not been paid all of it."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "before": 60,
+          "after": 45,
+          "daily": 10000
+        },
+        "formula": "(before - after) * daily"
+      }
+    },
+    {
+      "prompt": "A sponsor will pay a $200,000 deal today instead of in 90 days if you give a 2% discount. The other way to get the cash now is to borrow $200,000 for 90 days at 10% a year. Which is cheaper?",
+      "options": [
+        "Borrow, it costs about $4,900",
+        "Discount, it costs $40,000",
+        "Borrow, it's free",
+        "Discount, it costs $4,000"
+      ],
+      "answer": 3,
+      "hint": "Work out the cost of each in dollars.",
+      "working": [
+        "Discount: $200,000 x 2% = $4,000.",
+        "Borrowing: $200,000 x 10% x 90 / 365 = about $4,900.",
+        "$4,900 - $4,000 = $900 cheaper to take the early payment."
+      ],
+      "whyNot": [
+        "Borrowing costs about $4,900. The discount costs $4,000, so it's the cheaper way to get the cash now.",
+        "$200,000 x 2% = $4,000, not $40,000. At $4,000 the discount is the cheaper option.",
+        "Borrowing is never free. 90 days at 10% a year on $200,000 is about $4,900 of interest.",
+        null
+      ],
+      "kind": "concept"
+    }
+  ],
+  "takeaway": "Every day a customer takes to pay is your cash sitting in their bank."
+}

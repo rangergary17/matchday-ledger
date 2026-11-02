@@ -1,0 +1,112 @@
+{
+  "number": 22,
+  "topic": "Cash Conversion",
+  "opponent": "Westholm United",
+  "talk": "The cash conversion cycle is how many days your cash is gone between paying for stock and getting paid for it. Add the days stock sits and the days customers take to pay, then take off the days you take to pay suppliers. The shorter the cycle, the less cash you need to run.",
+  "terms": [
+    {
+      "term": "Cash conversion cycle",
+      "meaning": "Days between paying for stock and getting paid for it."
+    },
+    {
+      "term": "Days of stock",
+      "meaning": "How long stock sits before it sells."
+    },
+    {
+      "term": "Payable days",
+      "meaning": "How long you take to pay your suppliers."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "Shirts sit in the shop for 60 days. Customers pay in 10 days. You pay the kit supplier after 30 days. What's the cash conversion cycle?",
+      "options": [
+        "20 days",
+        "40 days",
+        "80 days",
+        "100 days"
+      ],
+      "answer": 1,
+      "hint": "Stock days + customer days - supplier days.",
+      "working": [
+        "60 + 10 - 30 = 40 days."
+      ],
+      "whyNot": [
+        "60 - 10 - 30 = 20 takes off the customer days. Waiting for customers to pay adds to the cycle.",
+        null,
+        "60 + 30 - 10 = 80 swaps the customer and supplier days. Customer days add, supplier days come off.",
+        "60 + 10 + 30 = 100 adds the supplier days. Paying suppliers later shortens the cycle."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "stock": 60,
+          "customers": 10,
+          "suppliers": 30
+        },
+        "formula": "stock + customers - suppliers"
+      }
+    },
+    {
+      "prompt": "The shop buys $100,000 of kit a month. Roughly how much cash is tied up in a 40-day cycle? (Use 30-day months.)",
+      "options": [
+        "About $40,000",
+        "About $100,000",
+        "About $133,000",
+        "About $400,000"
+      ],
+      "answer": 2,
+      "hint": "Kit bought per day x days in the cycle.",
+      "working": [
+        "$100,000 / 30 = about $3,333 of kit a day.",
+        "$100,000 / 30 x 40 = about $133,000 tied up."
+      ],
+      "whyNot": [
+        "That reads the 40 days as $40,000. You need a day's worth of kit times 40 days.",
+        "$100,000 is one 30-day month. The cycle is 40 days, a bit longer.",
+        null,
+        "4 x $100,000 = $400,000 is 4 months of kit. The cycle is 40 days, not 4 months."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "month": 100000,
+          "days": 30,
+          "cycle": 40
+        },
+        "formula": "month / days * cycle"
+      }
+    },
+    {
+      "prompt": "You agree 60-day terms with the kit supplier instead of 30. Stock still sits 60 days and customers still pay in 10. What's the new cycle?",
+      "options": [
+        "-20 days",
+        "10 days",
+        "40 days",
+        "70 days"
+      ],
+      "answer": 1,
+      "hint": "Same sum, new supplier days.",
+      "working": [
+        "60 + 10 - 60 = 10 days.",
+        "Your cash is now gone for 10 days instead of 40. The supplier is paying for most of your stock."
+      ],
+      "whyNot": [
+        "40 - 30 - 30 = -20 takes the 30 days off twice. The new terms only change the sum once.",
+        null,
+        "40 days was the old cycle. Paying the supplier 30 days later takes 30 days off it.",
+        "40 + 30 = 70 adds the extra days. Paying later shortens the cycle, it doesn't lengthen it."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "stock": 60,
+          "customers": 10,
+          "suppliers": 60
+        },
+        "formula": "stock + customers - suppliers"
+      }
+    }
+  ],
+  "takeaway": "Get paid sooner, hold stock for less time, pay suppliers later. Every day you cut is cash back."
+}

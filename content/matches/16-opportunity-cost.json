@@ -1,0 +1,112 @@
+{
+  "number": 16,
+  "topic": "Opportunity Cost",
+  "opponent": "Stonecross Albion",
+  "talk": "Every choice has a price you don't see on the invoice: the best thing you gave up to make it. That's opportunity cost. A good decision has to beat the next best option, not just zero.",
+  "terms": [
+    {
+      "term": "Opportunity cost",
+      "meaning": "The value of the best option you didn't choose."
+    },
+    {
+      "term": "Trade-off",
+      "meaning": "Picking one thing means giving up another."
+    },
+    {
+      "term": "Next best option",
+      "meaning": "The choice you'd make if this one weren't on the table."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "The pitch is free on Saturday. A concert promoter will pay $60,000 to hire it. A friendly match would bring in $40,000 of profit. What's the opportunity cost of playing the friendly?",
+      "options": [
+        "$20,000",
+        "$40,000",
+        "$60,000",
+        "$100,000"
+      ],
+      "answer": 2,
+      "hint": "What do you give up by playing?",
+      "working": [
+        "Playing the friendly means saying no to the concert.",
+        "The best thing you give up is the concert's $60,000.",
+        "$40,000 - $60,000 = -$20,000. The friendly leaves you $20,000 worse off."
+      ],
+      "whyNot": [
+        "$60,000 - $40,000 = $20,000 is how much better the concert is. The opportunity cost is the whole $60,000 you give up.",
+        "$40,000 is what the friendly earns, not what it costs you.",
+        null,
+        "$60,000 + $40,000 = $100,000 adds both options together. You can only pick one."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "concert": 60000
+        },
+        "formula": "concert"
+      }
+    },
+    {
+      "prompt": "Your best coach could run the academy, worth $120,000 a year to the club, or coach the first team's set pieces, worth $90,000. There's only time for one. If the coach takes set pieces, what's the opportunity cost?",
+      "options": [
+        "$30,000",
+        "$90,000",
+        "$120,000",
+        "$210,000"
+      ],
+      "answer": 2,
+      "hint": "Opportunity cost is the value of the job not chosen.",
+      "working": [
+        "Choosing set pieces means giving up the academy.",
+        "The academy is worth $120,000, so that's the opportunity cost.",
+        "$90,000 - $120,000 = -$30,000. Set pieces is the worse choice by $30,000."
+      ],
+      "whyNot": [
+        "$120,000 - $90,000 = $30,000 is the gap between the two jobs. The opportunity cost is the full value of the job given up.",
+        "$90,000 is what set pieces are worth. That's the job being done, not the one given up.",
+        null,
+        "$120,000 + $90,000 = $210,000 assumes the coach can do both. There's time for one."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "academy": 120000
+        },
+        "formula": "academy"
+      }
+    },
+    {
+      "prompt": "You have $1M spare. Option A: new hospitality boxes earning $150,000 a year. Option B: pay off a loan that charges 8% interest a year. How much more a year do the boxes earn than paying off the loan?",
+      "options": [
+        "$70,000",
+        "$80,000",
+        "$150,000",
+        "$230,000"
+      ],
+      "answer": 0,
+      "hint": "Paying off the loan saves you interest. How much?",
+      "working": [
+        "Paying off the loan saves $1M x 8% = $80,000 a year in interest.",
+        "$150,000 - $80,000 = $70,000 more a year from the boxes.",
+        "The $80,000 is the opportunity cost of building the boxes. The boxes still win."
+      ],
+      "whyNot": [
+        null,
+        "$80,000 is the interest you'd save by paying off the loan. Compare it with the boxes' $150,000.",
+        "$150,000 is what the boxes earn, but spending the $1M on them means not saving $80,000 of interest.",
+        "$150,000 + $80,000 = $230,000 spends the same $1M twice."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "boxes": 150000,
+          "cash": 1000000,
+          "rate": 0.08
+        },
+        "formula": "boxes - cash * rate"
+      }
+    }
+  ],
+  "takeaway": "Every yes is a no to something else. Count what you give up."
+}

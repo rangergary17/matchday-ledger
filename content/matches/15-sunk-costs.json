@@ -1,0 +1,99 @@
+{
+  "number": 15,
+  "topic": "Sunk Costs",
+  "opponent": "Emberly Vale",
+  "talk": "A sunk cost is money already spent that you can't get back. It feels like it should matter, but it shouldn't change your next decision. Only the money still to come counts.",
+  "terms": [
+    {
+      "term": "Sunk cost",
+      "meaning": "Money already spent and gone for good."
+    },
+    {
+      "term": "Future cost",
+      "meaning": "Money you'll spend from here if you carry on."
+    },
+    {
+      "term": "Walk away",
+      "meaning": "Stop, accept the loss, and spend nothing more."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "You've spent $400,000 on a new stand that's half built. Finishing it costs $300,000 more. Once done, it will earn $250,000 of profit over its life. Going only on the numbers, what should you do?",
+      "options": [
+        "Stop: the next $300,000 only earns $250,000",
+        "Finish it, or the $400,000 is wasted",
+        "Finish it, it's already half built",
+        "Stop: $700,000 is too much for a stand"
+      ],
+      "answer": 0,
+      "hint": "Which of these numbers can still change?",
+      "working": [
+        "Ignore the $400,000. It's spent whatever you decide.",
+        "From here: $250,000 - $300,000 = -$50,000.",
+        "Finishing the stand loses another $50,000, so stop."
+      ],
+      "whyNot": [
+        null,
+        "The $400,000 is gone either way. Spending $300,000 to get $250,000 back just adds a $50,000 loss.",
+        "Half built doesn't matter. What matters is whether the next $300,000 earns more than $300,000. It doesn't.",
+        "$400,000 + $300,000 = $700,000 mixes the sunk cost back in. The reason to stop is that the next $300,000 only brings back $250,000."
+      ],
+      "kind": "concept"
+    },
+    {
+      "prompt": "You signed a striker for $2M. He isn't playing. Another club offers $500,000 for him. Keeping him costs $300,000 in wages for the rest of his contract. How much better off are you if you sell?",
+      "options": [
+        "-$1.5M",
+        "$500,000",
+        "$800,000",
+        "$2.3M"
+      ],
+      "answer": 2,
+      "hint": "Compare the two futures. The $2M is the same in both.",
+      "working": [
+        "Selling: you get $500,000 and stop paying $300,000 of wages.",
+        "$500,000 + $300,000 = $800,000 better off than keeping him.",
+        "The $2M fee is sunk. It's the same whichever you choose."
+      ],
+      "whyNot": [
+        "$500,000 - $2M = -$1.5M compares the sale to the old fee. The fee is spent whether he stays or goes, so it doesn't belong in the sum.",
+        "$500,000 is the fee you'd get. You also stop paying $300,000 of wages.",
+        null,
+        "$2M + $300,000 = $2.3M adds the old fee back in. That money left the bank when you signed him."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "offer": 500000,
+          "wages": 300000
+        },
+        "formula": "offer + wages"
+      }
+    },
+    {
+      "prompt": "Last season you spent $80,000 on a ticketing app nobody uses. It's paid for in full. A new app costs $30,000 and would save $50,000 a year in staff time. What's the right comparison?",
+      "options": [
+        "$50,000 saved vs $110,000 spent",
+        "Keep the old app, it cost more",
+        "Wait until the old app pays for itself",
+        "$50,000 saved vs $30,000 cost"
+      ],
+      "answer": 3,
+      "hint": "Which money can you still choose to spend?",
+      "working": [
+        "The $80,000 is sunk. It's gone either way.",
+        "New app: $50,000 - $30,000 = $20,000 better off in year one.",
+        "Switch."
+      ],
+      "whyNot": [
+        "$80,000 + $30,000 = $110,000 drags the sunk cost back in. You can't get the $80,000 back by keeping an app nobody uses.",
+        "What you paid doesn't make something useful. The old app saves nothing, the new one saves $50,000 a year.",
+        "An app nobody uses will never pay for itself. Waiting just loses the $50,000 a year you could be saving.",
+        null
+      ],
+      "kind": "concept"
+    }
+  ],
+  "takeaway": "Money already spent is gone. Decide on the money still to come."
+}

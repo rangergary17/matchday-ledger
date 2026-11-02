@@ -1,0 +1,107 @@
+{
+  "number": 18,
+  "topic": "Return on Investment",
+  "opponent": "Highgrove Wanderers",
+  "talk": "ROI (return on investment) is the profit an investment makes, as a share of what you put in. It lets you compare a small idea with a big one on the same scale. Always check whether the return is per year or in total.",
+  "terms": [
+    {
+      "term": "ROI",
+      "meaning": "Gain divided by what you invested."
+    },
+    {
+      "term": "Gain",
+      "meaning": "What you get back minus what you put in."
+    },
+    {
+      "term": "Yearly ROI",
+      "meaning": "ROI per year, so projects of different lengths can be compared."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "You spend $20,000 on a fan zone for the season. It brings back $26,000. What's the ROI?",
+      "options": [
+        "6%",
+        "About 23%",
+        "30%",
+        "130%"
+      ],
+      "answer": 2,
+      "hint": "Gain divided by what you put in.",
+      "working": [
+        "$26,000 - $20,000 = $6,000 gain.",
+        "$6,000 / $20,000 = 30% ROI."
+      ],
+      "whyNot": [
+        "That reads the $6,000 gain as 6%. ROI is the gain divided by the $20,000 invested.",
+        "$6,000 / $26,000 = about 23% divides by what came back. ROI divides by what you put in.",
+        null,
+        "$26,000 / $20,000 = 130% counts your own money coming back too. The gain on top is 30%."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "back": 26000,
+          "cost": 20000
+        },
+        "formula": "(back - cost) / cost"
+      }
+    },
+    {
+      "prompt": "Option A: put in $50,000, get $60,000 back in a year. Option B: put in $10,000, get $14,000 back in a year. Which has the better ROI?",
+      "options": [
+        "A, 20%",
+        "A, it makes $10,000",
+        "B, it costs less",
+        "B, 40%"
+      ],
+      "answer": 3,
+      "hint": "Work out gain divided by cost for each.",
+      "working": [
+        "A's gain: $60,000 - $50,000 = $10,000.",
+        "B's gain: $14,000 - $10,000 = $4,000.",
+        "A: $10,000 / $50,000 = 20%. B: $4,000 / $10,000 = 40%.",
+        "B returns twice as much per dollar. A makes more dollars only because it's bigger."
+      ],
+      "whyNot": [
+        "A's ROI is 20%, but B's is 40%. B is the better return per dollar.",
+        "A makes more dollars, but it also needs five times the money. Per dollar invested, B does twice as well.",
+        "Right pick, wrong reason. Cheap isn't the point. B wins because it returns 40% against A's 20%.",
+        null
+      ],
+      "kind": "concept"
+    },
+    {
+      "prompt": "A $200,000 gym upgrade makes a $60,000 gain in total, spread over 3 years. What's the ROI per year?",
+      "options": [
+        "10%",
+        "30%",
+        "90%",
+        "$20,000"
+      ],
+      "answer": 0,
+      "hint": "Total ROI first, then split it over the years.",
+      "working": [
+        "$60,000 / $200,000 = 30% over 3 years.",
+        "30% / 3 = 10% a year.",
+        "Compare yearly ROI with yearly ROI, or a slow project will look better than it is."
+      ],
+      "whyNot": [
+        null,
+        "30% is the ROI over all 3 years. Per year it's a third of that.",
+        "30% x 3 = 90% multiplies when you should divide. The 30% is already the total.",
+        "$60,000 / 3 = $20,000 is the gain per year in dollars. As a share of the $200,000 invested, it's 10%."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "gain": 60000,
+          "cost": 200000,
+          "years": 3
+        },
+        "formula": "gain / cost / years"
+      }
+    }
+  ],
+  "takeaway": "ROI is gain divided by what you put in. Always ask: per year, or in total?"
+}

@@ -1,0 +1,99 @@
+{
+  "number": 8,
+  "topic": "The Bottleneck",
+  "opponent": "Copperfield Rovers",
+  "talk": "Every system has one constraint that caps the whole thing. Find it before spending money anywhere else. Pushing harder on a step that isn't the bottleneck just builds a bigger queue.",
+  "terms": [
+    {
+      "term": "Constraint",
+      "meaning": "The one step that limits total output."
+    },
+    {
+      "term": "Throughput",
+      "meaning": "How much actually gets through the whole system."
+    },
+    {
+      "term": "Capacity",
+      "meaning": "The most a step can handle."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "Your 15,000-seat stadium sells out every week. Marketing wants $20,000 more for ads. How many extra fans watch the match?",
+      "options": [
+        "About 1,000",
+        "About 500",
+        "Depends on the ads",
+        "Zero"
+      ],
+      "answer": 3,
+      "hint": "What's full?",
+      "working": [
+        "Zero. Every seat is already sold.",
+        "The seats are the constraint, not demand. More ads just make a longer waiting list."
+      ],
+      "whyNot": [
+        "There's nowhere to put 1,000 more fans. The stadium already sells out, so more demand can't turn into more seats.",
+        "Same problem. Every one of the 15,000 seats is sold. Extra fans have nowhere to sit.",
+        "Good ads still can't create seats. When you sell out, the answer is zero however clever the campaign.",
+        null
+      ],
+      "kind": "concept"
+    },
+    {
+      "prompt": "Which move actually grows matchday revenue?",
+      "options": [
+        "More ads",
+        "Discount tickets",
+        "Hire more ticket sellers",
+        "Raise prices or add seats"
+      ],
+      "answer": 3,
+      "hint": "Work on the constraint, or charge more for it.",
+      "working": [
+        "When demand beats capacity, raise the price or raise capacity.",
+        "Anything else is wasted money."
+      ],
+      "whyNot": [
+        "More ads add demand you can't serve. The seats are already full.",
+        "A discount gives away money on seats you were already selling. Same crowd, less revenue.",
+        "Ticket sellers aren't the problem. You already sell every seat.",
+        null
+      ],
+      "kind": "concept"
+    },
+    {
+      "prompt": "At halftime, 4 food kiosks can each serve 100 fans. 2,000 fans want food and spend $10 each. How much more food money per match if you add 4 more kiosks?",
+      "options": [
+        "$1,000",
+        "$4,000",
+        "$16,000",
+        "$20,000"
+      ],
+      "answer": 1,
+      "hint": "Kiosks are the constraint. How many more fans get served?",
+      "working": [
+        "Today 4 x 100 = 400 fans get served.",
+        "4 more kiosks serve another 4 x 100 = 400 fans.",
+        "400 x $10 = $4,000 more per match.",
+        "8 x 100 = 800 fans served in total, so 2,000 - 800 = 1,200 still go hungry. Fix the bottleneck and revenue follows."
+      ],
+      "whyNot": [
+        "100 x $10 = $1,000 is one extra kiosk. You're adding 4.",
+        null,
+        "2,000 - 400 = 1,600 fans unserved today, and 1,600 x $10 = $16,000. That's the money on the table, but 4 kiosks only serve 400 of them.",
+        "2,000 x $10 = $20,000 assumes every hungry fan gets served. 8 kiosks still only serve 800."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "kiosks": 4,
+          "per": 100,
+          "spend": 10
+        },
+        "formula": "kiosks * per * spend"
+      }
+    }
+  ],
+  "takeaway": "Find the one thing that's full. Spend there, or charge more for it."
+}

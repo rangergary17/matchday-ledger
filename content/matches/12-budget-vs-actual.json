@@ -1,0 +1,117 @@
+{
+  "number": 12,
+  "topic": "Budget vs Actual",
+  "opponent": "Ashcombe Town",
+  "talk": "A budget is the match plan and actuals are what happened. The gap between them is the variance. Splitting it into 'how many' and 'how much' tells you what actually went wrong.",
+  "terms": [
+    {
+      "term": "Variance",
+      "meaning": "Actual minus budget."
+    },
+    {
+      "term": "Volume variance",
+      "meaning": "The gap caused by selling more or fewer."
+    },
+    {
+      "term": "Price variance",
+      "meaning": "The gap caused by charging more or less."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "Budget: 12,000 fans at $30. Actual: 10,500 fans at $32. What's the total variance?",
+      "options": [
+        "-$45,000",
+        "-$24,000",
+        "+$21,000",
+        "+$24,000"
+      ],
+      "answer": 1,
+      "hint": "Actual revenue minus budget revenue.",
+      "working": [
+        "Actual: 10,500 x $32 = $336,000.",
+        "Budget: 12,000 x $30 = $360,000.",
+        "$336,000 - $360,000 = -$24,000."
+      ],
+      "whyNot": [
+        "-$45,000 is only the hit from missing fans. The higher price clawed some of it back.",
+        null,
+        "+$21,000 is only the gain from the higher price. The missing fans cost you more.",
+        "Right size, wrong direction. You took in less than planned, so the variance is negative."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "actualFans": 10500,
+          "actualPrice": 32,
+          "budgetFans": 12000,
+          "budgetPrice": 30
+        },
+        "formula": "actualFans * actualPrice - budgetFans * budgetPrice"
+      }
+    },
+    {
+      "prompt": "How much of that came from fewer fans (counted at the budget price)?",
+      "options": [
+        "-$48,000",
+        "-$45,000",
+        "-$24,000",
+        "-$1,500"
+      ],
+      "answer": 1,
+      "hint": "Missing fans x budget price.",
+      "working": [
+        "12,000 - 10,500 = 1,500 fewer fans.",
+        "(10,500 - 12,000) x $30 = -$45,000."
+      ],
+      "whyNot": [
+        "1,500 x $32 = $48,000 uses the actual price. Volume variance uses the budget price, $30.",
+        null,
+        "-$24,000 is the total variance. This question asks only for the part caused by the crowd.",
+        "1,500 is the number of missing fans, not dollars. Each one was worth $30 at the budget price."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "actualFans": 10500,
+          "budgetFans": 12000,
+          "budgetPrice": 30
+        },
+        "formula": "(actualFans - budgetFans) * budgetPrice"
+      }
+    },
+    {
+      "prompt": "And how much came from charging more per ticket?",
+      "options": [
+        "+$3,000",
+        "+$21,000",
+        "+$24,000",
+        "+$45,000"
+      ],
+      "answer": 1,
+      "hint": "Price difference x actual fans.",
+      "working": [
+        "$32 - $30 = $2 more per ticket.",
+        "$2 x 10,500 = $21,000, so +$21,000.",
+        "-$45,000 + $21,000 = -$24,000. The two parts add up to the total.",
+        "Pricing worked, the crowd didn't show. Now you know where to look."
+      ],
+      "whyNot": [
+        "1,500 x $2 = $3,000 applies the price rise to the missing fans. They didn't pay anything.",
+        null,
+        "$2 x 12,000 = $24,000 uses the budgeted crowd. Only 10,500 fans actually paid the higher price.",
+        "$45,000 is the size of the crowd shortfall. That's the volume variance, not price."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "actualPrice": 32,
+          "budgetPrice": 30,
+          "actualFans": 10500
+        },
+        "formula": "(actualPrice - budgetPrice) * actualFans"
+      }
+    }
+  ],
+  "takeaway": "Split every miss into how many and how much. Then you know which one to fix."
+}

@@ -1,0 +1,109 @@
+{
+  "number": 4,
+  "topic": "Cash vs Profit",
+  "opponent": "Ironbridge Rangers",
+  "talk": "Profit is the scoreline and cash is your fitness. You can be winning on the P&L and still collapse because the bank account is empty. Clubs rarely die from losses, they die from running out of cash.",
+  "terms": [
+    {
+      "term": "Cash",
+      "meaning": "Money actually in the bank right now."
+    },
+    {
+      "term": "Amortization",
+      "meaning": "Spreading a big upfront cost across the years it helps you."
+    },
+    {
+      "term": "Runway",
+      "meaning": "How long your cash lasts at the current burn (the cash you lose each month)."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "You sign a striker for a $10M fee on a 5-year contract, paid up front. How much of the fee hits THIS year's P&L?",
+      "options": [
+        "$0",
+        "$2M",
+        "$5M",
+        "$10M"
+      ],
+      "answer": 1,
+      "hint": "The cost is spread over the contract.",
+      "working": [
+        "$10M / 5 = $2M a year on the P&L.",
+        "The fee is spread over the 5 years the player helps you. That's amortization."
+      ],
+      "whyNot": [
+        "Paying up front doesn't make the cost disappear from the P&L. Each of the 5 years takes its share of $2M.",
+        null,
+        "$10M / 2 = $5M spreads it over 2 years. The contract is 5 years, so it's $2M a year.",
+        "$10M is the cash that leaves the bank. The P&L spreads the cost over the 5 years of the contract."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "fee": 10000000,
+          "years": 5
+        },
+        "formula": "fee / years"
+      }
+    },
+    {
+      "prompt": "How much cash leaves the bank this year?",
+      "options": [
+        "$0",
+        "$2M",
+        "$5M",
+        "$10M"
+      ],
+      "answer": 3,
+      "hint": "When was the fee paid?",
+      "working": [
+        "All $10M leaves the bank today.",
+        "The P&L says $2M. The bank says $10M. Both are true."
+      ],
+      "whyNot": [
+        "The money has gone. Paid up front means all $10M left the bank this year.",
+        "$2M is the P&L charge. Cash doesn't care how accountants spread the cost. The full fee was paid today.",
+        "That's half the fee, as if you paid in two parts. This fee was paid up front, all $10M.",
+        null
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "fee": 10000000
+        },
+        "formula": "fee"
+      }
+    },
+    {
+      "prompt": "You have $6M in the bank and burn $500K a month. How many months of runway do you have?",
+      "options": [
+        "6",
+        "12",
+        "18",
+        "24"
+      ],
+      "answer": 1,
+      "hint": "Cash divided by monthly burn.",
+      "working": [
+        "$6M / $500K = 12 months.",
+        "That's the number that tells you when you need to raise money or start winning."
+      ],
+      "whyNot": [
+        "After 6 months you've only burned 6 x $500K = $3M. Half your cash is still there.",
+        null,
+        "18 months would need 18 x $500K = $9M in the bank. You have $6M.",
+        "24 months would need 24 x $500K = $12M. Double what you have."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "cash": 6000000,
+          "burn": 500000
+        },
+        "formula": "cash / burn"
+      }
+    }
+  ],
+  "takeaway": "Profit is spread over years. Cash is what's in the bank today."
+}

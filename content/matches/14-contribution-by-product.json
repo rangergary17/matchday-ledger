@@ -1,0 +1,121 @@
+{
+  "number": 14,
+  "topic": "Contribution by Product",
+  "opponent": "Oakhollow Athletic",
+  "talk": "Not everything you sell earns the same. Contribution margin is what each product leaves behind after the costs that come with it. Push the products that leave the most in total, and question the ones that leave almost nothing.",
+  "terms": [
+    {
+      "term": "Contribution margin",
+      "meaning": "Price minus the costs that come with each sale."
+    },
+    {
+      "term": "Product mix",
+      "meaning": "The blend of products you sell."
+    },
+    {
+      "term": "Variable cost",
+      "meaning": "A cost that comes with each sale, like the stock or the card fee."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "Shirts sell for $70 and cost $30. Mugs sell for $12 and cost $4. How much more does one shirt contribute than one mug?",
+      "options": [
+        "$8",
+        "$32",
+        "$40",
+        "$58"
+      ],
+      "answer": 1,
+      "hint": "Work out each product's contribution first.",
+      "working": [
+        "Shirt: $70 - $30 = $40.",
+        "Mug: $12 - $4 = $8.",
+        "$40 - $8 = $32 more per shirt."
+      ],
+      "whyNot": [
+        "$8 is what one mug contributes, not the gap between the two.",
+        null,
+        "$40 is what one shirt contributes. The question asks how much more than a mug.",
+        "$70 - $12 = $58 compares the prices. Prices aren't what you keep. Take the costs off first."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "shirtPrice": 70,
+          "shirtCost": 30,
+          "mugPrice": 12,
+          "mugCost": 4
+        },
+        "formula": "(shirtPrice - shirtCost) - (mugPrice - mugCost)"
+      }
+    },
+    {
+      "prompt": "This month you sold 200 shirts and 1,500 mugs. What was the total contribution from both?",
+      "options": [
+        "$8,000",
+        "$12,000",
+        "$20,000",
+        "$32,000"
+      ],
+      "answer": 2,
+      "hint": "Units x contribution for each, then add.",
+      "working": [
+        "Shirts: 200 x $40 = $8,000.",
+        "Mugs: 1,500 x $8 = $12,000.",
+        "$8,000 + $12,000 = $20,000.",
+        "The cheap mug brought in more than the shirt, because you sold so many."
+      ],
+      "whyNot": [
+        "$8,000 is the shirts only. Add the mugs.",
+        "$12,000 is the mugs only. Add the shirts.",
+        null,
+        "200 x $70 + 1,500 x $12 = $32,000 is sales, before the cost of the stock comes off."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "shirts": 200,
+          "mugs": 1500,
+          "shirtC": 40,
+          "mugC": 8
+        },
+        "formula": "shirts * shirtC + mugs * mugC"
+      }
+    },
+    {
+      "prompt": "Shelf space is tight. You could replace the mugs with a new hat that sells for $25, costs $10, and should sell 300 a month. Mugs bring in $12,000 a month. What happens to monthly contribution if you swap?",
+      "options": [
+        "-$12,000",
+        "-$7,500",
+        "+$4,500",
+        "+$16,500"
+      ],
+      "answer": 1,
+      "hint": "What the hats bring in, minus what the mugs were bringing in.",
+      "working": [
+        "Hat: $25 - $10 = $15 each.",
+        "300 x $15 = $4,500 a month.",
+        "$4,500 - $12,000 = -$7,500.",
+        "The hat earns more per item but sells far fewer. Judge the shelf on total contribution."
+      ],
+      "whyNot": [
+        "-$12,000 is losing the mugs with nothing in their place. The hats still bring in $4,500.",
+        null,
+        "+$4,500 is what the hats bring in. You also lose the $12,000 the mugs were making.",
+        "$4,500 + $12,000 = $16,500 adds the mugs instead of taking them away. The hats replace the mugs."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "hatPrice": 25,
+          "hatCost": 10,
+          "hats": 300,
+          "mugs": 12000
+        },
+        "formula": "hats * (hatPrice - hatCost) - mugs"
+      }
+    }
+  ],
+  "takeaway": "Judge products on what they leave behind in total, not on price or percentage alone."
+}

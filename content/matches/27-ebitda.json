@@ -1,0 +1,105 @@
+{
+  "number": 27,
+  "topic": "EBITDA",
+  "opponent": "Lanternhill Rovers",
+  "talk": "EBITDA stands for earnings before interest, tax, depreciation and amortization. It strips out borrowing costs, tax and the spreading of big past purchases, to show what the day-to-day business makes. It's handy for comparing clubs, but it isn't cash and it isn't the bottom line.",
+  "terms": [
+    {
+      "term": "EBITDA",
+      "meaning": "Operating profit with depreciation and amortization added back."
+    },
+    {
+      "term": "Depreciation",
+      "meaning": "Spreading the cost of things like stands or floodlights over their useful life."
+    },
+    {
+      "term": "Interest",
+      "meaning": "What you pay to borrow money."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "Operating profit is $1.5M. That's after $0.8M of depreciation on the stadium and $1.2M of amortization on player fees. What's EBITDA?",
+      "options": [
+        "-$0.5M",
+        "$2.3M",
+        "$2.7M",
+        "$3.5M"
+      ],
+      "answer": 3,
+      "hint": "Add back the two non-cash charges.",
+      "working": [
+        "$1.5M + $0.8M + $1.2M = $3.5M."
+      ],
+      "whyNot": [
+        "$1.5M - $0.8M - $1.2M = -$0.5M takes them off a second time. They're already inside operating profit, so EBITDA adds them back.",
+        "$1.5M + $0.8M = $2.3M adds back depreciation but forgets the amortization on player fees.",
+        "$1.5M + $1.2M = $2.7M adds back amortization but forgets the stadium depreciation.",
+        null
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "op": 1500000,
+          "dep": 800000,
+          "amort": 1200000
+        },
+        "formula": "op + dep + amort"
+      }
+    },
+    {
+      "prompt": "The club also pays $0.6M in interest and $0.2M in tax. What's net profit, the real bottom line?",
+      "options": [
+        "$0.7M",
+        "$1.3M",
+        "$2.7M",
+        "$3.5M"
+      ],
+      "answer": 0,
+      "hint": "Start from operating profit.",
+      "working": [
+        "$1.5M - $0.6M - $0.2M = $0.7M net profit.",
+        "EBITDA said $3.5M. The bottom line is $0.7M. Big difference."
+      ],
+      "whyNot": [
+        null,
+        "$1.5M - $0.2M = $1.3M takes off tax but forgets the $0.6M of interest.",
+        "$3.5M - $0.6M - $0.2M = $2.7M starts from EBITDA. Depreciation and amortization are real costs, so start from operating profit.",
+        "$3.5M is EBITDA, before interest, tax and the cost of the stadium and players."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "op": 1500000,
+          "interest": 600000,
+          "tax": 200000
+        },
+        "formula": "op - interest - tax"
+      }
+    },
+    {
+      "prompt": "A lender says: 'Your EBITDA is $3.5M, so a loan costing $2M a year is easy to pay.' What's wrong with that?",
+      "options": [
+        "Nothing, $3.5M is more than $2M",
+        "EBITDA includes tax",
+        "Loans are paid from revenue",
+        "EBITDA ignores the cash you spend on players and the stadium"
+      ],
+      "answer": 3,
+      "hint": "What does EBITDA leave out?",
+      "working": [
+        "EBITDA adds back $0.8M + $1.2M = $2M a year of stadium and player costs.",
+        "But you'll keep spending real cash on new players and repairs.",
+        "Judge loan payments against the cash left after that spending, not against EBITDA."
+      ],
+      "whyNot": [
+        "EBITDA isn't cash in hand. It ignores the money you keep spending on players and the stadium, plus interest and tax.",
+        "EBITDA is before tax, not after. The problem is the player and stadium spending it leaves out.",
+        "Loans are paid from the cash left over after all your costs, not from revenue.",
+        null
+      ],
+      "kind": "concept"
+    }
+  ],
+  "takeaway": "EBITDA shows what the day-to-day business makes. It isn't cash, and it isn't profit."
+}

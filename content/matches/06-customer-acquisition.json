@@ -1,0 +1,110 @@
+{
+  "number": 6,
+  "topic": "Customer Acquisition",
+  "opponent": "Brackwater Wanderers",
+  "talk": "Winning a new season ticket holder costs money: ads, open days, free scarves. The question is how fast you earn that money back, and how much each fan is worth over the years they stay.",
+  "terms": [
+    {
+      "term": "CAC",
+      "meaning": "Customer acquisition cost. What you spend to win one new customer."
+    },
+    {
+      "term": "Payback",
+      "meaning": "Months until a new customer has paid back what it cost to win them."
+    },
+    {
+      "term": "Lifetime value",
+      "meaning": "Total profit from one customer over all the years they stay."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "You spend $50,000 on a campaign and sign 250 new season ticket holders. What's your cost to win each one?",
+      "options": [
+        "$20",
+        "$200",
+        "$250",
+        "$2,000"
+      ],
+      "answer": 1,
+      "hint": "Spend divided by new customers.",
+      "working": [
+        "$50,000 / 250 = $200 per fan."
+      ],
+      "whyNot": [
+        "$20 is too small by 10 times. $50,000 / 250 = $200.",
+        null,
+        "250 is the number of new fans, not the cost of each one.",
+        "$2,000 is 10 times too big. $50,000 / 250 = $200."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "spend": 50000,
+          "fans": 250
+        },
+        "formula": "spend / fans"
+      }
+    },
+    {
+      "prompt": "Each season ticket holder makes you $300 profit a year, which is $25 a month. How many months to earn back the $200?",
+      "options": [
+        "4",
+        "6",
+        "8",
+        "12"
+      ],
+      "answer": 2,
+      "hint": "Cost to win divided by monthly profit.",
+      "working": [
+        "$200 / $25 = 8 months.",
+        "Under 12 months is healthy for most subscription businesses."
+      ],
+      "whyNot": [
+        "After 4 months: 4 x $25 = $100. That's only half the $200.",
+        "After 6 months: 6 x $25 = $150, still short of $200.",
+        null,
+        "12 months is when you've earned a full year's $300. You're paid back sooner: 8 x $25 = $200."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "cac": 200,
+          "monthly": 25
+        },
+        "formula": "cac / monthly"
+      }
+    },
+    {
+      "prompt": "40% of fans don't renew each year, so the average fan stays 2.5 years. What's a fan's lifetime value?",
+      "options": [
+        "$300",
+        "$500",
+        "$750",
+        "$1,200"
+      ],
+      "answer": 2,
+      "hint": "Yearly profit x years they stay.",
+      "working": [
+        "If 40% leave each year, the average fan stays 1 / 40% = 2.5 years.",
+        "$300 x 2.5 = $750 per fan.",
+        "$750 / $200 = 3.75, so you get $3.75 back for every $1 you spend winning a fan. A good deal."
+      ],
+      "whyNot": [
+        "$300 is one year. The average fan stays 2.5 years.",
+        "$300 + $200 = $500 adds the cost to win them to one year's profit. Lifetime value is yearly profit times years: $300 x 2.5 = $750.",
+        null,
+        "4 x $300 = $1,200 is 4 years of profit. The average fan stays 2.5 years."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "profit": 300,
+          "years": 2.5
+        },
+        "formula": "profit * years"
+      }
+    }
+  ],
+  "takeaway": "Know what a fan costs to win and what they're worth. Spend where the second number is much bigger."
+}

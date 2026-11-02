@@ -1,0 +1,103 @@
+{
+  "number": 30,
+  "topic": "Valuation Multiples",
+  "opponent": "Crownfield United",
+  "talk": "A multiple is a shortcut for valuing a business: take a profit number and multiply it by what similar businesses sell for. If similar clubs sell for 8 times their EBITDA, yours is probably worth around 8 times too. The hard parts are picking the right multiple and remembering that debt comes off before the owners get paid.",
+  "terms": [
+    {
+      "term": "Multiple",
+      "meaning": "What buyers pay for each dollar of profit, like 8 times EBITDA."
+    },
+    {
+      "term": "Enterprise value",
+      "meaning": "What the whole business is worth, before paying off debt."
+    },
+    {
+      "term": "Equity value",
+      "meaning": "What's left for the owners after the debt is paid off."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "Similar clubs sell for 8 times EBITDA. Your EBITDA is $3.5M. What's the whole club worth (its enterprise value)?",
+      "options": [
+        "$3.5M",
+        "$11.5M",
+        "$28M",
+        "$35M"
+      ],
+      "answer": 2,
+      "hint": "EBITDA x the multiple.",
+      "working": [
+        "$3.5M x 8 = $28M."
+      ],
+      "whyNot": [
+        "$3.5M is one year of EBITDA. Buyers pay a multiple of it.",
+        "That adds the multiple instead of multiplying by it. $3.5M x 8 = $28M.",
+        null,
+        "$3.5M x 10 = $35M uses a multiple of 10. Similar clubs sell for 8."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "ebitda": 3500000,
+          "multiple": 8
+        },
+        "formula": "ebitda * multiple"
+      }
+    },
+    {
+      "prompt": "The club has $10M of loans. If a buyer pays $28M for the whole club, how much do the owners get?",
+      "options": [
+        "$10M",
+        "$18M",
+        "$28M",
+        "$38M"
+      ],
+      "answer": 1,
+      "hint": "Lenders get paid first.",
+      "working": [
+        "$28M - $10M = $18M for the owners.",
+        "The loans are paid off first."
+      ],
+      "whyNot": [
+        "$10M is the loans. That goes to the lenders, not the owners.",
+        null,
+        "$28M is the whole club. The lenders get their $10M first.",
+        "$28M + $10M = $38M adds the debt. Debt is money the club owes, so it comes off."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "ev": 28000000,
+          "debt": 10000000
+        },
+        "formula": "ev - debt"
+      }
+    },
+    {
+      "prompt": "Two clubs both make $3.5M of EBITDA. One is growing fast with loyal fans. The other is shrinking. A seller asks 8 times EBITDA for each. Which is the better buy?",
+      "options": [
+        "The growing club",
+        "The shrinking club",
+        "They're worth the same",
+        "Neither, multiples don't work"
+      ],
+      "answer": 0,
+      "hint": "What happens to each club's profit next year?",
+      "working": [
+        "Same EBITDA today, so both cost $3.5M x 8 = $28M.",
+        "The growing club's EBITDA should rise, so you pay less for each dollar of future profit.",
+        "Multiples price the future, not just this year. Growth and loyal customers earn a higher multiple."
+      ],
+      "whyNot": [
+        null,
+        "The shrinking club's profit is heading down. At the same price you get less profit each year.",
+        "Same price today, but not the same future. The growing club should earn more in the years ahead.",
+        "Multiples work fine as a shortcut. The skill is adjusting them for growth and risk."
+      ],
+      "kind": "concept"
+    }
+  ],
+  "takeaway": "A business is worth a multiple of its profit, minus its debt. Growth earns a bigger multiple."
+}

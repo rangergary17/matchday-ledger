@@ -1,0 +1,112 @@
+{
+  "number": 13,
+  "topic": "Margin vs Markup",
+  "opponent": "Larkspur United",
+  "talk": "Markup and margin use the same two numbers but divide by different things. Markup compares your profit to what the item cost you. Margin compares it to the price the customer paid, which is why margin is always the smaller number.",
+  "terms": [
+    {
+      "term": "Markup",
+      "meaning": "Profit as a share of what the item cost you."
+    },
+    {
+      "term": "Margin",
+      "meaning": "Profit as a share of the selling price."
+    },
+    {
+      "term": "Cost price",
+      "meaning": "What you paid to make or buy the item."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "A club scarf costs you $10 to make and sells for $15. What's the markup?",
+      "options": [
+        "About 33%",
+        "50%",
+        "About 67%",
+        "150%"
+      ],
+      "answer": 1,
+      "hint": "Profit divided by what it cost you.",
+      "working": [
+        "$15 - $10 = $5 profit per scarf.",
+        "$5 / $10 = 50% markup."
+      ],
+      "whyNot": [
+        "$5 / $15 = about 33% is the margin, which divides by the price. Markup divides by the cost.",
+        null,
+        "$10 / $15 = about 67% is the cost's share of the price. That's not profit at all.",
+        "$15 / $10 = 150% compares the whole price to the cost. Markup only counts the profit part, the $5."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "cost": 10,
+          "price": 15
+        },
+        "formula": "(price - cost) / cost"
+      }
+    },
+    {
+      "prompt": "Same scarf: costs $10, sells for $15. What's the margin?",
+      "options": [
+        "About 33%",
+        "50%",
+        "About 67%",
+        "$5"
+      ],
+      "answer": 0,
+      "hint": "Same profit, but divide by the price.",
+      "working": [
+        "$5 / $15 = about 33% margin.",
+        "Same $5 of profit, divided by the bigger number, the price."
+      ],
+      "whyNot": [
+        null,
+        "50% is the markup: $5 / $10 = 50%. Margin divides the profit by the price, $15.",
+        "$10 / $15 = about 67% is how much of the price goes on cost. The margin is the rest.",
+        "$5 is the profit in dollars. Margin is that profit as a share of the price."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "cost": 10,
+          "price": 15
+        },
+        "formula": "(price - cost) / price"
+      }
+    },
+    {
+      "prompt": "The shop manager says 'we put a 50% markup on everything'. The owner hears that and budgets for a 50% margin. Shop sales are $300,000. What gross profit will the shop really make?",
+      "options": [
+        "$100,000",
+        "$150,000",
+        "$200,000",
+        "$450,000"
+      ],
+      "answer": 0,
+      "hint": "A 50% markup is the scarf: cost $10, price $15.",
+      "working": [
+        "With a 50% markup, a $10 item sells for $15.",
+        "So every $15 of sales holds $5 of profit: $5 / $15 = about 33%, a third.",
+        "$300,000 / 3 = $100,000 of gross profit.",
+        "The owner budgeted $300,000 x 50% = $150,000. That's $150,000 - $100,000 = $50,000 too much."
+      ],
+      "whyNot": [
+        null,
+        "$300,000 x 50% = $150,000 treats the markup as a margin. A 50% markup is only about a 33% margin.",
+        "$300,000 - $100,000 = $200,000 is what the stock cost you, not the profit.",
+        "$450,000 adds the 50% markup on top of sales again. The $300,000 already includes it."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "sales": 300000,
+          "markup": 0.5
+        },
+        "formula": "sales * markup / (1 + markup)"
+      }
+    }
+  ],
+  "takeaway": "Markup divides by cost, margin divides by price. Mix them up and your budget is wrong."
+}

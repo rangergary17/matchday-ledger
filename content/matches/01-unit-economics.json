@@ -1,0 +1,115 @@
+{
+  "number": 1,
+  "topic": "Unit Economics",
+  "opponent": "Dockside United",
+  "talk": "Before you sell one more ticket, know what each fan is worth to you. Every fan who walks through the turnstile brings in money and costs you money. What's left over is the only thing that pays for the stadium, the wages and the trophies.",
+  "terms": [
+    {
+      "term": "Unit economics",
+      "meaning": "Profit or loss on one unit of what you sell. Here, one fan at one match."
+    },
+    {
+      "term": "Contribution",
+      "meaning": "Price minus the cost that comes with each sale. What one fan 'contributes' to the club."
+    },
+    {
+      "term": "Break-even",
+      "meaning": "The point where contribution covers your fixed costs. Zero profit, zero loss."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "A matchday ticket costs $30. Each fan costs you $12 (stewards, cleaning, card fees). What does each fan contribute?",
+      "options": [
+        "$12",
+        "$18",
+        "$30",
+        "$42"
+      ],
+      "answer": 1,
+      "hint": "Price minus cost per fan.",
+      "working": [
+        "$30 - $12 = $18 per fan.",
+        "That $18 is what you play with. It pays for the stadium, the wages and everything else."
+      ],
+      "whyNot": [
+        "$12 is what each fan costs you, not what they leave behind. Contribution is what's left after that cost: $30 - $12 = $18.",
+        null,
+        "$30 is the ticket price. Some of it goes straight back out on stewards, cleaning and card fees, so you don't keep all of it.",
+        "That adds the cost to the price: $30 + $12 = $42. Costs come off the price, they don't add to it."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "price": 30,
+          "cost": 12
+        },
+        "formula": "price - cost"
+      }
+    },
+    {
+      "prompt": "Running the stadium on matchday costs $90,000 no matter how many fans turn up. How many fans do you need to break even?",
+      "options": [
+        "3,000",
+        "5,000",
+        "7,500",
+        "9,000"
+      ],
+      "answer": 1,
+      "hint": "Fixed cost divided by contribution per fan.",
+      "working": [
+        "$90,000 / $18 = 5,000 fans.",
+        "Every fan after the 5,000th is making you money."
+      ],
+      "whyNot": [
+        "$90,000 / $30 = 3,000 divides by the ticket price. But each fan costs $12 to host, so only $18 of each ticket goes toward the $90,000.",
+        null,
+        "$90,000 / $12 = 7,500 divides by the cost per fan. Costs don't pay the bills. You need what each fan leaves behind after costs: $18.",
+        "9,000 x $18 = $162,000, far more than the $90,000 you need to cover. You break even well before that."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "fixed": 90000,
+          "contrib": 18
+        },
+        "formula": "fixed / contrib"
+      }
+    },
+    {
+      "prompt": "You normally get 8,000 fans. The commercial team wants a 10% discount, so $27 a ticket. How many EXTRA fans do you need just to make the same profit?",
+      "options": [
+        "800",
+        "960",
+        "None, it pays for itself",
+        "1,600"
+      ],
+      "answer": 3,
+      "hint": "Each fan now leaves $15 instead of $18. Profit today is 8,000 x $18.",
+      "working": [
+        "Today: 8,000 x $18 = $144,000.",
+        "With the discount each fan leaves $27 - $12 = $15.",
+        "$144,000 / $15 = 9,600 fans.",
+        "9,600 - 8,000 = 1,600 extra fans.",
+        "1,600 / 8,000 = 20% more fans to cover a 10% discount. Discounts are expensive."
+      ],
+      "whyNot": [
+        "8,000 x 10% = 800 assumes a 10% discount needs 10% more fans. But the $3 comes out of your $18, not the $30 price, so it bites much harder.",
+        "9,600 x 10% = 960 mixes up the new crowd with the discount. Compare the new crowd to the old one: 9,600 - 8,000 = 1,600.",
+        "A discount only pays for itself if enough new fans come. With the same crowd, 8,000 x $15 = $120,000, and $144,000 - $120,000 = $24,000 short.",
+        null
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "fans": 8000,
+          "contrib": 18,
+          "newPrice": 27,
+          "cost": 12
+        },
+        "formula": "fans * contrib / (newPrice - cost) - fans"
+      }
+    }
+  ],
+  "takeaway": "Know what one fan leaves behind before you sell one more ticket."
+}

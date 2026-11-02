@@ -1,0 +1,104 @@
+{
+  "number": 17,
+  "topic": "Payback Period",
+  "opponent": "Northmere City",
+  "talk": "Payback period is how long an investment takes to earn back what it cost. It's the simplest test there is: how long until I'm back to even? Shorter is safer, because the future is never certain.",
+  "terms": [
+    {
+      "term": "Payback period",
+      "meaning": "Time until an investment has earned back its cost."
+    },
+    {
+      "term": "Upfront cost",
+      "meaning": "What you pay at the start."
+    },
+    {
+      "term": "Yearly return",
+      "meaning": "What the investment brings in or saves each year."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "New LED floodlights cost $240,000 and cut the power bill by $60,000 a year. What's the payback period?",
+      "options": [
+        "2 years",
+        "4 years",
+        "5 years",
+        "6 years"
+      ],
+      "answer": 1,
+      "hint": "Cost divided by yearly saving.",
+      "working": [
+        "$240,000 / $60,000 = 4 years."
+      ],
+      "whyNot": [
+        "After 2 years you've saved 2 x $60,000 = $120,000. That's only half the cost.",
+        null,
+        "After 5 years you've saved 5 x $60,000 = $300,000, more than the cost. You were back to even a year earlier.",
+        "After 6 years you've saved 6 x $60,000 = $360,000. You got your money back well before that."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "cost": 240000,
+          "saving": 60000
+        },
+        "formula": "cost / saving"
+      }
+    },
+    {
+      "prompt": "A new big screen costs $300,000. It brings in $50,000 a year in adverts but costs $10,000 a year to run. What's the payback period?",
+      "options": [
+        "5 years",
+        "6 years",
+        "7.5 years",
+        "30 years"
+      ],
+      "answer": 2,
+      "hint": "Use what it earns after running costs.",
+      "working": [
+        "$50,000 - $10,000 = $40,000 a year after running costs.",
+        "$300,000 / $40,000 = 7.5 years."
+      ],
+      "whyNot": [
+        "After 5 years: 5 x $40,000 = $200,000, and $300,000 - $200,000 = $100,000 still to earn back.",
+        "$300,000 / $50,000 = 6 years forgets the $10,000 a year it costs to run.",
+        null,
+        "$300,000 / $10,000 = 30 years divides by the running cost. Divide by what it actually earns you each year."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "cost": 300000,
+          "ads": 50000,
+          "run": 10000
+        },
+        "formula": "cost / (ads - run)"
+      }
+    },
+    {
+      "prompt": "Two projects cost $100,000 each. Project A pays $50,000 a year for 2 years, then nothing. Project B pays $25,000 a year for 8 years. Which is true?",
+      "options": [
+        "A pays back faster, B earns more",
+        "A pays back faster and earns more",
+        "B pays back faster, A earns more",
+        "They're the same"
+      ],
+      "answer": 0,
+      "hint": "Work out payback and total for each.",
+      "working": [
+        "A: $100,000 / $50,000 = 2 years to pay back, and 2 x $50,000 = $100,000 in total. You just get your money back.",
+        "B: $100,000 / $25,000 = 4 years to pay back, and 8 x $25,000 = $200,000 in total.",
+        "Payback only tells you how fast. It ignores everything after."
+      ],
+      "whyNot": [
+        null,
+        "A pays back faster, but it stops at $100,000, exactly what you put in. B earns $200,000.",
+        "B takes 4 years to pay back, twice as long as A. It does earn more in total, though.",
+        "Same cost, very different shape. A is quick and then stops. B is slow but keeps paying."
+      ],
+      "kind": "concept"
+    }
+  ],
+  "takeaway": "Payback tells you how fast you're back to even. It says nothing about what comes after."
+}

@@ -1,0 +1,115 @@
+{
+  "number": 10,
+  "topic": "Fixed Costs & Leverage",
+  "opponent": "Marrowgate FC",
+  "talk": "Some costs stay the same however you play: the ground, the staff, the loans. Once revenue covers them, every extra dollar mostly drops to profit. That's operating leverage, and it works brilliantly on the way up and painfully on the way down.",
+  "terms": [
+    {
+      "term": "Fixed costs",
+      "meaning": "Costs that don't move with sales."
+    },
+    {
+      "term": "Variable costs",
+      "meaning": "Costs that rise with each sale."
+    },
+    {
+      "term": "Operating leverage",
+      "meaning": "A small change in revenue makes a big change in profit."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "Fixed costs are $4M. You keep 60 cents of every revenue dollar (60%) after variable costs. What revenue do you need to break even?",
+      "options": [
+        "$2.4M",
+        "$4M",
+        "$6.7M",
+        "$10M"
+      ],
+      "answer": 2,
+      "hint": "Fixed costs divided by 60%.",
+      "working": [
+        "You need revenue where 60% of it covers $4M.",
+        "$4M / 60% = about $6.7M."
+      ],
+      "whyNot": [
+        "$4M x 60% = $2.4M multiplies when you should divide. You need revenue big enough that 60% of it covers $4M.",
+        "$4M of revenue only leaves $4M x 60% = $2.4M after variable costs. Not enough to cover $4M of fixed costs.",
+        null,
+        "That divides by the share you lose, not the share you keep. 100% - 60% = 40%, and $4M / 40% = $10M."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "fixed": 4000000,
+          "keep": 0.6
+        },
+        "formula": "fixed / keep"
+      }
+    },
+    {
+      "prompt": "Revenue comes in at $8M. What's your profit?",
+      "options": [
+        "$0.8M",
+        "$3.2M",
+        "$4M",
+        "$4.8M"
+      ],
+      "answer": 0,
+      "hint": "60% of revenue, minus fixed costs.",
+      "working": [
+        "$8M x 60% = $4.8M left after variable costs.",
+        "$4.8M - $4M = $0.8M profit."
+      ],
+      "whyNot": [
+        null,
+        "$8M x 40% = $3.2M is the variable costs, not profit.",
+        "$8M - $4M = $4M takes off the fixed costs but forgets the variable costs on every sale.",
+        "$4.8M is what's left after variable costs. You still have $4M of fixed costs to pay."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "revenue": 8000000,
+          "keep": 0.6,
+          "fixed": 4000000
+        },
+        "formula": "revenue * keep - fixed"
+      }
+    },
+    {
+      "prompt": "A cup run lifts revenue 10% to $8.8M. How much does profit grow?",
+      "options": [
+        "10%",
+        "48%",
+        "60%",
+        "100%"
+      ],
+      "answer": 2,
+      "hint": "Work out the new profit and compare it to $0.8M.",
+      "working": [
+        "$8.8M x 60% = $5.28M.",
+        "$5.28M - $4M = $1.28M profit.",
+        "($1.28M - $0.8M) / $0.8M = 60% more profit.",
+        "A 10% rise in revenue gave a 60% rise in profit. That's leverage."
+      ],
+      "whyNot": [
+        "Profit would only grow 10% if every cost grew with revenue. Fixed costs stay at $4M, so profit jumps much faster.",
+        "$1.28M - $0.8M = $0.48M is the extra profit in dollars. As a share of the old $0.8M it's 60%.",
+        null,
+        "Doubling would mean 2 x $0.8M = $1.6M of profit. You made $1.28M."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "revenue": 8800000,
+          "keep": 0.6,
+          "fixed": 4000000,
+          "old": 800000
+        },
+        "formula": "(revenue * keep - fixed - old) / old"
+      }
+    }
+  ],
+  "takeaway": "With high fixed costs, a little more revenue means a lot more profit. A little less hurts just as much."
+}

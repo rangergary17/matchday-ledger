@@ -1,0 +1,113 @@
+{
+  "number": 23,
+  "topic": "CAC Payback by Channel",
+  "opponent": "Falconridge FC",
+  "talk": "Not every marketing channel wins fans at the same price. Work out the cost to win a fan on each channel, and how many months each fan takes to pay that back. Then move money to the channel that pays back fastest.",
+  "terms": [
+    {
+      "term": "Channel",
+      "meaning": "Where a customer came from: social ads, radio, a school visit."
+    },
+    {
+      "term": "CAC",
+      "meaning": "Customer acquisition cost. Spend on a channel divided by the customers it brings."
+    },
+    {
+      "term": "Payback months",
+      "meaning": "Cost to win a customer divided by the monthly profit they bring."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "Last season, social ads cost $30,000 and won 300 season ticket holders. Radio cost $40,000 and won 200. What did it cost to win a fan on radio?",
+      "options": [
+        "$100",
+        "$140",
+        "$200",
+        "$2,000"
+      ],
+      "answer": 2,
+      "hint": "Radio spend divided by radio fans.",
+      "working": [
+        "$40,000 / 200 = $200 per fan on radio.",
+        "Social: $30,000 / 300 = $100 per fan, half the price."
+      ],
+      "whyNot": [
+        "$100 is the cost on social ads. Radio cost more and won fewer fans.",
+        "($30,000 + $40,000) / (300 + 200) = $140 is the average across both channels. The question is radio on its own.",
+        null,
+        "$2,000 is too big by 10 times. $40,000 / 200 = $200."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "spend": 40000,
+          "fans": 200
+        },
+        "formula": "spend / fans"
+      }
+    },
+    {
+      "prompt": "Each season ticket holder makes $20 profit a month. How many months does a radio fan take to pay back?",
+      "options": [
+        "5 months",
+        "7 months",
+        "10 months",
+        "20 months"
+      ],
+      "answer": 2,
+      "hint": "Cost to win divided by monthly profit.",
+      "working": [
+        "$200 / $20 = 10 months for radio.",
+        "Social: $100 / $20 = 5 months."
+      ],
+      "whyNot": [
+        "$100 / $20 = 5 months is social ads. Radio fans cost twice as much to win.",
+        "$140 / $20 = 7 months uses the average cost across both channels. Radio alone is $200.",
+        null,
+        "20 x $10 = $200 assumes fans make $10 a month. They make $20, so it takes half as long."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "cac": 200,
+          "monthly": 20
+        },
+        "formula": "cac / monthly"
+      }
+    },
+    {
+      "prompt": "You move $30,000 from radio to social. Assume social keeps winning fans at $100 each. How many more fans do you get for the same money?",
+      "options": [
+        "0",
+        "150",
+        "300",
+        "450"
+      ],
+      "answer": 1,
+      "hint": "Fans on social minus the fans radio would have won.",
+      "working": [
+        "On radio: $30,000 / $200 = 150 fans.",
+        "On social: $30,000 / $100 = 300 fans.",
+        "300 - 150 = 150 more fans for the same money.",
+        "Check the assumption: channels often get pricier as you spend more on them."
+      ],
+      "whyNot": [
+        "Same money, but social wins fans at half the price, so you get more of them.",
+        null,
+        "300 is all the social fans. Moving the money also means losing the 150 radio would have won.",
+        "300 + 150 = 450 counts the radio fans too. That money has moved, so radio wins nobody now."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "money": 30000,
+          "radio": 200,
+          "social": 100
+        },
+        "formula": "money / social - money / radio"
+      }
+    }
+  ],
+  "takeaway": "Compare channels on cost per fan and months to pay back. Move money to the fastest."
+}

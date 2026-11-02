@@ -1,0 +1,112 @@
+{
+  "number": 25,
+  "topic": "LTV to CAC",
+  "opponent": "Redcastle Harriers",
+  "talk": "LTV to CAC compares what a customer is worth over their whole time with you to what it cost to win them. A ratio of 3 to 1 is a common healthy target. Much lower and you're overpaying for customers, much higher and you may be spending too little on growth.",
+  "terms": [
+    {
+      "term": "LTV",
+      "meaning": "Lifetime value. Total profit from one customer over all the years they stay."
+    },
+    {
+      "term": "CAC",
+      "meaning": "Customer acquisition cost. What you spend to win one new customer."
+    },
+    {
+      "term": "LTV to CAC ratio",
+      "meaning": "LTV divided by CAC. How many dollars come back for each dollar spent winning a customer."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "A club membership makes $120 profit a year and the average member stays 3 years. It costs $90 to win a member. What's the LTV to CAC ratio?",
+      "options": [
+        "1.3 to 1",
+        "3 to 1",
+        "4 to 1",
+        "40 to 1"
+      ],
+      "answer": 2,
+      "hint": "Lifetime value first, then divide by the cost to win.",
+      "working": [
+        "LTV: $120 x 3 = $360.",
+        "$360 / $90 = 4, so 4 to 1."
+      ],
+      "whyNot": [
+        "$120 / $90 = about 1.3 uses one year of profit. Members stay 3 years, so count all three.",
+        "3 to 1 is the usual target, not your number. Yours is $360 / $90 = 4.",
+        null,
+        "40 to 1 is too big by 10 times. $360 / $90 = 4."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "profit": 120,
+          "years": 3,
+          "cac": 90
+        },
+        "formula": "profit * years / cac"
+      }
+    },
+    {
+      "prompt": "You want a ratio of at least 3 to 1. With an LTV of $360, what's the most you should spend to win a member?",
+      "options": [
+        "$90",
+        "$120",
+        "$180",
+        "$360"
+      ],
+      "answer": 1,
+      "hint": "LTV divided by the target ratio.",
+      "working": [
+        "$360 / 3 = $120 at most."
+      ],
+      "whyNot": [
+        "$90 is what you spend now. You could spend up to $120 and still hit 3 to 1.",
+        null,
+        "$360 / 2 = $180 gives a ratio of 2 to 1. That's below your target.",
+        "$360 is the whole lifetime value. Spend that and you'd make nothing."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "ltv": 360,
+          "target": 3
+        },
+        "formula": "ltv / target"
+      }
+    },
+    {
+      "prompt": "A new referral scheme wins members for $40 each, but referred members only stay 2 years. They still make $120 a year. What's their LTV to CAC ratio?",
+      "options": [
+        "3 to 1",
+        "4 to 1",
+        "6 to 1",
+        "9 to 1"
+      ],
+      "answer": 2,
+      "hint": "New lifetime value, new cost to win.",
+      "working": [
+        "LTV: $120 x 2 = $240.",
+        "$240 / $40 = 6, so 6 to 1.",
+        "They stay for less time, but they're so cheap to win that the ratio is better. Spend more on referrals."
+      ],
+      "whyNot": [
+        "$120 / $40 = 3 uses one year of profit. Referred members stay 2 years.",
+        "4 to 1 is the ratio for ordinary members. Referred members are a different deal.",
+        null,
+        "$360 / $40 = 9 uses the old 3-year LTV. Referred members only stay 2 years."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "profit": 120,
+          "years": 2,
+          "cac": 40
+        },
+        "formula": "profit * years / cac"
+      }
+    }
+  ],
+  "takeaway": "Spend to win customers while each dollar brings back about three. Watch both numbers, not just one."
+}

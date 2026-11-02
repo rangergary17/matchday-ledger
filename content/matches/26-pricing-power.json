@@ -1,0 +1,110 @@
+{
+  "number": 26,
+  "topic": "Pricing Power",
+  "opponent": "Tidewater Athletic",
+  "talk": "Pricing power is how much you can raise prices before customers walk away. Clubs with loyal fans and full stadiums have lots of it. A price rise wins if the extra money from the fans who stay beats what you lose from the ones who leave.",
+  "terms": [
+    {
+      "term": "Pricing power",
+      "meaning": "How far you can raise prices without losing many customers."
+    },
+    {
+      "term": "Price sensitivity",
+      "meaning": "How strongly customers react to a price change."
+    },
+    {
+      "term": "Break-even loss",
+      "meaning": "How many customers you can lose and still take the same money."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "You sell 15,000 season tickets at $400. You raise the price 10% to $440 and lose 5% of holders. What happens to ticket revenue?",
+      "options": [
+        "-$300,000",
+        "+$600,000",
+        "No change",
+        "+$270,000"
+      ],
+      "answer": 3,
+      "hint": "Revenue before, then revenue after with fewer fans.",
+      "working": [
+        "Before: 15,000 x $400 = $6M.",
+        "15,000 x 5% = 750 leave, so 15,000 - 750 = 14,250 stay.",
+        "After: 14,250 x $440 = $6.27M.",
+        "$6.27M - $6M = $270,000, so +$270,000."
+      ],
+      "whyNot": [
+        "750 x $400 = $300,000 is what the leavers used to pay. But the 14,250 who stay each pay $440 - $400 = $40 more, which more than makes up for it.",
+        "15,000 x $40 = $600,000 assumes nobody leaves. 750 holders do.",
+        "Revenue does move. Fewer fans, but each pays more, and the total rises to $6.27M.",
+        null
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "fans": 15000,
+          "oldPrice": 400,
+          "newPrice": 440,
+          "lost": 0.05
+        },
+        "formula": "fans * (1 - lost) * newPrice - fans * oldPrice"
+      }
+    },
+    {
+      "prompt": "At $440, how many holders could you lose before ticket revenue drops below the old $6M?",
+      "options": [
+        "About 750",
+        "About 1,360",
+        "About 1,500",
+        "About 13,600"
+      ],
+      "answer": 1,
+      "hint": "How many fans at $440 make $6M?",
+      "working": [
+        "$6M / $440 = about 13,636 fans keep revenue level.",
+        "15,000 - 13,636 = 1,364.",
+        "So you could lose about 1,360 holders: 1,364 / 15,000 = about 9% of them."
+      ],
+      "whyNot": [
+        "750 is how many you expect to lose. The question is how many you could lose before it hurts.",
+        null,
+        "Lose 1,500 and 15,000 - 1,500 = 13,500 stay, and 13,500 x $440 = $5.94M. That's below $6M.",
+        "About 13,600 is how many fans need to stay, not how many can leave."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "fans": 15000,
+          "oldPrice": 400,
+          "newPrice": 440
+        },
+        "formula": "fans - fans * oldPrice / newPrice"
+      }
+    },
+    {
+      "prompt": "A rival club with half-empty stands tries the same 10% rise and loses 20% of its fans. What does that tell you?",
+      "options": [
+        "Low pricing power: the rise loses money",
+        "High pricing power",
+        "Price rises always work",
+        "Pricing power is only about the price"
+      ],
+      "answer": 0,
+      "hint": "Try it on your own numbers.",
+      "working": [
+        "100% - 20% = 80% of fans stay.",
+        "On your numbers: 15,000 x 80% = 12,000 fans, and 12,000 x $440 = $5.28M, down from $6M.",
+        "Losing a fifth of your fans for a tenth more on the price is low pricing power. Fill the stands before raising prices."
+      ],
+      "whyNot": [
+        null,
+        "High pricing power means fans stay when prices rise. Here a fifth of them left.",
+        "Price rises only work when few customers leave. Losing 20% of fans for a 10% rise loses money.",
+        "Pricing power is about how customers react to the price. Their reaction is the whole test."
+      ],
+      "kind": "concept"
+    }
+  ],
+  "takeaway": "A price rise wins when the fans who stay pay for the ones who leave. Test it before you try it."
+}

@@ -1,0 +1,106 @@
+{
+  "number": 29,
+  "topic": "Discounting",
+  "opponent": "Greystone Celtic",
+  "talk": "A dollar today is worth more than a dollar next year, because today's dollar can be invested or used to pay down debt. Discounting turns future money into today's money so you can compare fairly. The further away the money, the less it's worth now.",
+  "terms": [
+    {
+      "term": "Discount rate",
+      "meaning": "The yearly return you could get elsewhere, used to shrink future money."
+    },
+    {
+      "term": "Present value",
+      "meaning": "What future money is worth today."
+    },
+    {
+      "term": "Time value of money",
+      "meaning": "The idea that money now beats the same money later."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "A sponsor offers $110,000 paid in one year, or $100,000 today. Your discount rate is 10% a year. What's the $110,000 worth today?",
+      "options": [
+        "$99,000",
+        "$100,000",
+        "$110,000",
+        "$121,000"
+      ],
+      "answer": 1,
+      "hint": "Divide by (1 + the rate) for each year of waiting.",
+      "working": [
+        "$110,000 / (1 + 10%) = $100,000.",
+        "The two offers are worth the same. If you'd rather have the cash sooner, take it today."
+      ],
+      "whyNot": [
+        "$110,000 x 10% = $11,000, and $110,000 - $11,000 = $99,000 takes 10% off the future amount. Discounting divides by 1 plus the rate instead: $110,000 / (1 + 10%) = $100,000.",
+        null,
+        "$110,000 is what you'd get next year. Money that far away is worth less today.",
+        "$110,000 x (1 + 10%) = $121,000 grows the money forward a year. You need to shrink it back to today."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "future": 110000,
+          "rate": 0.1
+        },
+        "formula": "future / (1 + rate)"
+      }
+    },
+    {
+      "prompt": "An agent offers a deal: $1M paid now, or $1.21M paid in two years. At a 10% discount rate, what's the $1.21M worth today?",
+      "options": [
+        "$1.0M",
+        "$1.1M",
+        "$1.21M",
+        "$1.46M"
+      ],
+      "answer": 0,
+      "hint": "Two years away, so discount twice.",
+      "working": [
+        "$1.21M / (1 + 10%) / (1 + 10%) = $1M.",
+        "Same value either way. Two years out, $1.21M is only worth $1M today."
+      ],
+      "whyNot": [
+        null,
+        "$1.21M / (1 + 10%) = $1.1M only discounts one year. The money is two years away, so discount twice.",
+        "$1.21M is the amount in two years. Today it's worth less.",
+        "$1.21M x (1 + 10%) x (1 + 10%) = about $1.46M grows the money two more years. You want to shrink it back to today."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "future": 1210000,
+          "rate": 0.1
+        },
+        "formula": "future / (1 + rate) / (1 + rate)"
+      }
+    },
+    {
+      "prompt": "Refurbishing a stand costs $250,000 today and saves $100,000 at the end of each of the next 3 years. At a 10% discount rate, are the savings worth more than the cost?",
+      "options": [
+        "Yes, $300,000 beats $250,000",
+        "Yes, by about $50,000",
+        "It's exactly break-even",
+        "No, they're worth about $249,000 today"
+      ],
+      "answer": 3,
+      "hint": "Discount each year's saving separately, then add them up.",
+      "working": [
+        "Year 1: $100,000 / (1 + 10%) = about $90,909.",
+        "Year 2: $100,000 / (1 + 10%) / (1 + 10%) = about $82,645.",
+        "Year 3: $100,000 / (1 + 10%) / (1 + 10%) / (1 + 10%) = about $75,131.",
+        "$90,909 + $82,645 + $75,131 = $248,685, about $249,000 today.",
+        "$250,000 - $248,685 = $1,315 short. Close, but it doesn't pay."
+      ],
+      "whyNot": [
+        "3 x $100,000 = $300,000 adds the savings as if they all arrived today. Later money is worth less, so it shrinks to about $249,000.",
+        "$300,000 - $250,000 = $50,000 ignores when the savings arrive. Discounted, they fall just short of the cost.",
+        "Close, but not exact. The savings are worth $248,685 today, a little under the $250,000 cost.",
+        null
+      ],
+      "kind": "concept"
+    }
+  ],
+  "takeaway": "Money later is worth less than money now. Shrink it before you compare."
+}

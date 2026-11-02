@@ -1,0 +1,117 @@
+{
+  "number": 3,
+  "topic": "The P&L",
+  "opponent": "Kestrel Town",
+  "talk": "The P&L (profit and loss) is the club's season table for money. Revenue at the top, costs stacked underneath, profit at the bottom. In football, one cost line usually decides everything: wages.",
+  "terms": [
+    {
+      "term": "Revenue",
+      "meaning": "All the money coming in. Tickets, TV, shirts."
+    },
+    {
+      "term": "Gross profit",
+      "meaning": "Revenue minus the direct cost of what you sold."
+    },
+    {
+      "term": "Operating profit",
+      "meaning": "What's left after wages and running the club. The real result."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "Season revenue: tickets $2.0M, TV $3.0M, shop $0.5M. Direct costs (shop stock, matchday costs) are $1.0M. What's gross profit?",
+      "options": [
+        "$1.0M",
+        "$3.5M",
+        "$4.5M",
+        "$5.5M"
+      ],
+      "answer": 2,
+      "hint": "Add up the revenue, then take off direct costs.",
+      "working": [
+        "$2.0M + $3.0M + $0.5M = $5.5M of revenue.",
+        "$5.5M - $1.0M = $4.5M gross profit."
+      ],
+      "whyNot": [
+        "$1.0M is the direct costs themselves, not what's left after them.",
+        "$5.5M - $2.0M = $3.5M takes off the ticket money as if it were a cost. Tickets are revenue. Only the $1.0M of direct costs comes off.",
+        null,
+        "$5.5M is total revenue, before any costs. Gross profit takes off the direct costs of what you sold."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "tickets": 2000000,
+          "tv": 3000000,
+          "shop": 500000,
+          "direct": 1000000
+        },
+        "formula": "tickets + tv + shop - direct"
+      }
+    },
+    {
+      "prompt": "Wages are $3.5M and stadium plus office overheads are $0.8M. What's operating profit?",
+      "options": [
+        "-$0.3M",
+        "$0.2M",
+        "$1.0M",
+        "$1.2M"
+      ],
+      "answer": 1,
+      "hint": "Gross profit minus wages minus overheads.",
+      "working": [
+        "$4.5M - $3.5M - $0.8M = $0.2M operating profit.",
+        "One bad signing wipes it out."
+      ],
+      "whyNot": [
+        "$4.5M - $3.5M - $0.8M - $0.5M = -$0.3M takes the shop money off as if it were a cost. The shop is revenue, and it's already inside the $4.5M.",
+        null,
+        "$4.5M - $3.5M = $1.0M takes off the wages but forgets the $0.8M for the stadium and office.",
+        "$5.5M - $3.5M - $0.8M = $1.2M starts from revenue and skips the $1.0M of direct costs. Start from gross profit, $4.5M."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "gross": 4500000,
+          "wages": 3500000,
+          "overheads": 800000
+        },
+        "formula": "gross - wages - overheads"
+      }
+    },
+    {
+      "prompt": "What share of revenue goes on wages?",
+      "options": [
+        "About 36%",
+        "About 64%",
+        "About 78%",
+        "About 175%"
+      ],
+      "answer": 1,
+      "hint": "Wages divided by total revenue.",
+      "working": [
+        "$3.5M / $5.5M = about 64% of revenue goes on wages.",
+        "Above 70% and most clubs are in trouble.",
+        "Every business has its wage bill line. Find yours."
+      ],
+      "whyNot": [
+        "That's the share left over after wages: 100% - 64% = 36%. The question asks what goes on them.",
+        null,
+        "$3.5M / $4.5M = about 78% divides by gross profit. The wage share uses total revenue, $5.5M.",
+        "$3.5M / $2.0M = 175% compares wages to ticket money only. Wages are paid out of all revenue: tickets, TV and the shop."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "wages": 3500000,
+          "revenue": 5500000
+        },
+        "formula": "wages / revenue"
+      },
+      "benchmarks": [
+        "70%"
+      ]
+    }
+  ],
+  "takeaway": "Revenue at the top, profit at the bottom, and wages decide most of what's in between."
+}

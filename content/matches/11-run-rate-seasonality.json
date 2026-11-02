@@ -1,0 +1,105 @@
+{
+  "number": 11,
+  "topic": "Run Rate & Seasonality",
+  "opponent": "Glenmoor Celtic",
+  "talk": "Run rate takes a short period and scales it up to a year. It's fast and useful, but dangerous when the business has seasons. A football club with no matches in summer isn't a 12-month business.",
+  "terms": [
+    {
+      "term": "Run rate",
+      "meaning": "Recent revenue times the number of periods in a year."
+    },
+    {
+      "term": "Seasonality",
+      "meaning": "Predictable highs and lows across the year."
+    },
+    {
+      "term": "Annualize",
+      "meaning": "Turning a monthly or weekly figure into a yearly one."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "October revenue was $1.2M. What's the annual run rate?",
+      "options": [
+        "$1.2M",
+        "$7.2M",
+        "$12M",
+        "$14.4M"
+      ],
+      "answer": 3,
+      "hint": "Monthly x 12.",
+      "working": [
+        "$1.2M x 12 = $14.4M."
+      ],
+      "whyNot": [
+        "$1.2M is one month. Run rate scales it up to a full year.",
+        "$1.2M x 6 = $7.2M is half a year.",
+        "$1.2M x 10 = $12M, as if there were 10 months in a year.",
+        null
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "month": 1200000
+        },
+        "formula": "month * 12"
+      }
+    },
+    {
+      "prompt": "But there are only 9 matchday months. The 3 summer months bring in $0.3M each. What's the realistic year?",
+      "options": [
+        "$10.8M",
+        "$11.7M",
+        "$14.4M",
+        "$15.3M"
+      ],
+      "answer": 1,
+      "hint": "9 busy months plus 3 quiet months.",
+      "working": [
+        "9 x $1.2M = $10.8M from the season.",
+        "3 x $0.3M = $0.9M from the summer.",
+        "$10.8M + $0.9M = $11.7M.",
+        "$14.4M - $11.7M = $2.7M. That's how much the run rate overstated it."
+      ],
+      "whyNot": [
+        "$10.8M is the 9 busy months only. The summer still brings in $0.9M.",
+        null,
+        "$14.4M treats every month like October. Summer months bring in $0.3M, not $1.2M.",
+        "$14.4M + $0.9M = $15.3M adds summer on top of a run rate that already counted 12 busy months."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "busy": 9,
+          "month": 1200000,
+          "quiet": 3,
+          "summer": 300000
+        },
+        "formula": "busy * month + quiet * summer"
+      }
+    },
+    {
+      "prompt": "The board pack says '$14.4M run rate'. What should you do?",
+      "options": [
+        "Celebrate",
+        "Hire against $14.4M",
+        "Ignore October",
+        "Show the seasonal forecast instead"
+      ],
+      "answer": 3,
+      "hint": "Which number will you actually hit?",
+      "working": [
+        "Show $11.7M. It's the number you'll actually hit.",
+        "Hiring against the run rate is how clubs end up short of cash in July."
+      ],
+      "whyNot": [
+        "October is a peak month. Celebrating a number you won't hit sets up a nasty surprise in summer.",
+        "Hiring against $14.4M means paying wages from money that never arrives. The real year is $11.7M.",
+        "October is real data. The problem isn't the month, it's multiplying a peak month by 12.",
+        null
+      ],
+      "kind": "concept"
+    }
+  ],
+  "takeaway": "Run rate is a quick guess. If your business has seasons, forecast the seasons."
+}

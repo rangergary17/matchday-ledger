@@ -1,0 +1,118 @@
+{
+  "number": 7,
+  "topic": "Churn",
+  "opponent": "Fernhill Albion",
+  "talk": "Churn is fans who don't come back. It's the slow puncture in every subscription business. You can sign new fans all summer and still go backwards if the old ones keep walking out.",
+  "terms": [
+    {
+      "term": "Churn",
+      "meaning": "Share of customers who leave in a period."
+    },
+    {
+      "term": "Net growth",
+      "meaning": "New customers minus lost customers."
+    },
+    {
+      "term": "Retention",
+      "meaning": "The opposite of churn. The share who stay."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "You have 10,000 season ticket holders. 15% don't renew, and you sign 1,200 new ones. Where do you end up?",
+      "options": [
+        "8,500",
+        "9,700",
+        "10,000",
+        "11,200"
+      ],
+      "answer": 1,
+      "hint": "Start, minus lost, plus new.",
+      "working": [
+        "10,000 x 15% = 1,500 leave.",
+        "10,000 - 1,500 + 1,200 = 9,700.",
+        "You signed 1,200 and still shrank."
+      ],
+      "whyNot": [
+        "10,000 - 1,500 = 8,500 counts the leavers but forgets the 1,200 new fans.",
+        null,
+        "Nothing stays still. 1,500 left and 1,200 joined, so 1,500 - 1,200 = 300 fewer than you started.",
+        "10,000 + 1,200 = 11,200 forgets the 1,500 who didn't renew."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "start": 10000,
+          "churn": 0.15,
+          "signed": 1200
+        },
+        "formula": "start - start * churn + signed"
+      }
+    },
+    {
+      "prompt": "Next year you want 10,500 holders, starting from 10,000, with 10% churn. How many new fans must you sign?",
+      "options": [
+        "500",
+        "1,000",
+        "1,500",
+        "2,000"
+      ],
+      "answer": 2,
+      "hint": "Replace the leavers first, then add the growth.",
+      "working": [
+        "10,000 x 10% = 1,000 leave, so you sign 1,000 just to stand still.",
+        "10,500 - 10,000 = 500 of growth on top.",
+        "1,000 + 500 = 1,500 new fans. All that to grow 500 / 10,000 = 5%."
+      ],
+      "whyNot": [
+        "500 is the growth you want, but first you have to replace the 1,000 who leave.",
+        "1,000 only replaces the leavers. You'd end the year where you started, at 10,000.",
+        null,
+        "10,000 - 1,000 + 2,000 = 11,000, which is 500 more than your target."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "target": 10500,
+          "start": 10000,
+          "churn": 0.1
+        },
+        "formula": "start * churn + target - start"
+      }
+    },
+    {
+      "prompt": "Each holder is worth $600 a year. You cut churn from 15% to 10% on 10,000 fans. What's that worth a year?",
+      "options": [
+        "$60,000",
+        "$150,000",
+        "$300,000",
+        "$600,000"
+      ],
+      "answer": 2,
+      "hint": "How many fans did you keep?",
+      "working": [
+        "15% - 10% = 5% fewer leave.",
+        "10,000 x 5% = 500 fans kept.",
+        "500 x $600 = $300,000 a year.",
+        "Keeping 500 fans is often cheaper than winning 500 new ones."
+      ],
+      "whyNot": [
+        "100 x $600 = $60,000 counts 100 fans kept. You keep 500.",
+        "500 x $300 = $150,000 values each fan at half a year. Each holder is worth $600 a year.",
+        null,
+        "1,000 x $600 = $600,000 counts 1,000 fans kept, as if churn fell by 10 points. It fell by 5 points, from 15% to 10%."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "fans": 10000,
+          "before": 0.15,
+          "after": 0.1,
+          "value": 600
+        },
+        "formula": "fans * (before - after) * value"
+      }
+    }
+  ],
+  "takeaway": "Plug the leak before you pour in more fans."
+}

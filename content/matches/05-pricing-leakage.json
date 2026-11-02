@@ -1,0 +1,115 @@
+{
+  "number": 5,
+  "topic": "Pricing Leakage",
+  "opponent": "Saltmarsh City",
+  "talk": "A small price rise drops straight to the bottom line. No new fans, no new staff, no new costs. The same goes for stopping the leaks: free tickets, card fees you swallow, discounts nobody asked for.",
+  "terms": [
+    {
+      "term": "Price rise",
+      "meaning": "Charging a bit more for the same thing."
+    },
+    {
+      "term": "Leakage",
+      "meaning": "Revenue you should get but don't. Freebies, uncharged extras, fees you swallow."
+    },
+    {
+      "term": "Pass-through",
+      "meaning": "Charging a cost back to the customer, like card fees."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "20,000 fans per game, $30 average ticket, 20 home games. You raise prices 2%. How much extra a season?",
+      "options": [
+        "$12,000",
+        "$120,000",
+        "$240,000",
+        "$600,000"
+      ],
+      "answer": 2,
+      "hint": "Total ticket revenue first, then 2% of it.",
+      "working": [
+        "20,000 x $30 x 20 = $12M of ticket money a season.",
+        "$12M x 2% = $240,000.",
+        "No extra fans, no extra cost. All of it is profit."
+      ],
+      "whyNot": [
+        "20,000 x $30 x 2% = $12,000 is one game. There are 20 home games.",
+        "$120,000 is half the right answer, as if prices rose by half as much. 2% of $12M is $240,000.",
+        null,
+        "20,000 x $30 = $600,000 is the ticket money from one game, not the extra from the price rise."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "fans": 20000,
+          "price": 30,
+          "games": 20,
+          "rise": 0.02
+        },
+        "formula": "fans * price * games * rise"
+      }
+    },
+    {
+      "prompt": "Each extra fan contributes $18. How many extra fans PER GAME would you need to earn that same $240,000?",
+      "options": [
+        "about 400",
+        "about 667",
+        "about 12,000",
+        "about 13,333"
+      ],
+      "answer": 1,
+      "hint": "Total extra fans needed, then divide by 20 games.",
+      "working": [
+        "$240,000 / $18 = about 13,333 extra fans a season.",
+        "13,333 / 20 = about 667 extra fans every game.",
+        "The price rise was much easier."
+      ],
+      "whyNot": [
+        "$240,000 / $30 = 8,000 fans, then 8,000 / 20 = 400. That divides by the ticket price, but each extra fan only leaves you $18.",
+        null,
+        "$240,000 / 20 = $12,000 is the extra money you need each game. That's dollars, not fans. Divide by the $18 each fan brings: $12,000 / $18 = about 667.",
+        "13,333 is the extra fans for the whole season. Spread over 20 home games it's about 667 a game."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "target": 240000,
+          "contrib": 18,
+          "games": 20
+        },
+        "formula": "target / contrib / games"
+      }
+    },
+    {
+      "prompt": "The shop takes $1M a year on cards and you swallow the 3% card fee. If you pass it on to customers, what's it worth a year?",
+      "options": [
+        "$3,000",
+        "$300,000",
+        "Nothing, you'll lose customers",
+        "$30,000"
+      ],
+      "answer": 3,
+      "hint": "3% of $1M.",
+      "working": [
+        "$1M x 3% = $30,000 a year.",
+        "Many shops add a small card fee and most customers barely notice."
+      ],
+      "whyNot": [
+        "$3,000 is too small by 10 times. $1M x 3% = $30,000.",
+        "$300,000 is 10 times too big. $1M x 3% = $30,000.",
+        "A few customers might grumble, but a small fee rarely loses many sales. Swallowing it costs you $30,000 a year for sure.",
+        null
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "sales": 1000000,
+          "fee": 0.03
+        },
+        "formula": "sales * fee"
+      }
+    }
+  ],
+  "takeaway": "A small price rise is the cheapest goal you'll ever score."
+}
