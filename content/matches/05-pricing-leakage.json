@@ -1,6 +1,7 @@
 {
   "number": 5,
   "topic": "Pricing Leakage",
+  "skill": "PRI",
   "opponent": "Saltmarsh City",
   "talk": "A small price rise drops straight to the bottom line. No new fans, no new staff, no new costs. The same goes for stopping the leaks: free tickets, card fees you swallow, discounts nobody asked for.",
   "terms": [
@@ -111,5 +112,92 @@
       }
     }
   ],
+  "penalty": {
+    "where": [
+      "whole: fans * price * games * rise / 1000"
+    ],
+    "vars": {
+      "fans": {
+        "value": 20000,
+        "min": 10000,
+        "max": 30000,
+        "step": 1000,
+        "fmt": "int"
+      },
+      "price": {
+        "value": 30,
+        "min": 20,
+        "max": 60,
+        "step": 5,
+        "fmt": "usd"
+      },
+      "games": {
+        "value": 20,
+        "min": 15,
+        "max": 25,
+        "step": 1,
+        "fmt": "int"
+      },
+      "rise": {
+        "value": 0.02,
+        "min": 0.01,
+        "max": 0.05,
+        "step": 0.01,
+        "fmt": "pct"
+      }
+    },
+    "prompt": "{fans} fans a game, {price} average ticket, {games} home games. You raise prices {rise}. How much extra a season?",
+    "answer": "fans * price * games * rise",
+    "fmt": "usd",
+    "whole": 1000,
+    "hint": "Total ticket money for the season first, then the percentage.",
+    "working": [
+      "{fans} x {price} x {games} = {fans * price * games|usd} a season.",
+      "{fans * price * games|usd} x {rise} = {fans * price * games * rise|usd}."
+    ],
+    "traps": [
+      {
+        "formula": "fans * price * rise",
+        "why": "That's one game. There are {games} home games."
+      },
+      {
+        "formula": "fans * price * games",
+        "why": "That's all the ticket money. You only want the extra {rise}."
+      }
+    ]
+  },
+  "call": {
+    "title": "The free tickets",
+    "prompt": "Every matchday 200 seats go free to local business contacts. Most of them would happily pay the $30 ticket.",
+    "options": [
+      {
+        "label": "Start charging them",
+        "effects": {
+          "fixed": -6000
+        },
+        "result": "Good call. 200 x $30 = $6,000 a matchday you were giving away. It drops straight to profit.",
+        "later": {
+          "after": 4,
+          "text": "A couple of local contacts grumble about paying, but they all keep coming.",
+          "effects": {}
+        }
+      },
+      {
+        "label": "Keep them free, it's goodwill",
+        "effects": {},
+        "result": "Goodwill is nice, but 200 x $30 = $6,000 a matchday is a lot to hand to people who'd pay."
+      },
+      {
+        "label": "Charge them and raise all prices 10%",
+        "effects": {
+          "fixed": -6000,
+          "contrib": 3,
+          "fans": -1200
+        },
+        "result": "The free-ticket fix is worth $6,000. But the rise loses 1,200 fans: 8,000 - 1,200 = 6,800 left, at $18 + $3 = $21 each. 6,800 x $21 = $142,800 against 8,000 x $18 = $144,000. The second change cost you."
+      }
+    ],
+    "best": 0
+  },
   "takeaway": "A small price rise is the cheapest goal you'll ever score."
 }

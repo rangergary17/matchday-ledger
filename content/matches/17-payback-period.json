@@ -1,6 +1,7 @@
 {
   "number": 17,
   "topic": "Payback Period",
+  "skill": "INV",
   "opponent": "Northmere City",
   "talk": "Payback period is how long an investment takes to earn back what it cost. It's the simplest test there is: how long until I'm back to even? Shorter is safer, because the future is never certain.",
   "terms": [
@@ -100,5 +101,77 @@
       "kind": "concept"
     }
   ],
+  "penalty": {
+    "where": [
+      "ads - run >= 10000"
+    ],
+    "vars": {
+      "cost": {
+        "value": 300000,
+        "min": 100000,
+        "max": 500000,
+        "step": 20000,
+        "fmt": "usd"
+      },
+      "ads": {
+        "value": 50000,
+        "min": 20000,
+        "max": 80000,
+        "step": 5000,
+        "fmt": "usd"
+      },
+      "run": {
+        "value": 10000,
+        "min": 0,
+        "max": 20000,
+        "step": 5000,
+        "fmt": "usd"
+      }
+    },
+    "prompt": "A big screen costs {cost}. It brings in {ads} a year in adverts and costs {run} a year to run. How many years to pay back?",
+    "answer": "cost / (ads - run)",
+    "fmt": "num",
+    "whole": 0.5,
+    "tol": 0.25,
+    "hint": "Divide the cost by what it earns after running costs.",
+    "working": [
+      "{ads} - {run} = {ads - run|usd} a year.",
+      "{cost} / {ads - run|usd} = {cost / (ads - run)|num} years."
+    ],
+    "traps": [
+      {
+        "formula": "cost / ads",
+        "why": "You forgot the {run} a year it costs to run."
+      }
+    ]
+  },
+  "call": {
+    "title": "Solar panels or new seats",
+    "prompt": "You have $120,000 to invest. Solar panels would save $6,000 a matchday. New padded seats in the family stand would bring 600 more fans a match.",
+    "options": [
+      {
+        "label": "Solar panels",
+        "effects": {
+          "cash": -120000,
+          "fixed": -6000
+        },
+        "result": "$120,000 / $6,000 = 20 matchdays to pay back. Safe, but slow."
+      },
+      {
+        "label": "New seats",
+        "effects": {
+          "cash": -120000,
+          "fans": 600
+        },
+        "result": "Good call. 600 x $18 = $10,800 a matchday. $120,000 / $10,800 = about 11 matchdays to pay back. The faster payback wins."
+      },
+      {
+        "label": "Keep the cash",
+        "effects": {},
+        "result": "Cash in the bank earns nothing here, and the seats would pay back in about 11 matchdays."
+      }
+    ],
+    "best": 1
+  },
   "takeaway": "Payback tells you how fast you're back to even. It says nothing about what comes after."
 }

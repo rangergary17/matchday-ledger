@@ -1,6 +1,7 @@
 {
   "number": 8,
   "topic": "The Bottleneck",
+  "skill": "PLN",
   "opponent": "Copperfield Rovers",
   "talk": "Every system has one constraint that caps the whole thing. Find it before spending money anywhere else. Pushing harder on a step that isn't the bottleneck just builds a bigger queue.",
   "terms": [
@@ -95,5 +96,97 @@
       }
     }
   ],
+  "penalty": {
+    "where": [
+      "(kiosks + added) * per <= hungry"
+    ],
+    "vars": {
+      "kiosks": {
+        "value": 4,
+        "min": 2,
+        "max": 8,
+        "step": 1,
+        "fmt": "int"
+      },
+      "per": {
+        "value": 100,
+        "min": 50,
+        "max": 200,
+        "step": 25,
+        "fmt": "int"
+      },
+      "spend": {
+        "value": 10,
+        "min": 5,
+        "max": 20,
+        "step": 1,
+        "fmt": "usd"
+      },
+      "added": {
+        "value": 4,
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "fmt": "int"
+      },
+      "hungry": {
+        "value": 2000,
+        "min": 2000,
+        "max": 2000,
+        "step": 1,
+        "fmt": "int"
+      }
+    },
+    "prompt": "At halftime {kiosks} kiosks can each serve {per} fans. {hungry} fans want food and spend {spend} each. How much more food money per match if you add {added} kiosks?",
+    "answer": "added * per * spend",
+    "fmt": "usd",
+    "whole": 1,
+    "hint": "Kiosks are the bottleneck. How many more fans get served?",
+    "working": [
+      "{added} x {per} = {added * per|int} more fans served.",
+      "{added * per|int} x {spend} = {added * per * spend|usd} more per match."
+    ],
+    "traps": [
+      {
+        "formula": "(kiosks + added) * per * spend",
+        "why": "That counts every kiosk. The first {kiosks} were already selling."
+      },
+      {
+        "formula": "added * spend",
+        "why": "That's one fan per kiosk. Each kiosk serves {per}."
+      }
+    ]
+  },
+  "call": {
+    "title": "The turnstile queues",
+    "prompt": "Fans miss kick-off queuing at the old turnstiles, and surveys say hundreds stay home because of it. New turnstiles cost $100,000 and should bring back 400 fans. Opening the gates earlier needs $2,000 a matchday of staff and should bring back 300. Or spend $60,000 on ads, worth about 150 fans.",
+    "options": [
+      {
+        "label": "Buy new turnstiles",
+        "effects": {
+          "cash": -100000,
+          "fans": 400
+        },
+        "result": "It works: 400 x $18 = $7,200 a matchday. But $100,000 / $7,200 = about 14 matchdays to pay back."
+      },
+      {
+        "label": "Open the gates earlier",
+        "effects": {
+          "fixed": 2000,
+          "fans": 300
+        },
+        "result": "Good call. 300 x $18 = $5,400 a matchday, and $5,400 - $2,000 = $3,400 better off every matchday, from day one. The cheapest fix for the bottleneck wins."
+      },
+      {
+        "label": "Spend $60,000 on ads",
+        "effects": {
+          "cash": -60000,
+          "fans": 150
+        },
+        "result": "Ads send more people into the same queue. 150 x $18 = $2,700 a matchday, and the bottleneck is still there."
+      }
+    ],
+    "best": 1
+  },
   "takeaway": "Find the one thing that's full. Spend there, or charge more for it."
 }

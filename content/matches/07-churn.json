@@ -1,6 +1,7 @@
 {
   "number": 7,
   "topic": "Churn",
+  "skill": "GRO",
   "opponent": "Fernhill Albion",
   "talk": "Churn is fans who don't come back. It's the slow puncture in every subscription business. You can sign new fans all summer and still go backwards if the old ones keep walking out.",
   "terms": [
@@ -114,5 +115,80 @@
       }
     }
   ],
+  "penalty": {
+    "where": [
+      "whole: start * churn"
+    ],
+    "vars": {
+      "start": {
+        "value": 10000,
+        "min": 5000,
+        "max": 20000,
+        "step": 1000,
+        "fmt": "int"
+      },
+      "churn": {
+        "value": 0.15,
+        "min": 0.05,
+        "max": 0.25,
+        "step": 0.05,
+        "fmt": "pct"
+      },
+      "signed": {
+        "value": 1200,
+        "min": 500,
+        "max": 3000,
+        "step": 100,
+        "fmt": "int"
+      }
+    },
+    "prompt": "You have {start} season ticket holders. {churn} don't renew, and you sign {signed} new ones. How many do you end up with?",
+    "answer": "start - start * churn + signed",
+    "fmt": "int",
+    "whole": 10,
+    "hint": "Start, minus the leavers, plus the new ones.",
+    "working": [
+      "{start} x {churn} = {start * churn|int} leave.",
+      "{start} - {start * churn|int} + {signed} = {start - start * churn + signed|int}."
+    ],
+    "traps": [
+      {
+        "formula": "start + signed",
+        "why": "You forgot the {start * churn|int} who didn't renew."
+      },
+      {
+        "formula": "start - start * churn",
+        "why": "You forgot the {signed} new fans."
+      }
+    ]
+  },
+  "call": {
+    "title": "Renewal season",
+    "prompt": "Renewal letters go out next week. Last year 15% of holders didn't renew. You have $30,000. A renewal push (early-bird perks, calls to lapsed fans) should keep 400 who'd otherwise leave. Ads for new fans should win 150.",
+    "options": [
+      {
+        "label": "Run the renewal push",
+        "effects": {
+          "cash": -30000,
+          "fans": 400
+        },
+        "result": "Good call. 400 x $18 = $7,200 a matchday kept, so $30,000 / $7,200 = about 4 matchdays to earn it back. Keeping fans is cheaper than finding new ones."
+      },
+      {
+        "label": "Spend it on ads for new fans",
+        "effects": {
+          "cash": -30000,
+          "fans": 150
+        },
+        "result": "150 x $18 = $2,700 a matchday. It takes $30,000 / $2,700 = about 11 matchdays to earn it back."
+      },
+      {
+        "label": "Do nothing",
+        "effects": {},
+        "result": "8,000 x 15% = 1,200 fans could walk, and you did nothing to stop it."
+      }
+    ],
+    "best": 0
+  },
   "takeaway": "Plug the leak before you pour in more fans."
 }

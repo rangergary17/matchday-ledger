@@ -1,12 +1,12 @@
-import type { Match } from "../lib/types";
 import { forwardRef } from "react";
+import type { Match } from "../lib/types";
 
-export const TeamTalk = forwardRef<HTMLHeadingElement, { match: Match; onKickOff: () => void; replay: boolean }>(
-  function TeamTalk({ match, onKickOff, replay }, ref) {
+export const TeamTalk = forwardRef<HTMLHeadingElement, { match: Match; label: string; onKickOff: () => void }>(
+  function TeamTalk({ match, label, onKickOff }, ref) {
     return (
       <>
         <section className="tactics" aria-labelledby="talk-title">
-          <p className="eyebrow">Tactics board{replay ? " · replay, doesn't count" : ""}</p>
+          <p className="eyebrow">Team talk · {label}</p>
           <h2 id="talk-title" ref={ref} tabIndex={-1}>{match.topic}</h2>
           <p>{match.talk}</p>
           <ul className="terms" aria-label="Key terms">
@@ -15,6 +15,7 @@ export const TeamTalk = forwardRef<HTMLHeadingElement, { match: Match; onKickOff
             ))}
           </ul>
         </section>
+        <p className="dim small">3 chances, then a penalty. Right answers are goals. Wrong ones are goals for {match.opponent}.</p>
         <button className="btn" onClick={onKickOff}>Kick off</button>
       </>
     );

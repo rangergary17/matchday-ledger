@@ -1,6 +1,7 @@
 {
   "number": 24,
   "topic": "Cohort Retention",
+  "skill": "GRO",
   "opponent": "Bramblewood City",
   "talk": "A cohort is a group of customers who joined at the same time, like everyone who bought their first season ticket last summer. Tracking each group separately shows whether you're getting better at keeping people. A single overall number can hide a problem.",
   "terms": [
@@ -100,5 +101,88 @@
       "kind": "concept"
     }
   ],
+  "penalty": {
+    "where": [
+      "whole: start * keep",
+      "whole: start * keep * keep"
+    ],
+    "vars": {
+      "start": {
+        "value": 1000,
+        "min": 500,
+        "max": 3000,
+        "step": 100,
+        "fmt": "int"
+      },
+      "keep": {
+        "value": 0.7,
+        "min": 0.5,
+        "max": 0.9,
+        "step": 0.1,
+        "fmt": "pct"
+      }
+    },
+    "prompt": "{start} fans bought their first season ticket. {keep} renew each year. How many are left after two renewals?",
+    "answer": "start * keep * keep",
+    "fmt": "int",
+    "whole": 1,
+    "hint": "The share who stay, then the share of those who stay again.",
+    "working": [
+      "Year 1: {start} x {keep} = {start * keep|int}.",
+      "Year 2: {start * keep|int} x {keep} = {start * keep * keep|int}."
+    ],
+    "traps": [
+      {
+        "formula": "start * keep",
+        "why": "That's after one year. Two renewals means applying it twice."
+      },
+      {
+        "formula": "start - 2 * (start - start * keep)",
+        "why": "That takes the same number off twice. Year 2 starts from a smaller group."
+      }
+    ]
+  },
+  "call": {
+    "title": "Which fans to chase",
+    "prompt": "Two schemes each cost $20,000 and bring 400 new fans. Fans from the school scheme renew at 85%. Fans from the half-price promo renew at 40%. You can only run one.",
+    "options": [
+      {
+        "label": "School scheme",
+        "effects": {
+          "cash": -20000,
+          "fans": 400
+        },
+        "result": "Good call. 400 x 85% = 340 stay a second year. Same cost, far more keepers.",
+        "later": {
+          "after": 10,
+          "text": "Renewal time: most school-scheme families stay, but 60 don't renew.",
+          "effects": {
+            "fans": -60
+          }
+        }
+      },
+      {
+        "label": "Half-price promo",
+        "effects": {
+          "cash": -20000,
+          "fans": 400
+        },
+        "result": "400 x 40% = 160 stay. Same cost, far fewer keepers.",
+        "later": {
+          "after": 10,
+          "text": "Renewal time: most of the promo fans drift away. 240 don't renew.",
+          "effects": {
+            "fans": -240
+          }
+        }
+      },
+      {
+        "label": "Neither",
+        "effects": {},
+        "result": "Both bring fans. The real choice was which group stays."
+      }
+    ],
+    "best": 0
+  },
   "takeaway": "Track each group of new customers on its own. Totals can grow while retention gets worse."
 }

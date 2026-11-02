@@ -1,6 +1,7 @@
 {
   "number": 23,
   "topic": "CAC Payback by Channel",
+  "skill": "GRO",
   "opponent": "Falconridge FC",
   "talk": "Not every marketing channel wins fans at the same price. Work out the cost to win a fan on each channel, and how many months each fan takes to pay that back. Then move money to the channel that pays back fastest.",
   "terms": [
@@ -109,5 +110,86 @@
       }
     }
   ],
+  "penalty": {
+    "where": [
+      "radio > social",
+      "whole: money / radio",
+      "whole: money / social"
+    ],
+    "vars": {
+      "money": {
+        "value": 30000,
+        "min": 10000,
+        "max": 60000,
+        "step": 10000,
+        "fmt": "usd"
+      },
+      "radio": {
+        "value": 200,
+        "min": 100,
+        "max": 400,
+        "step": 100,
+        "fmt": "usd"
+      },
+      "social": {
+        "value": 100,
+        "min": 50,
+        "max": 100,
+        "step": 50,
+        "fmt": "usd"
+      }
+    },
+    "prompt": "You move {money} from radio, where a fan costs {radio} to win, to social ads, where a fan costs {social}. How many more fans do you get for the same money?",
+    "answer": "money / social - money / radio",
+    "fmt": "int",
+    "whole": 1,
+    "hint": "Fans on social, minus the fans radio would have won.",
+    "working": [
+      "Radio: {money} / {radio} = {money / radio|int} fans.",
+      "Social: {money} / {social} = {money / social|int} fans.",
+      "{money / social|int} - {money / radio|int} = {money / social - money / radio|int} more fans."
+    ],
+    "traps": [
+      {
+        "formula": "money / social",
+        "why": "That's all the social fans. You also lose the ones radio would have won."
+      },
+      {
+        "formula": "money / social + money / radio",
+        "why": "That counts the radio fans too. That money has moved."
+      }
+    ]
+  },
+  "call": {
+    "title": "Next season's marketing",
+    "prompt": "You have $60,000. Social ads win fans at $100 each. Radio wins them at $200. A stadium tour day wins them at $60, but can only bring 200 fans.",
+    "options": [
+      {
+        "label": "All on radio",
+        "effects": {
+          "cash": -60000,
+          "fans": 300
+        },
+        "result": "$60,000 / $200 = 300 fans."
+      },
+      {
+        "label": "All on social",
+        "effects": {
+          "cash": -60000,
+          "fans": 600
+        },
+        "result": "$60,000 / $100 = 600 fans. Good, but the cheapest channel went unused."
+      },
+      {
+        "label": "Tour day first, the rest on social",
+        "effects": {
+          "cash": -60000,
+          "fans": 680
+        },
+        "result": "Good call. 200 x $60 = $12,000 for the tour day. $60,000 - $12,000 = $48,000 left, and $48,000 / $100 = 480 fans. 200 + 480 = 680 fans. Fill the cheapest channel first."
+      }
+    ],
+    "best": 2
+  },
   "takeaway": "Compare channels on cost per fan and months to pay back. Move money to the fastest."
 }

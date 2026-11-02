@@ -1,6 +1,7 @@
 {
   "number": 12,
   "topic": "Budget vs Actual",
+  "skill": "PLN",
   "opponent": "Ashcombe Town",
   "talk": "A budget is the match plan and actuals are what happened. The gap between them is the variance. Splitting it into 'how many' and 'how much' tells you what actually went wrong.",
   "terms": [
@@ -113,5 +114,88 @@
       }
     }
   ],
+  "penalty": {
+    "where": [
+      "ap > bp",
+      "bf > af"
+    ],
+    "vars": {
+      "ap": {
+        "value": 32,
+        "min": 20,
+        "max": 45,
+        "step": 1,
+        "fmt": "usd"
+      },
+      "bp": {
+        "value": 30,
+        "min": 20,
+        "max": 45,
+        "step": 1,
+        "fmt": "usd"
+      },
+      "af": {
+        "value": 10500,
+        "min": 6000,
+        "max": 15000,
+        "step": 500,
+        "fmt": "int"
+      },
+      "bf": {
+        "value": 12000,
+        "min": 6000,
+        "max": 15000,
+        "step": 500,
+        "fmt": "int"
+      }
+    },
+    "prompt": "Budget: {bf} fans at {bp}. Actual: {af} fans at {ap}. How much of the gap came from charging more per ticket?",
+    "answer": "(ap - bp) * af",
+    "fmt": "usd",
+    "whole": 500,
+    "hint": "Price difference times the fans who actually paid it.",
+    "working": [
+      "{ap} - {bp} = {ap - bp|usd} more per ticket.",
+      "{ap - bp|usd} x {af} = {(ap - bp) * af|usd}."
+    ],
+    "traps": [
+      {
+        "formula": "(ap - bp) * bf",
+        "why": "That uses the budgeted crowd of {bf}. Only {af} fans paid the higher price."
+      },
+      {
+        "formula": "ap * af - bp * bf",
+        "why": "That's the total gap. The question asks only for the price part."
+      }
+    ]
+  },
+  "call": {
+    "title": "Explaining the miss",
+    "prompt": "Ticket money came in under budget. The crowd was short, but prices were $2 higher than planned. A survey says kick-off times clash with kids' weekend sport. Moving kick-off costs $5,000 and should bring back 600 fans.",
+    "options": [
+      {
+        "label": "Cut prices back by $2",
+        "effects": {
+          "contrib": -2,
+          "fans": 500
+        },
+        "result": "The price part of the gap was positive. Pricing worked. Cutting it fixes the wrong thing: $18 - $2 = $16, and 8,000 + 500 = 8,500 fans at $16 is 8,500 x $16 = $136,000 against 8,000 x $18 = $144,000 now."
+      },
+      {
+        "label": "Keep prices, move kick-off",
+        "effects": {
+          "cash": -5000,
+          "fans": 600
+        },
+        "result": "Good call. The variance said the crowd was the problem. 600 x $18 = $10,800 a matchday back for a $5,000 change."
+      },
+      {
+        "label": "Keep everything as it is",
+        "effects": {},
+        "result": "The crowd problem won't fix itself. You knew where to look and didn't."
+      }
+    ],
+    "best": 1
+  },
   "takeaway": "Split every miss into how many and how much. Then you know which one to fix."
 }

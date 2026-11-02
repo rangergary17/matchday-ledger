@@ -1,6 +1,7 @@
 {
   "number": 16,
   "topic": "Opportunity Cost",
+  "skill": "INV",
   "opponent": "Stonecross Albion",
   "talk": "Every choice has a price you don't see on the invoice: the best thing you gave up to make it. That's opportunity cost. A good decision has to beat the next best option, not just zero.",
   "terms": [
@@ -108,5 +109,81 @@
       }
     }
   ],
+  "penalty": {
+    "where": [
+      "boxes - cash * rate > 0"
+    ],
+    "vars": {
+      "cash": {
+        "value": 1000000,
+        "min": 500000,
+        "max": 3000000,
+        "step": 500000,
+        "fmt": "usd"
+      },
+      "rate": {
+        "value": 0.08,
+        "min": 0.04,
+        "max": 0.12,
+        "step": 0.01,
+        "fmt": "pct"
+      },
+      "boxes": {
+        "value": 150000,
+        "min": 50000,
+        "max": 300000,
+        "step": 10000,
+        "fmt": "usd"
+      }
+    },
+    "prompt": "You have {cash} spare. New hospitality boxes would earn {boxes} a year. Or you could pay off a loan charging {rate} a year. How much more a year do the boxes earn than paying off the loan?",
+    "answer": "boxes - cash * rate",
+    "fmt": "usd",
+    "whole": 1000,
+    "hint": "Paying off the loan saves interest. How much?",
+    "working": [
+      "Paying off the loan saves {cash} x {rate} = {cash * rate|usd} a year.",
+      "{boxes} - {cash * rate|usd} = {boxes - cash * rate|usd} more from the boxes."
+    ],
+    "traps": [
+      {
+        "formula": "boxes",
+        "why": "That ignores what else the {cash} could do. Paying off the loan saves {cash * rate|usd} a year."
+      },
+      {
+        "formula": "cash * rate",
+        "why": "That's the interest saved. Compare it with what the boxes earn."
+      }
+    ]
+  },
+  "call": {
+    "title": "Saturday's free pitch",
+    "prompt": "The pitch is free on Saturday. A concert promoter offers $60,000. A friendly match would make $40,000. A youth tournament would make $10,000 and bring in 100 new young fans.",
+    "options": [
+      {
+        "label": "Host the concert",
+        "effects": {
+          "cash": 60000
+        },
+        "result": "Good call. It's the best use of the pitch. Anything else would have cost you this $60,000."
+      },
+      {
+        "label": "Play the friendly",
+        "effects": {
+          "cash": 40000
+        },
+        "result": "$40,000 is good, but saying yes meant saying no to $60,000. That's $60,000 - $40,000 = $20,000 worse off."
+      },
+      {
+        "label": "Run the youth tournament",
+        "effects": {
+          "cash": 10000,
+          "fans": 100
+        },
+        "result": "100 x $18 = $1,800 a matchday from the new fans. Over 20 matchdays: $10,000 + 20 x $1,800 = $46,000, still short of the concert's $60,000."
+      }
+    ],
+    "best": 0
+  },
   "takeaway": "Every yes is a no to something else. Count what you give up."
 }

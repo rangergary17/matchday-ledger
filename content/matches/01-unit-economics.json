@@ -1,6 +1,7 @@
 {
   "number": 1,
   "topic": "Unit Economics",
+  "skill": "PRF",
   "opponent": "Dockside United",
   "talk": "Before you sell one more ticket, know what each fan is worth to you. Every fan who walks through the turnstile brings in money and costs you money. What's left over is the only thing that pays for the stadium, the wages and the trophies.",
   "terms": [
@@ -111,5 +112,80 @@
       }
     }
   ],
+  "penalty": {
+    "where": [
+      "price - cost >= 10"
+    ],
+    "vars": {
+      "price": {
+        "value": 30,
+        "min": 20,
+        "max": 60,
+        "step": 5,
+        "fmt": "usd"
+      },
+      "cost": {
+        "value": 12,
+        "min": 4,
+        "max": 24,
+        "step": 2,
+        "fmt": "usd"
+      },
+      "fixed": {
+        "value": 90000,
+        "min": 40000,
+        "max": 150000,
+        "step": 10000,
+        "fmt": "usd"
+      }
+    },
+    "prompt": "A ticket costs {price}. Each fan costs {cost} to host, and opening the stadium costs {fixed} a matchday. How many fans do you need to break even?",
+    "answer": "fixed / (price - cost)",
+    "fmt": "int",
+    "whole": 100,
+    "hint": "Fixed costs divided by what each fan leaves behind.",
+    "working": [
+      "{price} - {cost} = {price - cost|usd} per fan.",
+      "{fixed} / {price - cost|usd} = {fixed / (price - cost)|int} fans."
+    ],
+    "traps": [
+      {
+        "formula": "fixed / price",
+        "why": "That divides by the ticket price. Each fan only leaves {price - cost|usd} after costs."
+      },
+      {
+        "formula": "fixed / cost",
+        "why": "That divides by the cost per fan. Divide by what each fan leaves behind: {price - cost|usd}."
+      }
+    ]
+  },
+  "call": {
+    "title": "The discount pitch",
+    "prompt": "The commercial team wants 10% off every ticket for the rest of the season, from $30 to $27. They promise 500 more fans a match. Each fan costs $12 to host.",
+    "options": [
+      {
+        "label": "Approve the discount",
+        "effects": {
+          "fans": 500,
+          "contrib": -3
+        },
+        "result": "Each fan now leaves $27 - $12 = $15. At 8,000 fans you made 8,000 x $18 = $144,000 a match. Now it's 8,000 + 500 = 8,500 fans, and 8,500 x $15 = $127,500. That's $144,000 - $127,500 = $16,500 less every matchday."
+      },
+      {
+        "label": "Say no and keep prices",
+        "effects": {},
+        "result": "Good call. To make the discount pay you'd need 8,000 x $18 / $15 = 9,600 fans, which is 9,600 - 8,000 = 1,600 more, not 500."
+      },
+      {
+        "label": "Go bigger: 20% off to fill the ground",
+        "effects": {
+          "fans": 2000,
+          "contrib": -6
+        },
+        "result": "At $30 - $6 = $24 each fan leaves $24 - $12 = $12. With 8,000 + 2,000 = 10,000 fans, 10,000 x $12 = $120,000 a match against $144,000 now. A fuller stadium, and $144,000 - $120,000 = $24,000 less every matchday."
+      }
+    ],
+    "best": 1
+  },
   "takeaway": "Know what one fan leaves behind before you sell one more ticket."
 }

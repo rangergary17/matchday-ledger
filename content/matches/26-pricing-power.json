@@ -1,6 +1,7 @@
 {
   "number": 26,
   "topic": "Pricing Power",
+  "skill": "PRI",
   "opponent": "Tidewater Athletic",
   "talk": "Pricing power is how much you can raise prices before customers walk away. Clubs with loyal fans and full stadiums have lots of it. A price rise wins if the extra money from the fans who stay beats what you lose from the ones who leave.",
   "terms": [
@@ -106,5 +107,88 @@
       "kind": "concept"
     }
   ],
+  "penalty": {
+    "where": [
+      "whole: fans * (1 - lost)",
+      "whole: old * (1 + rise)",
+      "rise > lost"
+    ],
+    "vars": {
+      "fans": {
+        "value": 15000,
+        "min": 5000,
+        "max": 20000,
+        "step": 1000,
+        "fmt": "int"
+      },
+      "old": {
+        "value": 400,
+        "min": 200,
+        "max": 600,
+        "step": 50,
+        "fmt": "usd"
+      },
+      "rise": {
+        "value": 0.1,
+        "min": 0.05,
+        "max": 0.2,
+        "step": 0.05,
+        "fmt": "pct"
+      },
+      "lost": {
+        "value": 0.05,
+        "min": 0.05,
+        "max": 0.2,
+        "step": 0.05,
+        "fmt": "pct"
+      }
+    },
+    "prompt": "You sell {fans} season tickets at {old}. You raise the price {rise} and lose {lost} of holders. How much more ticket money do you take?",
+    "answer": "fans * (1 - lost) * old * (1 + rise) - fans * old",
+    "fmt": "usd",
+    "whole": 1000,
+    "hint": "Revenue after (fewer fans, higher price) minus revenue before.",
+    "working": [
+      "New price: {old} x {1 + rise|pct} = {old * (1 + rise)|usd}.",
+      "Fans left: {fans} x {1 - lost|pct} = {fans * (1 - lost)|int}.",
+      "After: {fans * (1 - lost)|int} x {old * (1 + rise)|usd} = {fans * (1 - lost) * old * (1 + rise)|usd}.",
+      "Before: {fans} x {old} = {fans * old|usd}.",
+      "{fans * (1 - lost) * old * (1 + rise)|usd} - {fans * old|usd} = {fans * (1 - lost) * old * (1 + rise) - fans * old|usd}."
+    ],
+    "traps": [
+      {
+        "formula": "fans * old * rise",
+        "why": "That assumes nobody leaves. {lost} of holders do."
+      }
+    ]
+  },
+  "call": {
+    "title": "The waiting list",
+    "prompt": "There's a waiting list for season tickets. Option one: raise prices 10%, adding $3 per fan per matchday, and lose about 3% of fans. Option two: raise them 25%, adding $7.50, and lose about 25%.",
+    "options": [
+      {
+        "label": "Raise 10%",
+        "effects": {
+          "contrib": 3,
+          "fans": -240
+        },
+        "result": "Good call. 8,000 x 3% = 240 leave, so 8,000 - 240 = 7,760 stay. At $18 + $3 = $21 each, 7,760 x $21 = $162,960 a matchday. $162,960 - $144,000 = $18,960 more. A waiting list means pricing power."
+      },
+      {
+        "label": "Raise 25%",
+        "effects": {
+          "contrib": 7.5,
+          "fans": -2000
+        },
+        "result": "8,000 x 25% = 2,000 leave, so 8,000 - 2,000 = 6,000 stay. At $18 + $7.50 = $25.50 each, 6,000 x $25.50 = $153,000. Only $153,000 - $144,000 = $9,000 more, and 2,000 empty seats."
+      },
+      {
+        "label": "Freeze prices",
+        "effects": {},
+        "result": "A waiting list is the market telling you the price is too low."
+      }
+    ],
+    "best": 0
+  },
   "takeaway": "A price rise wins when the fans who stay pay for the ones who leave. Test it before you try it."
 }

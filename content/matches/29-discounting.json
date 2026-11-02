@@ -1,6 +1,7 @@
 {
   "number": 29,
   "topic": "Discounting",
+  "skill": "INV",
   "opponent": "Greystone Celtic",
   "talk": "A dollar today is worth more than a dollar next year, because today's dollar can be invested or used to pay down debt. Discounting turns future money into today's money so you can compare fairly. The further away the money, the less it's worth now.",
   "terms": [
@@ -102,5 +103,79 @@
       "kind": "concept"
     }
   ],
+  "penalty": {
+    "where": [
+      "whole: fut / (1 + r) / (1 + r)"
+    ],
+    "vars": {
+      "fut": {
+        "value": 121000,
+        "min": 60500,
+        "max": 242000,
+        "step": 12100,
+        "fmt": "usd"
+      },
+      "r": {
+        "value": 0.1,
+        "min": 0.1,
+        "max": 0.1,
+        "step": 0.05,
+        "fmt": "pct"
+      }
+    },
+    "prompt": "You'll receive {fut} in two years. Your discount rate is {r} a year. What's it worth today?",
+    "answer": "fut / (1 + r) / (1 + r)",
+    "fmt": "usd",
+    "whole": 1,
+    "hint": "Divide by (1 + the rate) once for each year of waiting.",
+    "working": [
+      "{fut} / {1 + r|pct} = {fut / (1 + r)|usd} a year from now.",
+      "{fut / (1 + r)|usd} / {1 + r|pct} = {fut / (1 + r) / (1 + r)|usd} today."
+    ],
+    "traps": [
+      {
+        "formula": "fut / (1 + r)",
+        "why": "That only discounts one year. The money is two years away."
+      }
+    ]
+  },
+  "call": {
+    "title": "The sponsor's two offers",
+    "prompt": "A sponsor offers $500,000 today, or $520,000 paid next season. Your money is worth about 10% a year to you.",
+    "options": [
+      {
+        "label": "Take $500,000 today",
+        "effects": {
+          "cash": 500000
+        },
+        "result": "Good call. $520,000 next season is worth $520,000 / (1 + 10%) = about $472,727 today, less than the $500,000 on the table."
+      },
+      {
+        "label": "Wait for $520,000",
+        "effects": {},
+        "result": "$520,000 / (1 + 10%) = about $472,727 in today's money. More dollars, less value.",
+        "later": {
+          "after": 30,
+          "text": "Next season's sponsor payment arrives.",
+          "effects": {
+            "cash": 520000
+          }
+        }
+      },
+      {
+        "label": "Ask for $100,000 a season for six seasons",
+        "effects": {},
+        "result": "More dollars in total, but most of it arrives years away. Discounted at 10% a year, it's worth less than the $500,000 on offer today.",
+        "later": {
+          "after": 30,
+          "text": "The first $100,000 sponsor payment arrives.",
+          "effects": {
+            "cash": 100000
+          }
+        }
+      }
+    ],
+    "best": 0
+  },
   "takeaway": "Money later is worth less than money now. Shrink it before you compare."
 }

@@ -1,6 +1,7 @@
 {
   "number": 22,
   "topic": "Cash Conversion",
+  "skill": "CSH",
   "opponent": "Westholm United",
   "talk": "The cash conversion cycle is how many days your cash is gone between paying for stock and getting paid for it. Add the days stock sits and the days customers take to pay, then take off the days you take to pay suppliers. The shorter the cycle, the less cash you need to run.",
   "terms": [
@@ -108,5 +109,78 @@
       }
     }
   ],
+  "penalty": {
+    "where": [
+      "stock + cust - supp > 0"
+    ],
+    "vars": {
+      "stock": {
+        "value": 60,
+        "min": 20,
+        "max": 90,
+        "step": 5,
+        "fmt": "int"
+      },
+      "cust": {
+        "value": 10,
+        "min": 0,
+        "max": 60,
+        "step": 5,
+        "fmt": "int"
+      },
+      "supp": {
+        "value": 30,
+        "min": 0,
+        "max": 60,
+        "step": 5,
+        "fmt": "int"
+      }
+    },
+    "prompt": "Stock sits {stock} days before it sells. Customers pay in {cust} days. You pay suppliers in {supp} days. How many days is your cash tied up?",
+    "answer": "stock + cust - supp",
+    "fmt": "int",
+    "whole": 1,
+    "hint": "Stock days, plus customer days, minus supplier days.",
+    "working": [
+      "{stock} + {cust} - {supp} = {stock + cust - supp|int} days."
+    ],
+    "traps": [
+      {
+        "formula": "stock + cust + supp",
+        "why": "Paying suppliers later shortens the cycle, so take those days off."
+      },
+      {
+        "formula": "stock - cust - supp",
+        "why": "Waiting for customers to pay adds days, it doesn't take them off."
+      }
+    ]
+  },
+  "call": {
+    "title": "The supplier's offer",
+    "prompt": "The kit supplier will give you 60 days to pay instead of 30, at no extra cost, if you sign for two seasons. You buy $100,000 of kit a month. Or you could push customers to pay faster with a 3% discount, freeing $30,000 but costing $900 a matchday.",
+    "options": [
+      {
+        "label": "Sign for 60-day terms",
+        "effects": {
+          "cash": 100000
+        },
+        "result": "Good call. Paying 30 days later keeps $100,000 in your bank. Free supplier credit is the cheapest cash there is."
+      },
+      {
+        "label": "Stay on 30 days",
+        "effects": {},
+        "result": "Nothing wrong with it, but you turned down free cash."
+      },
+      {
+        "label": "Discount for fast payers",
+        "effects": {
+          "cash": 30000,
+          "fixed": 900
+        },
+        "result": "It frees $30,000 but costs 20 x $900 = $18,000 over 20 matchdays."
+      }
+    ],
+    "best": 0
+  },
   "takeaway": "Get paid sooner, hold stock for less time, pay suppliers later. Every day you cut is cash back."
 }

@@ -1,6 +1,7 @@
 {
   "number": 9,
   "topic": "Gross Margin",
+  "skill": "PRI",
   "opponent": "Thornbury Harriers",
   "talk": "Gross margin is how much of each dollar you keep after paying for the thing you sold. High margin gives you room for mistakes. Discounting attacks margin first, volume second.",
   "terms": [
@@ -109,5 +110,85 @@
       }
     }
   ],
+  "penalty": {
+    "where": [
+      "sale - cost >= 10",
+      "price - sale >= 10"
+    ],
+    "vars": {
+      "price": {
+        "value": 70,
+        "min": 40,
+        "max": 100,
+        "step": 5,
+        "fmt": "usd"
+      },
+      "cost": {
+        "value": 25,
+        "min": 10,
+        "max": 40,
+        "step": 5,
+        "fmt": "usd"
+      },
+      "sale": {
+        "value": 50,
+        "min": 30,
+        "max": 80,
+        "step": 5,
+        "fmt": "usd"
+      },
+      "sold": {
+        "value": 1000,
+        "min": 500,
+        "max": 2000,
+        "step": 100,
+        "fmt": "int"
+      }
+    },
+    "prompt": "Shirts cost {cost} to make and sell for {price}. You sold {sold} at full price. How many would you need to sell at a sale price of {sale} to make the same profit?",
+    "answer": "sold * (price - cost) / (sale - cost)",
+    "fmt": "int",
+    "whole": 100,
+    "hint": "Full-price profit, divided by the profit on each sale shirt.",
+    "working": [
+      "Full price: {sold} x {price - cost|usd} = {sold * (price - cost)|usd}.",
+      "Sale margin: {sale} - {cost} = {sale - cost|usd}.",
+      "{sold * (price - cost)|usd} / {sale - cost|usd} = {sold * (price - cost) / (sale - cost)|int} shirts."
+    ],
+    "traps": [
+      {
+        "formula": "sold * price / sale",
+        "why": "That compares prices. Compare what you keep after the {cost} cost."
+      }
+    ]
+  },
+  "call": {
+    "title": "The leftover shirts",
+    "prompt": "500 shirts are left at the end of the season. They cost $25 each to make, already paid. Full price is $70. At $70 about 100 more would sell. At $50 about 400 would. At $20 all 500 go.",
+    "options": [
+      {
+        "label": "Hold at $70",
+        "effects": {
+          "cash": 7000
+        },
+        "result": "100 x $70 = $7,000. The other 400 sit in a box."
+      },
+      {
+        "label": "Sale at $50",
+        "effects": {
+          "cash": 20000
+        },
+        "result": "Good call. 400 x $50 = $20,000. The $25 is already spent, so what matters now is the cash coming in."
+      },
+      {
+        "label": "Clear the lot at $20",
+        "effects": {
+          "cash": 10000
+        },
+        "result": "500 x $20 = $10,000. Everything's gone, but for half what the sale brings."
+      }
+    ],
+    "best": 1
+  },
   "takeaway": "Discounts eat margin first. Know how much more you'd need to sell before you cut."
 }

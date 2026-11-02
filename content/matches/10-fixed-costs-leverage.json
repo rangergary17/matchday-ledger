@@ -1,6 +1,7 @@
 {
   "number": 10,
   "topic": "Fixed Costs & Leverage",
+  "skill": "PRF",
   "opponent": "Marrowgate FC",
   "talk": "Some costs stay the same however you play: the ground, the staff, the loans. Once revenue covers them, every extra dollar mostly drops to profit. That's operating leverage, and it works brilliantly on the way up and painfully on the way down.",
   "terms": [
@@ -111,5 +112,78 @@
       }
     }
   ],
+  "penalty": {
+    "where": [
+      "revenue * keep - fixed > 0"
+    ],
+    "vars": {
+      "revenue": {
+        "value": 8000000,
+        "min": 4000000,
+        "max": 12000000,
+        "step": 1000000,
+        "fmt": "usd"
+      },
+      "keep": {
+        "value": 0.6,
+        "min": 0.3,
+        "max": 0.8,
+        "step": 0.1,
+        "fmt": "pct"
+      },
+      "fixed": {
+        "value": 4000000,
+        "min": 1000000,
+        "max": 6000000,
+        "step": 500000,
+        "fmt": "usd"
+      }
+    },
+    "prompt": "Revenue is {revenue}. You keep {keep} of every dollar after variable costs. Fixed costs are {fixed}. What's your profit?",
+    "answer": "revenue * keep - fixed",
+    "fmt": "usd",
+    "whole": 100000,
+    "hint": "Revenue times the share you keep, then take off fixed costs.",
+    "working": [
+      "{revenue} x {keep} = {revenue * keep|usd} after variable costs.",
+      "{revenue * keep|usd} - {fixed} = {revenue * keep - fixed|usd} profit."
+    ],
+    "traps": [
+      {
+        "formula": "revenue - fixed",
+        "why": "You forgot the variable costs. You only keep {keep} of each dollar."
+      },
+      {
+        "formula": "revenue * keep",
+        "why": "You forgot the {fixed} of fixed costs."
+      }
+    ]
+  },
+  "call": {
+    "title": "The cup tie",
+    "prompt": "A home cup tie could sell out all 15,000 seats. A normal ticket is $30 and each fan costs $12 to host. Opening every stand needs $20,000 of extra stewards for the day.",
+    "options": [
+      {
+        "label": "Open all 15,000 seats",
+        "effects": {
+          "cash": 106000
+        },
+        "result": "Good call. Your fixed costs are already covered. 15,000 - 8,000 = 7,000 extra fans, and 7,000 x $18 = $126,000. $126,000 - $20,000 = $106,000 for one afternoon. That's leverage."
+      },
+      {
+        "label": "Keep the usual stands, save on stewards",
+        "effects": {},
+        "result": "The stewards cost $20,000, but 7,000 extra fans bring 7,000 x $18 = $126,000. Saving the small cost lost the big gain."
+      },
+      {
+        "label": "Open everything at half price",
+        "effects": {
+          "cash": -119000
+        },
+        "result": "At half price, $30 / 2 = $15, and each fan leaves $15 - $12 = $3. 15,000 x $3 = $45,000, against 8,000 x $18 = $144,000 on a normal day. $45,000 - $144,000 - $20,000 = -$119,000. A full stadium at a silly price loses money."
+      }
+    ],
+    "best": 0
+  },
   "takeaway": "With high fixed costs, a little more revenue means a lot more profit. A little less hurts just as much."
 }

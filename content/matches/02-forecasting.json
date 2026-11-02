@@ -1,6 +1,7 @@
 {
   "number": 2,
   "topic": "Forecasting",
+  "skill": "PLN",
   "opponent": "Wolfden Athletic",
   "talk": "Good forecasts aren't guesses, they're sums. Take what's already done, add what's already booked, then add the days left times your daily run rate. Multiply by the average value and you're done.",
   "terms": [
@@ -118,5 +119,85 @@
       }
     }
   ],
+  "penalty": {
+    "where": [],
+    "vars": {
+      "done": {
+        "value": 4200,
+        "min": 2000,
+        "max": 6000,
+        "step": 100,
+        "fmt": "int"
+      },
+      "booked": {
+        "value": 600,
+        "min": 100,
+        "max": 1000,
+        "step": 100,
+        "fmt": "int"
+      },
+      "days": {
+        "value": 10,
+        "min": 5,
+        "max": 20,
+        "step": 1,
+        "fmt": "int"
+      },
+      "rate": {
+        "value": 80,
+        "min": 20,
+        "max": 150,
+        "step": 10,
+        "fmt": "int"
+      }
+    },
+    "prompt": "The season ticket deadline is in {days} days. {done} are paid, {booked} are reserved, and you're selling {rate} a day. How many will you close at?",
+    "answer": "done + booked + days * rate",
+    "fmt": "int",
+    "whole": 10,
+    "hint": "Done, plus booked, plus days left times sales a day.",
+    "working": [
+      "{days} x {rate} = {days * rate|int} still to sell.",
+      "{done} + {booked} + {days * rate|int} = {done + booked + days * rate|int}."
+    ],
+    "traps": [
+      {
+        "formula": "done + days * rate",
+        "why": "You left out the {booked} reserved seats. They're booked, so count them."
+      },
+      {
+        "formula": "done + booked",
+        "why": "You stopped at today. There are still {days} days of selling at {rate} a day."
+      }
+    ]
+  },
+  "call": {
+    "title": "The Christmas shirt order",
+    "prompt": "The kit supplier needs your Christmas order today. Done plus booked plus run rate says you'll sell 900 shirts. Each shirt sold makes $40. Each unsold shirt gets cleared at a $10 loss.",
+    "options": [
+      {
+        "label": "Order 600 to be safe",
+        "effects": {
+          "cash": 24000
+        },
+        "result": "600 x $40 = $24,000. Then you sell out, and 900 - 600 = 300 fans who wanted a shirt go without."
+      },
+      {
+        "label": "Order 900, as forecast",
+        "effects": {
+          "cash": 36000
+        },
+        "result": "Good call. 900 x $40 = $36,000. Done plus booked plus run rate is the best guess you have, so use it."
+      },
+      {
+        "label": "Order 1,500 so we never run out",
+        "effects": {
+          "cash": 30000
+        },
+        "result": "The 900 that sell make 900 x $40 = $36,000. 1,500 - 900 = 600 are left over, and 600 x $10 = $6,000 to clear them. $36,000 - $6,000 = $30,000."
+      }
+    ],
+    "best": 1
+  },
   "takeaway": "Done, plus booked, plus run rate times days left. Then times the average value."
 }

@@ -1,6 +1,7 @@
 {
   "number": 30,
   "topic": "Valuation Multiples",
+  "skill": "INV",
   "opponent": "Crownfield United",
   "talk": "A multiple is a shortcut for valuing a business: take a profit number and multiply it by what similar businesses sell for. If similar clubs sell for 8 times their EBITDA, yours is probably worth around 8 times too. The hard parts are picking the right multiple and remembering that debt comes off before the owners get paid.",
   "terms": [
@@ -99,5 +100,80 @@
       "kind": "concept"
     }
   ],
+  "penalty": {
+    "where": [
+      "ebitda * mult - debt > 0"
+    ],
+    "vars": {
+      "ebitda": {
+        "value": 3500000,
+        "min": 1000000,
+        "max": 6000000,
+        "step": 500000,
+        "fmt": "usd"
+      },
+      "mult": {
+        "value": 8,
+        "min": 4,
+        "max": 12,
+        "step": 1,
+        "fmt": "num"
+      },
+      "debt": {
+        "value": 10000000,
+        "min": 0,
+        "max": 20000000,
+        "step": 1000000,
+        "fmt": "usd"
+      }
+    },
+    "prompt": "Similar clubs sell for {mult} times EBITDA. Your EBITDA is {ebitda} and you owe {debt}. How much would the owners get if the club sold?",
+    "answer": "ebitda * mult - debt",
+    "fmt": "usd",
+    "whole": 500000,
+    "hint": "EBITDA times the multiple, then pay off the loans.",
+    "working": [
+      "{ebitda} x {mult} = {ebitda * mult|usd} for the whole club.",
+      "{ebitda * mult|usd} - {debt} = {ebitda * mult - debt|usd} for the owners."
+    ],
+    "traps": [
+      {
+        "formula": "ebitda * mult",
+        "why": "That's the whole club. The lenders get their {debt} first."
+      },
+      {
+        "formula": "ebitda * mult + debt",
+        "why": "Debt is money the club owes, so it comes off."
+      }
+    ]
+  },
+  "call": {
+    "title": "The end-of-season pot",
+    "prompt": "There's $300,000 to spend before the summer. A squad bonus should keep morale up and bring 200 more fans. The academy and a youth stand should bring 1,000 more fans.",
+    "options": [
+      {
+        "label": "Pay a squad bonus",
+        "effects": {
+          "cash": -300000,
+          "fans": 200
+        },
+        "result": "200 x $18 = $3,600 a matchday back on $300,000. Nice for morale, poor for value."
+      },
+      {
+        "label": "Invest in the academy",
+        "effects": {
+          "cash": -300000,
+          "fans": 1000
+        },
+        "result": "Good call. 1,000 x $18 = $18,000 a matchday, so $300,000 / $18,000 = about 17 matchdays to pay back. Growing profit also earns a bigger multiple when the club is valued."
+      },
+      {
+        "label": "Keep it in the bank",
+        "effects": {},
+        "result": "Cash sitting still doesn't grow the club, and buyers pay for growth."
+      }
+    ],
+    "best": 1
+  },
   "takeaway": "A business is worth a multiple of its profit, minus its debt. Growth earns a bigger multiple."
 }

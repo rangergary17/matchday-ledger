@@ -1,6 +1,7 @@
 {
   "number": 19,
   "topic": "Working Capital",
+  "skill": "CSH",
   "opponent": "Pinecliff Town",
   "talk": "Working capital is the cash tied up in running the club day to day: what you're owed and what you hold in stock, minus what you owe others. The more of it you need, the less cash sits in the bank. A growing business can run short of cash even when it's profitable, because growth ties up more of it.",
   "terms": [
@@ -102,5 +103,84 @@
       "kind": "concept"
     }
   ],
+  "penalty": {
+    "where": [
+      "owed + stock - pay > 0"
+    ],
+    "vars": {
+      "owed": {
+        "value": 400000,
+        "min": 100000,
+        "max": 800000,
+        "step": 50000,
+        "fmt": "usd"
+      },
+      "stock": {
+        "value": 100000,
+        "min": 50000,
+        "max": 300000,
+        "step": 50000,
+        "fmt": "usd"
+      },
+      "pay": {
+        "value": 250000,
+        "min": 50000,
+        "max": 500000,
+        "step": 50000,
+        "fmt": "usd"
+      }
+    },
+    "prompt": "Sponsors owe you {owed}. Shop stock is worth {stock}. You owe suppliers {pay}. What's your working capital?",
+    "answer": "owed + stock - pay",
+    "fmt": "usd",
+    "whole": 50000,
+    "hint": "Owed to you, plus stock, minus what you owe.",
+    "working": [
+      "{owed} + {stock} - {pay} = {owed + stock - pay|usd}."
+    ],
+    "traps": [
+      {
+        "formula": "owed + stock + pay",
+        "why": "Money you owe takes away from working capital."
+      },
+      {
+        "formula": "owed - pay",
+        "why": "You forgot the {stock} of stock on the shelves."
+      }
+    ]
+  },
+  "call": {
+    "title": "The sponsor's payment terms",
+    "prompt": "A new sponsor offers $270,000 paid today, or the full $300,000 in 5 matchdays. A finance company will also buy the deal from you for $255,000 today. Your cash is healthy.",
+    "options": [
+      {
+        "label": "Take $270,000 today",
+        "effects": {
+          "cash": 270000
+        },
+        "result": "Taking it now costs you $300,000 - $270,000 = $30,000. Worth it only if cash is tight, and yours isn't."
+      },
+      {
+        "label": "Wait for the full $300,000",
+        "effects": {},
+        "result": "Good call. With healthy cash you can wait 5 matchdays for the full amount. Money owed to you is fine when you don't need it yet.",
+        "later": {
+          "after": 5,
+          "text": "The sponsor pays the full $300,000.",
+          "effects": {
+            "cash": 300000
+          }
+        }
+      },
+      {
+        "label": "Sell the deal for $255,000",
+        "effects": {
+          "cash": 255000
+        },
+        "result": "The finance company keeps $300,000 - $255,000 = $45,000. The most expensive way to get cash you don't need."
+      }
+    ],
+    "best": 1
+  },
   "takeaway": "Growth eats cash. Watch what's owed to you and what's sitting on shelves."
 }

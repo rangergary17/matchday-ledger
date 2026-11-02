@@ -18,7 +18,7 @@ export function startAnalytics(): void {
   }
 }
 
-export function screen(path: "/daily/kick-off" | "/daily/full-time" | "/replay/kick-off" | "/replay/full-time"): void {
+export function screen(path: "/daily/kick-off" | "/daily/full-time" | "/daily/call" | "/replay/kick-off" | "/replay/full-time" | "/drill"): void {
   try {
     pageview({ path, route: path });
   } catch {

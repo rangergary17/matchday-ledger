@@ -1,6 +1,7 @@
 {
   "number": 14,
   "topic": "Contribution by Product",
+  "skill": "PRF",
   "opponent": "Oakhollow Athletic",
   "talk": "Not everything you sell earns the same. Contribution margin is what each product leaves behind after the costs that come with it. Push the products that leave the most in total, and question the ones that leave almost nothing.",
   "terms": [
@@ -117,5 +118,99 @@
       }
     }
   ],
+  "penalty": {
+    "where": [
+      "sp - sc >= 20",
+      "mp - mc >= 4"
+    ],
+    "vars": {
+      "n": {
+        "value": 200,
+        "min": 100,
+        "max": 500,
+        "step": 50,
+        "fmt": "int"
+      },
+      "sp": {
+        "value": 70,
+        "min": 50,
+        "max": 90,
+        "step": 5,
+        "fmt": "usd"
+      },
+      "sc": {
+        "value": 30,
+        "min": 20,
+        "max": 40,
+        "step": 5,
+        "fmt": "usd"
+      },
+      "m": {
+        "value": 1500,
+        "min": 500,
+        "max": 3000,
+        "step": 100,
+        "fmt": "int"
+      },
+      "mp": {
+        "value": 12,
+        "min": 8,
+        "max": 15,
+        "step": 1,
+        "fmt": "usd"
+      },
+      "mc": {
+        "value": 4,
+        "min": 2,
+        "max": 6,
+        "step": 1,
+        "fmt": "usd"
+      }
+    },
+    "prompt": "You sold {n} shirts at {sp} (cost {sc} each) and {m} mugs at {mp} (cost {mc} each). What's the total contribution?",
+    "answer": "n * (sp - sc) + m * (mp - mc)",
+    "fmt": "usd",
+    "whole": 100,
+    "hint": "Units times contribution for each product, then add them.",
+    "working": [
+      "Shirts: {n} x {sp - sc|usd} = {n * (sp - sc)|usd}.",
+      "Mugs: {m} x {mp - mc|usd} = {m * (mp - mc)|usd}.",
+      "{n * (sp - sc)|usd} + {m * (mp - mc)|usd} = {n * (sp - sc) + m * (mp - mc)|usd}."
+    ],
+    "traps": [
+      {
+        "formula": "n * sp + m * mp",
+        "why": "That's sales. Take each item's cost off first."
+      }
+    ]
+  },
+  "call": {
+    "title": "The best shelf in the shop",
+    "prompt": "The shelf by the gate can only hold one product. Expected per matchday: scarves, 300 sold at $8 profit each. Programmes, 1,000 sold at $2 each. Signed photos, 35 sold at $50 each.",
+    "options": [
+      {
+        "label": "Scarves",
+        "effects": {
+          "fixed": -2400
+        },
+        "result": "Good call. 300 x $8 = $2,400 a matchday. Not the biggest profit per item, but the biggest in total."
+      },
+      {
+        "label": "Programmes",
+        "effects": {
+          "fixed": -2000
+        },
+        "result": "1,000 x $2 = $2,000. Lots of sales, thin profit on each one."
+      },
+      {
+        "label": "Signed photos",
+        "effects": {
+          "fixed": -1750
+        },
+        "result": "35 x $50 = $1,750. Great profit per photo, but few sell."
+      }
+    ],
+    "best": 0
+  },
   "takeaway": "Judge products on what they leave behind in total, not on price or percentage alone."
 }

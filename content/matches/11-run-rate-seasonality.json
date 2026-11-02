@@ -1,6 +1,7 @@
 {
   "number": 11,
   "topic": "Run Rate & Seasonality",
+  "skill": "PLN",
   "opponent": "Glenmoor Celtic",
   "talk": "Run rate takes a short period and scales it up to a year. It's fast and useful, but dangerous when the business has seasons. A football club with no matches in summer isn't a 12-month business.",
   "terms": [
@@ -101,5 +102,77 @@
       "kind": "concept"
     }
   ],
+  "penalty": {
+    "where": [],
+    "vars": {
+      "month": {
+        "value": 1200000,
+        "min": 600000,
+        "max": 2000000,
+        "step": 100000,
+        "fmt": "usd"
+      },
+      "busy": {
+        "value": 9,
+        "min": 7,
+        "max": 10,
+        "step": 1,
+        "fmt": "int"
+      },
+      "summer": {
+        "value": 300000,
+        "min": 100000,
+        "max": 500000,
+        "step": 100000,
+        "fmt": "usd"
+      }
+    },
+    "prompt": "A busy month brings in {month}. There are {busy} busy months, and the rest of the year brings in {summer} a month. What's the realistic year?",
+    "answer": "busy * month + (12 - busy) * summer",
+    "fmt": "usd",
+    "whole": 100000,
+    "hint": "Busy months, plus quiet months. Not busy times 12.",
+    "working": [
+      "{busy} x {month} = {busy * month|usd} from the busy months.",
+      "{12 - busy|int} x {summer} = {(12 - busy) * summer|usd} from the quiet months.",
+      "{busy * month|usd} + {(12 - busy) * summer|usd} = {busy * month + (12 - busy) * summer|usd}."
+    ],
+    "traps": [
+      {
+        "formula": "month * 12",
+        "why": "That's the run rate. It treats every month like a busy one."
+      },
+      {
+        "formula": "busy * month",
+        "why": "You left out the quiet months."
+      }
+    ]
+  },
+  "call": {
+    "title": "Hiring on a hot month",
+    "prompt": "October looks like a record year. The head of commercial wants 3 new salespeople at $3,000 a matchday each. Realistically there's about $5,000 a matchday of new sponsorship left to sell, and one good salesperson can find $4,000 of it.",
+    "options": [
+      {
+        "label": "Hire all 3",
+        "effects": {
+          "fixed": 4000
+        },
+        "result": "3 x $3,000 = $9,000 a matchday of wages chasing $5,000 of sponsorship. $5,000 - $9,000 = -$4,000 every matchday."
+      },
+      {
+        "label": "Hire 1 and review in the spring",
+        "effects": {
+          "fixed": -1000
+        },
+        "result": "Good call. One person costs $3,000 and brings $4,000: $4,000 - $3,000 = $1,000 better off each matchday. Hire for the real year, not the run rate."
+      },
+      {
+        "label": "Hire nobody",
+        "effects": {},
+        "result": "Safe, but you leave $4,000 - $3,000 = $1,000 a matchday on the table."
+      }
+    ],
+    "best": 1
+  },
   "takeaway": "Run rate is a quick guess. If your business has seasons, forecast the seasons."
 }

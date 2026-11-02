@@ -1,11 +1,23 @@
-import { score, outcome } from "./results";
+import { score, outcome } from "./save";
 
-export function shareText(opts: { day: number; topic: string; goals: boolean[]; site: string }): string {
-  const { us, them } = score(opts.goals);
-  const verb = { win: "Won", draw: "Drew", loss: "Lost" }[outcome(opts.goals)];
-  const balls = opts.goals.map((g) => (g ? "⚽" : "❌")).join("");
-  const site = opts.site.replace(/^https?:\/\//, "").replace(/\/$/, "");
-  return `Matchday Ledger #${opts.day} - ${opts.topic}\n${balls} ${verb} ${us}-${them}\n${site}`;
+export interface ShareInput {
+  day: number;
+  topic: string;
+  goals: boolean[];
+  pen: boolean;
+  site: string;
+  rating?: number;
+  position?: string;
+}
+
+/** Spoiler-free result: no answers, just how it went. */
+export function shareText(o: ShareInput): string {
+  const { us, them } = score(o.goals, o.pen);
+  const verb = { win: "Won", draw: "Drew", loss: "Lost" }[outcome(o.goals, o.pen)];
+  const balls = o.goals.map((g) => (g ? "⚽" : "❌")).join("");
+  const site = o.site.replace(/^https?:\/\//, "").replace(/\/$/, "");
+  const extra = [o.rating ? `Chairman rating ${o.rating}` : "", o.position ? `${o.position} in the league` : ""].filter(Boolean).join(" · ");
+  return [`Matchday Ledger #${o.day} - ${o.topic}`, `${balls} pen ${o.pen ? "⚽" : "❌"} ${verb} ${us}-${them}`, extra, site].filter(Boolean).join("\n");
 }
 
 /** Copies text. Uses the Clipboard API, falls back to a hidden textarea for older browsers. */

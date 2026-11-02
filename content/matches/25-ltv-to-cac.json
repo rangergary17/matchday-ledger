@@ -1,6 +1,7 @@
 {
   "number": 25,
   "topic": "LTV to CAC",
+  "skill": "GRO",
   "opponent": "Redcastle Harriers",
   "talk": "LTV to CAC compares what a customer is worth over their whole time with you to what it cost to win them. A ratio of 3 to 1 is a common healthy target. Much lower and you're overpaying for customers, much higher and you may be spending too little on growth.",
   "terms": [
@@ -108,5 +109,82 @@
       }
     }
   ],
+  "penalty": {
+    "where": [],
+    "vars": {
+      "profit": {
+        "value": 120,
+        "min": 60,
+        "max": 240,
+        "step": 20,
+        "fmt": "usd"
+      },
+      "years": {
+        "value": 3,
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "fmt": "int"
+      },
+      "cac": {
+        "value": 90,
+        "min": 30,
+        "max": 150,
+        "step": 10,
+        "fmt": "usd"
+      }
+    },
+    "prompt": "A member makes {profit} profit a year and stays {years} years. Winning a member costs {cac}. What's the LTV to CAC ratio? (Type the first number, like 3 for 3 to 1.)",
+    "answer": "profit * years / cac",
+    "fmt": "num",
+    "whole": 0.5,
+    "tol": 0.25,
+    "hint": "Lifetime value first, then divide by the cost to win.",
+    "working": [
+      "LTV: {profit} x {years} = {profit * years|usd}.",
+      "{profit * years|usd} / {cac} = {profit * years / cac|num}, so {profit * years / cac|num} to 1."
+    ],
+    "traps": [
+      {
+        "formula": "profit / cac",
+        "why": "That uses one year of profit. Members stay {years} years."
+      },
+      {
+        "formula": "cac / (profit * years)",
+        "why": "Upside down. Divide the lifetime value by the cost to win."
+      }
+    ]
+  },
+  "call": {
+    "title": "The agency pitch",
+    "prompt": "A marketing agency offers 1,000 new fans for $400,000, which is $400 each. Your referral scheme can bring 300 fans at $50 each. Over 20 matchdays a fan is worth 20 x $18 = $360.",
+    "options": [
+      {
+        "label": "Sign the agency",
+        "effects": {
+          "cash": -400000,
+          "fans": 1000
+        },
+        "result": "$360 / $400 = 0.9, so 0.9 to 1. You pay more for each fan than they're worth."
+      },
+      {
+        "label": "Run the referral scheme",
+        "effects": {
+          "cash": -15000,
+          "fans": 300
+        },
+        "result": "Good call. 300 x $50 = $15,000, and $360 / $50 = 7.2, so 7.2 to 1. Cheap fans worth far more than they cost."
+      },
+      {
+        "label": "Do both",
+        "effects": {
+          "cash": -415000,
+          "fans": 1300
+        },
+        "result": "The referral fans are a great deal, but the agency half loses money. Don't let a good deal hide a bad one."
+      }
+    ],
+    "best": 1
+  },
   "takeaway": "Spend to win customers while each dollar brings back about three. Watch both numbers, not just one."
 }

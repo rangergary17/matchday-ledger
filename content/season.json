@@ -1,6 +1,19 @@
 {
   "id": "season-1",
   "name": "Season 1",
-  "club": { "name": "Harbour Rovers", "role": "You, Chairman" },
+  "club": {
+    "name": "Harbour Rovers",
+    "role": "You, Chairman",
+    "capacity": 15000,
+    "start": { "cash": 2000000, "fans": 8000, "contrib": 18, "fixed": 90000, "board": 60 }
+  },
+  "skills": [
+    { "key": "PRF", "name": "Profit" },
+    { "key": "PRI", "name": "Pricing" },
+    { "key": "CSH", "name": "Cash" },
+    { "key": "GRO", "name": "Growth" },
+    { "key": "PLN", "name": "Planning" },
+    { "key": "INV", "name": "Investing" }
+  ],
   "startDate": "2026-11-02"
 }

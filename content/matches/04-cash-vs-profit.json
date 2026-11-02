@@ -1,6 +1,7 @@
 {
   "number": 4,
   "topic": "Cash vs Profit",
+  "skill": "CSH",
   "opponent": "Ironbridge Rangers",
   "talk": "Profit is the scoreline and cash is your fitness. You can be winning on the P&L and still collapse because the bank account is empty. Clubs rarely die from losses, they die from running out of cash.",
   "terms": [
@@ -105,5 +106,87 @@
       }
     }
   ],
+  "penalty": {
+    "where": [
+      "whole: cash / burn"
+    ],
+    "vars": {
+      "cash": {
+        "value": 6000000,
+        "min": 1000000,
+        "max": 10000000,
+        "step": 500000,
+        "fmt": "usd"
+      },
+      "burn": {
+        "value": 500000,
+        "min": 100000,
+        "max": 1000000,
+        "step": 50000,
+        "fmt": "usd"
+      }
+    },
+    "prompt": "The club has {cash} in the bank and burns {burn} a month. How many months of runway?",
+    "answer": "cash / burn",
+    "fmt": "num",
+    "whole": 1,
+    "hint": "Cash divided by monthly burn.",
+    "working": [
+      "{cash} / {burn} = {cash / burn|num} months."
+    ],
+    "traps": [
+      {
+        "formula": "cash / burn / 12",
+        "why": "That's years. The question asks for months."
+      }
+    ]
+  },
+  "call": {
+    "title": "Paying for the new striker",
+    "prompt": "You've agreed to sign a striker for $1.2M. The selling club will take it all now, or $400,000 now and the rest over two years. Separately, the stadium roof needs $900,000 of repairs in 3 matchdays.",
+    "options": [
+      {
+        "label": "Pay $1.2M up front",
+        "effects": {
+          "cash": -1200000
+        },
+        "result": "Profit looks the same either way, but paying it all now leaves too little for the $900,000 roof.",
+        "later": {
+          "after": 3,
+          "text": "The roof bill lands and cash is tight. An emergency loan costs $60,000 in fees.",
+          "effects": {
+            "cash": -60000
+          }
+        }
+      },
+      {
+        "label": "Pay $400,000 now, the rest later",
+        "effects": {
+          "cash": -400000
+        },
+        "result": "Good call. Same player, same profit, but $1.2M - $400,000 = $800,000 stays in the bank, so the roof gets paid without a loan.",
+        "later": {
+          "after": 3,
+          "text": "The roof gets fixed, paid from cash. No drama.",
+          "effects": {}
+        }
+      },
+      {
+        "label": "Pay $1.2M now and put off the roof",
+        "effects": {
+          "cash": -1200000
+        },
+        "result": "A leaking roof costs you fans.",
+        "later": {
+          "after": 3,
+          "text": "The roof leaks onto the main stand. 500 fans move elsewhere.",
+          "effects": {
+            "fans": -500
+          }
+        }
+      }
+    ],
+    "best": 1
+  },
   "takeaway": "Profit is spread over years. Cash is what's in the bank today."
 }

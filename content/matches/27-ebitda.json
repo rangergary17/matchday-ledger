@@ -1,6 +1,7 @@
 {
   "number": 27,
   "topic": "EBITDA",
+  "skill": "PRF",
   "opponent": "Lanternhill Rovers",
   "talk": "EBITDA stands for earnings before interest, tax, depreciation and amortization. It strips out borrowing costs, tax and the spreading of big past purchases, to show what the day-to-day business makes. It's handy for comparing clubs, but it isn't cash and it isn't the bottom line.",
   "terms": [
@@ -101,5 +102,89 @@
       "kind": "concept"
     }
   ],
+  "penalty": {
+    "where": [],
+    "vars": {
+      "op": {
+        "value": 1500000,
+        "min": 500000,
+        "max": 3000000,
+        "step": 100000,
+        "fmt": "usd"
+      },
+      "dep": {
+        "value": 800000,
+        "min": 200000,
+        "max": 1500000,
+        "step": 100000,
+        "fmt": "usd"
+      },
+      "am": {
+        "value": 1200000,
+        "min": 200000,
+        "max": 2000000,
+        "step": 100000,
+        "fmt": "usd"
+      }
+    },
+    "prompt": "Operating profit is {op}. That's after {dep} of depreciation and {am} of amortization. What's EBITDA?",
+    "answer": "op + dep + am",
+    "fmt": "usd",
+    "whole": 100000,
+    "hint": "Add back the two spread-out costs.",
+    "working": [
+      "{op} + {dep} + {am} = {op + dep + am|usd}."
+    ],
+    "traps": [
+      {
+        "formula": "op",
+        "why": "That's operating profit. EBITDA adds depreciation and amortization back."
+      },
+      {
+        "formula": "op + dep",
+        "why": "You forgot the {am} of amortization."
+      }
+    ]
+  },
+  "call": {
+    "title": "The stadium repairs",
+    "prompt": "The stadium needs $200,000 of repairs. Spending on the stadium doesn't hit EBITDA, so the commercial director calls it 'free'. Skip it and a stand may have to close.",
+    "options": [
+      {
+        "label": "Do the repairs now",
+        "effects": {
+          "cash": -200000
+        },
+        "result": "Good call. EBITDA ignores spending on the stadium, but the $200,000 still leaves the bank. It protects 2,000 seats."
+      },
+      {
+        "label": "Skip them, EBITDA looks the same",
+        "effects": {},
+        "result": "EBITDA looked fine. The stand didn't.",
+        "later": {
+          "after": 6,
+          "text": "A stand is closed for safety. 2,000 fans lose their seats.",
+          "effects": {
+            "fans": -2000
+          }
+        }
+      },
+      {
+        "label": "Do half now",
+        "effects": {
+          "cash": -100000
+        },
+        "result": "Half a repair is still a closed section later.",
+        "later": {
+          "after": 10,
+          "text": "Part of a stand closes for safety. 1,000 fans lose their seats.",
+          "effects": {
+            "fans": -1000
+          }
+        }
+      }
+    ],
+    "best": 0
+  },
   "takeaway": "EBITDA shows what the day-to-day business makes. It isn't cash, and it isn't profit."
 }

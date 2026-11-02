@@ -1,6 +1,7 @@
 {
   "number": 20,
   "topic": "Receivable Days",
+  "skill": "CSH",
   "opponent": "Silverbeck Rangers",
   "talk": "Receivable days tell you how long, on average, customers take to pay you. The longer it is, the more of your cash is sitting in other people's bank accounts. Getting paid faster is one of the cheapest ways to find cash.",
   "terms": [
@@ -103,5 +104,68 @@
       "kind": "concept"
     }
   ],
+  "penalty": {
+    "where": [
+      "whole: owed / daily"
+    ],
+    "vars": {
+      "owed": {
+        "value": 600000,
+        "min": 100000,
+        "max": 1500000,
+        "step": 50000,
+        "fmt": "usd"
+      },
+      "daily": {
+        "value": 10000,
+        "min": 5000,
+        "max": 20000,
+        "step": 1000,
+        "fmt": "usd"
+      }
+    },
+    "prompt": "Hospitality customers owe you {owed}. You sell {daily} of hospitality a day. On average, how many days do they take to pay?",
+    "answer": "owed / daily",
+    "fmt": "num",
+    "whole": 1,
+    "hint": "What's owed divided by a day of sales.",
+    "working": [
+      "{owed} / {daily} = {owed / daily|num} days."
+    ],
+    "traps": [
+      {
+        "formula": "owed / daily / 30",
+        "why": "That's months. The question asks for days."
+      }
+    ]
+  },
+  "call": {
+    "title": "Chasing slow payers",
+    "prompt": "Corporate clients take 60 days to pay. A credit controller costs $1,500 a matchday and should get it down to 40 days, freeing $200,000 of cash. Or offer a discount for paying fast: it frees $250,000 but costs $5,000 a matchday.",
+    "options": [
+      {
+        "label": "Hire the credit controller",
+        "effects": {
+          "cash": 200000,
+          "fixed": 1500
+        },
+        "result": "Good call. 60 - 40 = 20 days faster frees $200,000. The controller costs 20 x $1,500 = $30,000 over 20 matchdays, so $200,000 - $30,000 = $170,000 better off."
+      },
+      {
+        "label": "Offer the fast-pay discount",
+        "effects": {
+          "cash": 250000,
+          "fixed": 5000
+        },
+        "result": "It frees $250,000, but the discount costs 20 x $5,000 = $100,000 over 20 matchdays. $250,000 - $100,000 = $150,000."
+      },
+      {
+        "label": "Leave it",
+        "effects": {},
+        "result": "$200,000 of your money stays in other people's bank accounts."
+      }
+    ],
+    "best": 0
+  },
   "takeaway": "Every day a customer takes to pay is your cash sitting in their bank."
 }

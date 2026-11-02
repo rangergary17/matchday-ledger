@@ -1,6 +1,7 @@
 {
   "number": 13,
   "topic": "Margin vs Markup",
+  "skill": "PRI",
   "opponent": "Larkspur United",
   "talk": "Markup and margin use the same two numbers but divide by different things. Markup compares your profit to what the item cost you. Margin compares it to the price the customer paid, which is why margin is always the smaller number.",
   "terms": [
@@ -108,5 +109,72 @@
       }
     }
   ],
+  "penalty": {
+    "where": [],
+    "vars": {
+      "sales": {
+        "value": 300000,
+        "min": 100000,
+        "max": 600000,
+        "step": 50000,
+        "fmt": "usd"
+      },
+      "markup": {
+        "value": 0.5,
+        "min": 0.25,
+        "max": 1,
+        "step": 0.25,
+        "fmt": "pct"
+      }
+    },
+    "prompt": "Shop sales are {sales}. Everything carries a {markup} markup on cost. What's the gross profit?",
+    "answer": "sales * markup / (1 + markup)",
+    "fmt": "usd",
+    "whole": 1000,
+    "hint": "Price is cost plus the markup. So what share of the price is profit?",
+    "working": [
+      "With a {markup} markup, price is {1 + markup|pct} of cost.",
+      "Profit is {markup} of cost, so {markup} / {1 + markup|pct} = about {markup / (1 + markup)|pct} of sales.",
+      "{sales} x {markup} / {1 + markup|pct} = {sales * markup / (1 + markup)|usd}."
+    ],
+    "traps": [
+      {
+        "formula": "sales * markup",
+        "why": "That treats the markup as a margin. Margin divides by price, so it's smaller."
+      },
+      {
+        "formula": "sales / (1 + markup)",
+        "why": "That's what the stock cost you, not the profit."
+      }
+    ]
+  },
+  "call": {
+    "title": "Pricing the new jackets",
+    "prompt": "New training jackets cost $40 each. The shop manager wants a 50% markup. The board wants a 50% margin. Expected sales this season: 300 at $60, 250 at $80, or 120 at $100.",
+    "options": [
+      {
+        "label": "$60 (50% markup)",
+        "effects": {
+          "cash": 6000
+        },
+        "result": "$60 - $40 = $20 a jacket, and 300 x $20 = $6,000. A 50% markup is only a $20 / $60 = about 33% margin."
+      },
+      {
+        "label": "$80 (50% margin)",
+        "effects": {
+          "cash": 10000
+        },
+        "result": "Good call. $80 - $40 = $40 a jacket, and $40 / $80 = 50% margin. 250 x $40 = $10,000."
+      },
+      {
+        "label": "$100 (premium)",
+        "effects": {
+          "cash": 7200
+        },
+        "result": "$100 - $40 = $60 a jacket, but only 120 sell: 120 x $60 = $7,200."
+      }
+    ],
+    "best": 1
+  },
   "takeaway": "Markup divides by cost, margin divides by price. Mix them up and your budget is wrong."
 }

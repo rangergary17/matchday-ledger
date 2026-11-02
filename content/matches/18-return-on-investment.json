@@ -1,6 +1,7 @@
 {
   "number": 18,
   "topic": "Return on Investment",
+  "skill": "INV",
   "opponent": "Highgrove Wanderers",
   "talk": "ROI (return on investment) is the profit an investment makes, as a share of what you put in. It lets you compare a small idea with a big one on the same scale. Always check whether the return is per year or in total.",
   "terms": [
@@ -103,5 +104,76 @@
       }
     }
   ],
+  "penalty": {
+    "where": [
+      "back > cost"
+    ],
+    "vars": {
+      "cost": {
+        "value": 20000,
+        "min": 10000,
+        "max": 50000,
+        "step": 5000,
+        "fmt": "usd"
+      },
+      "back": {
+        "value": 26000,
+        "min": 12000,
+        "max": 80000,
+        "step": 1000,
+        "fmt": "usd"
+      }
+    },
+    "prompt": "You spend {cost} on a fan zone. It brings back {back}. What's the ROI, as a percentage?",
+    "answer": "(back - cost) / cost",
+    "fmt": "pct",
+    "whole": 0.01,
+    "hint": "Gain divided by what you put in.",
+    "working": [
+      "{back} - {cost} = {back - cost|usd} gain.",
+      "{back - cost|usd} / {cost} = {(back - cost) / cost|pct} ROI."
+    ],
+    "traps": [
+      {
+        "formula": "(back - cost) / back",
+        "why": "That divides by what came back. ROI divides by what you put in."
+      },
+      {
+        "formula": "back / cost",
+        "why": "That counts your own money coming back too. Take the {cost} off first."
+      }
+    ]
+  },
+  "call": {
+    "title": "Three ideas, one budget",
+    "prompt": "Pick one. A fan zone costs $50,000 and brings in $3,000 a matchday. Better food stalls cost $20,000 and bring in $2,000 a matchday. A mascot makeover costs $50,000 and brings in $1,000 a matchday.",
+    "options": [
+      {
+        "label": "Fan zone",
+        "effects": {
+          "cash": -50000,
+          "fixed": -3000
+        },
+        "result": "$3,000 x 20 = $60,000 back over 20 matchdays, and ($60,000 - $50,000) / $50,000 = 20% ROI."
+      },
+      {
+        "label": "Better food",
+        "effects": {
+          "cash": -20000,
+          "fixed": -2000
+        },
+        "result": "Good call. $2,000 x 20 = $40,000 back over 20 matchdays, and ($40,000 - $20,000) / $20,000 = 100% ROI. A smaller idea with a far better return."
+      },
+      {
+        "label": "Mascot makeover",
+        "effects": {
+          "cash": -50000,
+          "fixed": -1000
+        },
+        "result": "$1,000 x 20 = $20,000 back for $50,000 spent. ($20,000 - $50,000) / $50,000 = -60%."
+      }
+    ],
+    "best": 1
+  },
   "takeaway": "ROI is gain divided by what you put in. Always ask: per year, or in total?"
 }

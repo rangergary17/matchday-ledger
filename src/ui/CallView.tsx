@@ -1,0 +1,56 @@
+import { forwardRef, useEffect, useRef } from "react";
+import type { Call, Effects } from "../lib/types";
+import { count, money, reducedMotion, signedMoney } from "./fmt";
+
+function chips(e: Effects): string[] {
+  const out: string[] = [];
+  if (e.cash) out.push(`${signedMoney(e.cash)} now`);
+  if (e.fans) out.push(`${e.fans > 0 ? "+" : "-"}${count(Math.abs(e.fans))} fans a match`);
+  if (e.contrib) out.push(`${e.contrib > 0 ? "+" : "-"}${money(Math.abs(e.contrib)).replace(/\.00$/, "")} profit per fan`);
+  if (e.fixed) out.push(`${e.fixed > 0 ? "+" : "-"}${money(Math.abs(e.fixed))} ${e.fixed > 0 ? "costs" : "income"} a matchday`);
+  return out.length ? out : ["No change now"];
+}
+
+interface Props {
+  call: Call;
+  chosen: number | null;
+  onChoose: (i: number) => void;
+  onDone: () => void;
+}
+
+export const CallView = forwardRef<HTMLHeadingElement, Props>(function CallView({ call, chosen, onChoose, onDone }, ref) {
+  const resultRef = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    if (chosen === null) return;
+    resultRef.current?.focus({ preventScroll: true });
+    resultRef.current?.scrollIntoView({ block: "nearest", behavior: reducedMotion() ? "auto" : "smooth" });
+  }, [chosen]);
+  const good = chosen === call.best;
+  return (
+    <section className="call" aria-labelledby="call-title">
+      <p className="eyebrow">Chairman's call</p>
+      <h2 id="call-title" ref={ref} tabIndex={-1}>{call.title}</h2>
+      <p>{call.prompt}</p>
+      <p className="dim small">Do the sums. Your choice changes the club's money for the rest of the season.</p>
+      <ul className="choices">
+        {call.options.map((o, i) => (
+          <li key={i}>
+            <button className={`choice ${chosen === i ? (good ? "right" : "wrong") : chosen !== null && i === call.best ? "best" : ""}`} disabled={chosen !== null} onClick={() => onChoose(i)}>
+              <b>{o.label}</b>
+              <span className="chips">{chips(o.effects).map((c) => <span key={c} className="chip">{c}</span>)}</span>
+            </button>
+          </li>
+        ))}
+      </ul>
+      {chosen !== null && (
+        <div className="ref">
+          <h3 ref={resultRef} tabIndex={-1} className={`verdict ${good ? "goal" : "conc"}`}>{good ? "The board approves" : "The board isn't convinced"}</h3>
+          <p>{call.options[chosen].result}</p>
+          {!good && <p className="whynot"><b>Better call: {call.options[call.best].label}.</b> {call.options[call.best].result.replace(/^Good call\. /, "")}</p>}
+          {call.options[chosen].later && <p className="dim small">Something from this decision will land in a few matchdays. Watch the club news.</p>}
+          <button className="btn" onClick={onDone}>Back to the club</button>
+        </div>
+      )}
+    </section>
+  );
+});

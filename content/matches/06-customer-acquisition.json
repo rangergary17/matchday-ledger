@@ -1,6 +1,7 @@
 {
   "number": 6,
   "topic": "Customer Acquisition",
+  "skill": "GRO",
   "opponent": "Brackwater Wanderers",
   "talk": "Winning a new season ticket holder costs money: ads, open days, free scarves. The question is how fast you earn that money back, and how much each fan is worth over the years they stay.",
   "terms": [
@@ -106,5 +107,76 @@
       }
     }
   ],
+  "penalty": {
+    "where": [
+      "whole: spend / fans"
+    ],
+    "vars": {
+      "spend": {
+        "value": 50000,
+        "min": 10000,
+        "max": 100000,
+        "step": 5000,
+        "fmt": "usd"
+      },
+      "fans": {
+        "value": 250,
+        "min": 50,
+        "max": 500,
+        "step": 50,
+        "fmt": "int"
+      },
+      "monthly": {
+        "value": 25,
+        "min": 5,
+        "max": 50,
+        "step": 5,
+        "fmt": "usd"
+      }
+    },
+    "prompt": "You spend {spend} and win {fans} new season ticket holders. Each makes you {monthly} profit a month. How many months until each one has paid back what it cost to win?",
+    "answer": "spend / fans / monthly",
+    "fmt": "num",
+    "whole": 1,
+    "hint": "Cost to win one fan first, then divide by monthly profit.",
+    "working": [
+      "{spend} / {fans} = {spend / fans|usd} to win each fan.",
+      "{spend / fans|usd} / {monthly} = {spend / fans / monthly|num} months."
+    ],
+    "traps": [
+      {
+        "formula": "spend / fans",
+        "why": "That's the cost to win a fan, in dollars. Divide by {monthly} a month to get months."
+      }
+    ]
+  },
+  "call": {
+    "title": "Where to spend $40,000",
+    "prompt": "Marketing has $40,000. A billboard campaign should win 100 season ticket holders. School visits should win 250. Each holder is worth $300 a season.",
+    "options": [
+      {
+        "label": "Billboards around town",
+        "effects": {
+          "cash": -40000,
+          "fans": 100
+        },
+        "result": "$40,000 / 100 = $400 to win each fan. More than a fan is worth in a season."
+      },
+      {
+        "label": "School visits",
+        "effects": {
+          "cash": -40000,
+          "fans": 250
+        },
+        "result": "Good call. $40,000 / 250 = $160 per fan, less than half the billboard's $400, and each one is worth $300 a season."
+      },
+      {
+        "label": "Save the money",
+        "effects": {},
+        "result": "Safe, but school visits win fans for $160 each, and each one is worth $300 a season."
+      }
+    ],
+    "best": 1
+  },
   "takeaway": "Know what a fan costs to win and what they're worth. Spend where the second number is much bigger."
 }

@@ -1,6 +1,7 @@
 {
   "number": 15,
   "topic": "Sunk Costs",
+  "skill": "INV",
   "opponent": "Emberly Vale",
   "talk": "A sunk cost is money already spent that you can't get back. It feels like it should matter, but it shouldn't change your next decision. Only the money still to come counts.",
   "terms": [
@@ -95,5 +96,80 @@
       "kind": "concept"
     }
   ],
+  "penalty": {
+    "where": [
+      "earn > remain"
+    ],
+    "vars": {
+      "spent": {
+        "value": 400000,
+        "min": 200000,
+        "max": 800000,
+        "step": 100000,
+        "fmt": "usd"
+      },
+      "remain": {
+        "value": 300000,
+        "min": 100000,
+        "max": 500000,
+        "step": 50000,
+        "fmt": "usd"
+      },
+      "earn": {
+        "value": 450000,
+        "min": 100000,
+        "max": 800000,
+        "step": 50000,
+        "fmt": "usd"
+      }
+    },
+    "prompt": "You've already spent {spent} on a half-built stand. Finishing it costs {remain}. Once open it will earn {earn}. Ignoring what's already spent, how much better off are you if you finish it?",
+    "answer": "earn - remain",
+    "fmt": "usd",
+    "whole": 50000,
+    "hint": "Only count money that's still to come.",
+    "working": [
+      "The {spent} is sunk. Leave it out.",
+      "{earn} - {remain} = {earn - remain|usd} better off."
+    ],
+    "traps": [
+      {
+        "formula": "earn - remain - spent",
+        "why": "That counts the {spent} already spent. It's gone whatever you decide."
+      },
+      {
+        "formula": "earn",
+        "why": "You still have to pay {remain} to finish it."
+      }
+    ]
+  },
+  "call": {
+    "title": "The useless ticketing app",
+    "prompt": "Last season the club spent $80,000 on a ticketing app nobody uses. A new app costs $30,000 and saves $4,000 a matchday in staff time. A developer offers to patch the old app for $20,000, saving $1,500 a matchday.",
+    "options": [
+      {
+        "label": "Switch to the new app",
+        "effects": {
+          "cash": -30000,
+          "fixed": -4000
+        },
+        "result": "Good call. The $80,000 is gone either way. $30,000 / $4,000 = 7.5 matchdays to pay back, then it's pure saving."
+      },
+      {
+        "label": "Keep the old one, we paid $80,000",
+        "effects": {},
+        "result": "What you paid doesn't make it work. Keeping it costs $4,000 of staff time every matchday."
+      },
+      {
+        "label": "Patch the old app",
+        "effects": {
+          "cash": -20000,
+          "fixed": -1500
+        },
+        "result": "Good money after bad: $20,000 to save $1,500 a matchday, when $30,000 saves $4,000."
+      }
+    ],
+    "best": 0
+  },
   "takeaway": "Money already spent is gone. Decide on the money still to come."
 }

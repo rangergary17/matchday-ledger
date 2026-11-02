@@ -1,6 +1,7 @@
 {
   "number": 3,
   "topic": "The P&L",
+  "skill": "PRF",
   "opponent": "Kestrel Town",
   "talk": "The P&L (profit and loss) is the club's season table for money. Revenue at the top, costs stacked underneath, profit at the bottom. In football, one cost line usually decides everything: wages.",
   "terms": [
@@ -113,5 +114,105 @@
       ]
     }
   ],
+  "penalty": {
+    "where": [
+      "tickets + tv + shop - direct - wages - over > 0"
+    ],
+    "vars": {
+      "tickets": {
+        "value": 2000000,
+        "min": 1000000,
+        "max": 4000000,
+        "step": 500000,
+        "fmt": "usd"
+      },
+      "tv": {
+        "value": 3000000,
+        "min": 1000000,
+        "max": 5000000,
+        "step": 500000,
+        "fmt": "usd"
+      },
+      "shop": {
+        "value": 500000,
+        "min": 100000,
+        "max": 1000000,
+        "step": 100000,
+        "fmt": "usd"
+      },
+      "direct": {
+        "value": 1000000,
+        "min": 500000,
+        "max": 2000000,
+        "step": 100000,
+        "fmt": "usd"
+      },
+      "wages": {
+        "value": 3500000,
+        "min": 1000000,
+        "max": 5000000,
+        "step": 500000,
+        "fmt": "usd"
+      },
+      "over": {
+        "value": 800000,
+        "min": 200000,
+        "max": 1500000,
+        "step": 100000,
+        "fmt": "usd"
+      }
+    },
+    "prompt": "Tickets {tickets}, TV {tv}, shop {shop}. Direct costs {direct}, wages {wages}, overheads {over}. What's operating profit?",
+    "answer": "tickets + tv + shop - direct - wages - over",
+    "fmt": "usd",
+    "whole": 100000,
+    "hint": "Add up revenue, take off direct costs, then wages and overheads.",
+    "working": [
+      "{tickets} + {tv} + {shop} = {tickets + tv + shop|usd} of revenue.",
+      "{tickets + tv + shop|usd} - {direct} = {tickets + tv + shop - direct|usd} gross profit.",
+      "{tickets + tv + shop - direct|usd} - {wages} - {over} = {tickets + tv + shop - direct - wages - over|usd} operating profit."
+    ],
+    "traps": [
+      {
+        "formula": "tickets + tv + shop - wages - over",
+        "why": "You skipped the {direct} of direct costs."
+      },
+      {
+        "formula": "tickets + tv + shop - direct",
+        "why": "That's gross profit. Wages and overheads still come off."
+      }
+    ]
+  },
+  "call": {
+    "title": "The star's new contract",
+    "prompt": "Your top scorer earns $20,000 a matchday and wants $30,000. Re-signed and happy, he should pull in 300 more fans a match. If he leaves, about 1,500 fans could stop coming. His agent hints he'd take $24,000 plus a goals bonus.",
+    "options": [
+      {
+        "label": "Pay him $30,000",
+        "effects": {
+          "fixed": 10000,
+          "fans": 300
+        },
+        "result": "That's $10,000 more a matchday. The extra fans bring 300 x $18 = $5,400. $5,400 - $10,000 = -$4,600 every matchday."
+      },
+      {
+        "label": "Offer $24,000 plus a goals bonus",
+        "effects": {
+          "fixed": 4000,
+          "fans": 300
+        },
+        "result": "Good call. $24,000 - $20,000 = $4,000 more a matchday, and 300 x $18 = $5,400 from the fans. $5,400 - $4,000 = $1,400 better off every matchday."
+      },
+      {
+        "label": "Let him walk",
+        "effects": {
+          "fixed": -20000,
+          "fans": -1500
+        },
+        "result": "You save $20,000 a matchday, but 1,500 x $18 = $27,000 walks out with him. $20,000 - $27,000 = -$7,000 every matchday."
+      }
+    ],
+    "best": 1
+  },
   "takeaway": "Revenue at the top, profit at the bottom, and wages decide most of what's in between."
 }

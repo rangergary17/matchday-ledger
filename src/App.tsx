@@ -1,194 +1,308 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { pack } from "./lib/content";
 import { browserStore } from "./lib/storage";
-import { load, recordDaily, recordReplay, save as persist, score, seasonRecord, streak, type SaveData } from "./lib/results";
+import { load, recordCall, recordDrill, recordMatch, recordReplay, save as persist, score, streak, type SaveData } from "./lib/save";
 import { dateKey, matchIndexFor, matchdayFor } from "./lib/schedule";
-import { screen } from "./lib/analytics";
-import { Scoreboard } from "./components/Scoreboard";
-import { TeamTalk } from "./components/TeamTalk";
-import { HALVES, MINUTES, QuestionView } from "./components/QuestionView";
-import { FullTime } from "./components/FullTime";
-import { Fixtures } from "./components/Fixtures";
+import { screen as track } from "./lib/analytics";
+import { buildClub } from "./lib/club";
+import { ordinal, seasonOf, table } from "./lib/league";
+import { ratings } from "./lib/skills";
+import { dueToday } from "./lib/drills";
+import { baseValues, draw, type Values } from "./lib/template";
+import { commentary } from "./lib/commentary";
+import { buzz, playSound } from "./lib/sound";
+import { Scoreboard } from "./ui/Scoreboard";
+import { TeamTalk } from "./ui/TeamTalk";
+import { Chance, HALVES, MINUTES } from "./ui/Chance";
+import { PenaltyView } from "./ui/Penalty";
+import { FullTime } from "./ui/FullTime";
+import { CallView } from "./ui/CallView";
+import { Hub } from "./ui/Hub";
+import { ClubView } from "./ui/ClubView";
+import { TableView } from "./ui/TableView";
+import { CardView } from "./ui/CardView";
+import { Intro } from "./ui/Intro";
+import { TabBar, type Tab } from "./ui/TabBar";
+import { GoalBurst } from "./ui/GoalBurst";
+import { reducedMotion } from "./ui/fmt";
 
 const { season, matches } = pack;
+const N = matches.length;
 const store = browserStore();
 
-type Phase =
-  | { name: "talk" }
-  | { name: "question"; q: number; picked: number | null; hint: boolean }
-  | { name: "fulltime" };
-
+type Kind = "daily" | "catchup" | "replay";
 interface Play {
-  replay: boolean;
-  matchIndex: number;
-  /** Matchday number and date this play belongs to (daily only counts for this date). */
+  kind: Kind;
   day: number;
   date: string;
+  matchIndex: number;
   goals: boolean[];
   hints: number;
-  phase: Phase;
+  pen: boolean | null;
 }
+type Screen =
+  | { s: "hub" }
+  | { s: "talk"; play: Play }
+  | { s: "chance"; play: Play; q: number; picked: number | null; hint: boolean }
+  | { s: "penalty"; play: Play; done: boolean }
+  | { s: "fulltime"; play: Play }
+  | { s: "call"; day: number; chosen: number | null }
+  | { s: "drill"; match: number; values: Values; done: boolean };
 
 function todayInfo() {
   const date = dateKey(new Date());
   const day = matchdayFor(date, season.startDate);
-  return { date, day, matchIndex: matchIndexFor(day, matches.length) };
-}
-
-/** Today's daily match, resuming a finished or half-played match if there is one. */
-function dailyPlay(data: SaveData): Play {
-  const t = todayInfo();
-  const done = data.daily[t.date];
-  if (done) return { replay: false, ...t, goals: done.goals, hints: done.hints, phase: { name: "fulltime" } };
-  const prog = data.progress;
-  if (prog && prog.date === t.date && prog.match === matches[t.matchIndex].number && prog.goals.length > 0) {
-    return { replay: false, ...t, goals: prog.goals, hints: prog.hints, phase: { name: "question", q: prog.goals.length, picked: null, hint: false } };
-  }
-  return { replay: false, ...t, goals: [], hints: 0, phase: { name: "talk" } };
+  return { date, day, matchIndex: matchIndexFor(day, N) };
 }
 
 export function App() {
   const [data, setData] = useState<SaveData>(() => load(store));
-  const [play, setPlay] = useState<Play>(() => dailyPlay(load(store)));
   const [today, setToday] = useState(todayInfo);
+  const [screen, setScreen] = useState<Screen>({ s: "hub" });
+  const [tab, setTab] = useState<Tab>("match");
+  const [burst, setBurst] = useState({ n: 0, text: "" });
   const focusRef = useRef<HTMLElement | null>(null);
   const firstRender = useRef(true);
+  const setFocus = (el: HTMLElement | null) => { focusRef.current = el; };
 
-  const update = useCallback((next: SaveData) => {
-    setData(next);
-    persist(store, next);
-  }, []);
+  const update = useCallback((next: SaveData) => { setData(next); persist(store, next); }, []);
 
-  // Roll over at local midnight, and when the tab comes back after a while.
+  // Local midnight rollover.
   useEffect(() => {
     const check = () => setToday((prev) => (prev.date === dateKey(new Date()) ? prev : todayInfo()));
     const id = setInterval(check, 15_000);
     document.addEventListener("visibilitychange", check);
     return () => { clearInterval(id); document.removeEventListener("visibilitychange", check); };
   }, []);
-  useEffect(() => {
-    // A new day: move to the new match unless someone is mid-question.
-    setPlay((p) => (!p.replay && p.date !== today.date && p.phase.name !== "question" ? dailyPlay(load(store)) : p));
-  }, [today.date]);
 
-  // Move keyboard and screen reader focus to the new screen's heading.
-  const phaseKey = `${play.replay}-${play.matchIndex}-${play.phase.name}-${play.phase.name === "question" ? play.phase.q : ""}`;
+  const records = useMemo(() => Object.values(data.records), [data.records]);
+  const club = useMemo(() => buildClub(records, matches, season), [records]);
+  const rows = useMemo(() => table(season.club.name, matches, records, today.day), [records, today.day]);
+  const position = rows.findIndex((r) => r.you) + 1;
+  const rate = useMemo(() => ratings(data, matches, season), [data]);
+  const drills = useMemo(() => dueToday(data, today.date), [data, today.date]);
+  const byNumber = useMemo(() => new Map(matches.map((m) => [m.number, m])), []);
+
+  // Focus the new screen's heading for keyboard and screen reader users.
+  const key = `${tab}-${screen.s}-${"q" in screen ? screen.q : ""}-${"match" in screen ? screen.match : ""}`;
   useEffect(() => {
     if (firstRender.current) { firstRender.current = false; return; }
     focusRef.current?.focus({ preventScroll: true });
-    window.scrollTo({ top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
-  }, [phaseKey]);
+    window.scrollTo({ top: 0, behavior: reducedMotion() ? "auto" : "smooth" });
+  }, [key]);
 
-  const match = matches[play.matchIndex];
-  const { us, them } = score(play.goals);
+  const sound = data.settings.sound;
+  const todayRecord = data.records[String(today.day)] ?? null;
+  const prog = data.progress;
+  const progressToday = prog && prog.kind === "daily" && prog.day === today.day && prog.date === today.date ? prog : null;
 
-  function kickOff() {
-    screen(play.replay ? "/replay/kick-off" : "/daily/kick-off");
-    setPlay({ ...play, phase: { name: "question", q: 0, picked: null, hint: false } });
+  // Matchdays this season that are in the past and unplayed.
+  const seasonStart = seasonOf(today.day, N) * N + 1;
+  const missed: { day: number; match: (typeof matches)[number] }[] = [];
+  for (let d = Math.max(seasonStart, today.day - N + 1); d < today.day; d++) if (!data.records[String(d)]) missed.push({ day: d, match: matches[matchIndexFor(d, N)] });
+
+  function startPlay(kind: Kind, day: number, matchIndex: number) {
+    const date = today.date;
+    const p = data.progress;
+    const resume = kind !== "replay" && p && p.kind === kind && p.day === day ? p : null;
+    const play: Play = { kind, day, date, matchIndex, goals: resume?.goals ?? [], hints: resume?.hints ?? 0, pen: null };
+    setTab("match");
+    if (resume && resume.goals.length > 0) {
+      if (resume.goals.length >= 3) setScreen({ s: "penalty", play, done: false });
+      else setScreen({ s: "chance", play, q: resume.goals.length, picked: null, hint: false });
+    } else setScreen({ s: "talk", play });
   }
 
-  function showHint() {
-    if (play.phase.name !== "question") return;
-    const hints = play.hints + 1;
-    setPlay({ ...play, hints, phase: { ...play.phase, hint: true } });
-    if (!play.replay) update({ ...data, progress: { date: play.date, match: match.number, goals: play.goals, hints } });
+  function saveProgress(play: Play) {
+    if (play.kind === "replay") return;
+    update({ ...data, progress: { day: play.day, date: play.date, match: matches[play.matchIndex].number, kind: play.kind, goals: play.goals, hints: play.hints } });
   }
 
-  function answer(i: number) {
-    if (play.phase.name !== "question" || play.phase.picked !== null) return;
-    const q = match.questions[play.phase.q];
-    const goals = [...play.goals, i === q.answer];
-    setPlay({ ...play, goals, phase: { ...play.phase, picked: i } });
-    if (!play.replay) update({ ...data, progress: { date: play.date, match: match.number, goals, hints: play.hints } });
+  function celebrate(goal: boolean, text = "GOAL!") {
+    if (goal) { setBurst((b) => ({ n: b.n + 1, text })); playSound("goal", sound); buzz([40, 60, 120]); }
+    else { playSound("conceded", sound); buzz([80]); }
   }
 
-  function next() {
-    if (play.phase.name !== "question") return;
-    if (play.phase.q < 2) {
-      setPlay({ ...play, phase: { name: "question", q: play.phase.q + 1, picked: null, hint: false } });
-      return;
+  // ---------- render helpers ----------
+  const scoreboard = (play: Play, clock: string) => {
+    const s = score(play.goals, play.pen);
+    return <Scoreboard club={season.club.name} opponent={matches[play.matchIndex].opponent} us={s.us} them={s.them} clock={clock} />;
+  };
+  const seed = (play: Play) => `${play.kind}:${play.day}:${play.matchIndex}`;
+
+  function matchScreen() {
+    switch (screen.s) {
+      case "hub": {
+        const pendingCalls = club.pendingCalls.map((r) => ({ record: r, match: byNumber.get(r.match)! }));
+        return (
+          <Hub ref={setFocus} day={today.day} match={matches[today.matchIndex]} today={todayRecord} inProgress={!!progressToday}
+            pendingCalls={pendingCalls}
+            drills={drills.map((d) => ({ due: d, match: byNumber.get(d.match)! }))}
+            missed={missed}
+            nextTopic={matches[matchIndexFor(today.day + 1, N)].topic}
+            seasonOver={(today.day % N === 0) && !!todayRecord}
+            position={ordinal(position)}
+            onPlay={() => startPlay("daily", today.day, today.matchIndex)}
+            onCall={(day) => setScreen({ s: "call", day, chosen: null })}
+            onDrill={(m) => setScreen({ s: "drill", match: m, values: draw(byNumber.get(m)!.penalty, `${today.date}:${m}`), done: false })}
+            onCatchUp={(day) => startPlay("catchup", day, matchIndexFor(day, N))} />
+        );
+      }
+      case "talk": {
+        const { play } = screen;
+        const label = play.kind === "replay" ? "replay, doesn't count" : play.kind === "catchup" ? `catch-up, matchday ${play.day}` : `matchday ${play.day}`;
+        return (<>
+          {scoreboard(play, "Pre-match")}
+          <TeamTalk ref={setFocus} match={matches[play.matchIndex]} label={label} onKickOff={() => {
+            playSound("whistle", sound);
+            track(play.kind === "daily" ? "/daily/kick-off" : "/replay/kick-off");
+            setScreen({ s: "chance", play, q: 0, picked: null, hint: false });
+          }} />
+        </>);
+      }
+      case "chance": {
+        const { play, q, picked, hint } = screen;
+        const m = matches[play.matchIndex];
+        const sd = `${seed(play)}:${q}`;
+        const right = picked !== null && picked === m.questions[q].answer;
+        return (<>
+          {scoreboard(play, `${HALVES[q]} · ${MINUTES[q]}`)}
+          <Chance key={q} ref={setFocus} question={m.questions[q]} index={q} opponent={m.opponent} picked={picked} hintShown={hint}
+            build={commentary.build(sd, season.club.name, m.opponent)}
+            after={right ? commentary.goal(sd, season.club.name, m.opponent) : commentary.conceded(sd, season.club.name, m.opponent)}
+            onHint={() => { const p = { ...play, hints: play.hints + 1 }; setScreen({ ...screen, play: p, hint: true }); saveProgress(p); }}
+            onAnswer={(i) => {
+              if (picked !== null) return;
+              const ok = i === m.questions[q].answer;
+              const p = { ...play, goals: [...play.goals, ok] };
+              setScreen({ ...screen, play: p, picked: i });
+              saveProgress(p);
+              celebrate(ok);
+            }}
+            onNext={() => setScreen(q < 2 ? { s: "chance", play, q: q + 1, picked: null, hint: false } : { s: "penalty", play, done: false })} />
+        </>);
+      }
+      case "penalty": {
+        const { play } = screen;
+        const m = matches[play.matchIndex];
+        return (<>
+          {scoreboard(play, "90+2' · Penalty")}
+          <PenaltyView ref={setFocus} penalty={m.penalty} values={baseValues(m.penalty)} mode="penalty"
+            intro={commentary.penalty(seed(play), season.club.name, m.opponent)}
+            onHint={() => setScreen({ ...screen, play: { ...play, hints: play.hints + 1 } })}
+            onResult={(ok) => {
+              const p = { ...play, pen: ok };
+              setScreen({ s: "penalty", play: p, done: true });
+              if (ok) celebrate(true); else { playSound("saved", sound); buzz([80]); }
+              if (play.kind === "replay") update(recordReplay(data, m.number, p.goals, ok));
+              else {
+                update(recordMatch(data, { day: play.day, date: play.date, match: m.number, kind: play.kind, goals: p.goals, pen: ok, hints: p.hints }));
+                if (play.kind === "daily") track("/daily/full-time");
+              }
+            }}
+            nextLabel="Full time"
+            onNext={() => { playSound("whistle", sound); setScreen({ s: "fulltime", play: screen.play }); }} />
+        </>);
+      }
+      case "fulltime": {
+        const { play } = screen;
+        const m = matches[play.matchIndex];
+        const rec = data.records[String(play.day)];
+        const pen = play.pen ?? false;
+        return (<>
+          {scoreboard({ ...play, pen }, "Full time")}
+          <FullTime ref={setFocus} match={m} day={play.day} goals={play.goals} pen={pen} kind={play.kind}
+            news={club.news.filter((n) => n.day === play.day)}
+            rating={rate.overall} position={ordinal(position)}
+            callPending={!!rec && rec.call === null}
+            onCall={() => setScreen({ s: "call", day: play.day, chosen: null })}
+            onReplay={() => startPlay("replay", play.day, play.matchIndex)}
+            onDone={() => setScreen({ s: "hub" })} />
+        </>);
+      }
+      case "call": {
+        const rec = data.records[String(screen.day)];
+        const m = rec ? byNumber.get(rec.match) : undefined;
+        if (!rec || !m) return null;
+        return (
+          <CallView ref={setFocus} call={m.call} chosen={screen.chosen ?? rec.call}
+            onChoose={(i) => {
+              if (rec.call !== null) return;
+              update(recordCall(data, screen.day, i));
+              setScreen({ ...screen, chosen: i });
+              track("/daily/call");
+              if (i === m.call.best) { playSound("goal", sound); buzz([30, 40, 60]); }
+            }}
+            onDone={() => setScreen({ s: "hub" })} />
+        );
+      }
+      case "drill": {
+        const m = byNumber.get(screen.match)!;
+        return (
+          <PenaltyView key={`${screen.match}-${JSON.stringify(screen.values)}`} ref={setFocus} penalty={m.penalty} values={screen.values} mode="drill"
+            intro={`Training ground: ${m.topic}. Same idea, new numbers.`}
+            onHint={() => undefined}
+            onResult={(ok) => {
+              update(recordDrill(data, m.number, today.date, ok));
+              setScreen({ ...screen, done: true });
+              if (ok) celebrate(true, "SPOT ON"); else playSound("saved", sound);
+              track("/drill");
+            }}
+            nextLabel="Back to the club" onNext={() => setScreen({ s: "hub" })} />
+        );
+      }
     }
-    if (play.replay) {
-      update(recordReplay(data, match.number, play.goals));
-      screen("/replay/full-time");
-    } else {
-      update(recordDaily(data, { day: play.day, date: play.date, match: match.number, goals: play.goals, hints: play.hints }));
-      screen("/daily/full-time");
-    }
-    setPlay({ ...play, phase: { name: "fulltime" } });
-  }
-
-  function startReplay(matchIndex: number) {
-    setPlay({ replay: true, matchIndex, day: play.day, date: play.date, goals: [], hints: 0, phase: { name: "talk" } });
-  }
-
-  function pickFixture(matchIndex: number) {
-    if (matchIndex === today.matchIndex && !data.daily[today.date]) setPlay(dailyPlay(data));
-    else startReplay(matchIndex);
   }
 
   const s = streak(data, today.date);
-  const rec = seasonRecord(data);
-  const clock = useMemo(() => {
-    if (play.phase.name === "talk") return "Pre-match team talk";
-    if (play.phase.name === "fulltime") return "Full time";
-    return `${HALVES[play.phase.q]} · ${MINUTES[play.phase.q]}`;
-  }, [play.phase]);
-  const nextTopic = matches[matchIndexFor(today.day + 1, matches.length)].topic;
-  const setFocus = (el: HTMLElement | null) => { focusRef.current = el; };
+  const pendingBadge = club.pendingCalls.length > 0 || drills.length > 0 || !todayRecord;
 
   return (
-    <div className="wrap">
-      <a className="skip" href="#stage">Skip to the match</a>
+    <div className="app">
+      <a className="skip" href="#stage">Skip to the game</a>
       <header className="top">
         <div>
-          <p className="eyebrow">
-            {play.replay ? "Replay" : "Today"} · Matchday {play.replay ? play.matchIndex + 1 : play.day} · {match.topic}
-          </p>
+          <p className="eyebrow">Matchday {today.day} · {rows.find((r) => r.you)!.p ? ordinal(position) : "pre-season"} · rating {rate.overall}</p>
           <h1>Matchday Ledger</h1>
         </div>
-        <div className="stats">
-          <div className="streak">{s ? `${s}-day streak` : "Play daily to build a streak"}</div>
-          <div className="record" aria-label={`Season record: ${rec.w} won, ${rec.d} drawn, ${rec.l} lost`}>
-            W {rec.w} · D {rec.d} · L {rec.l}
-          </div>
+        <div className="top-right">
+          <span className="streak" aria-label={`${s} day streak`}>{s ? `${s}-day streak` : "Start a streak"}</span>
+          <button className="icon-btn" aria-pressed={sound} aria-label={sound ? "Sound on" : "Sound off"} onClick={() => update({ ...data, settings: { ...data.settings, sound: !sound } })}>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 9h4l5-4v14l-5-4H4V9Z" />
+              {sound ? <path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" strokeWidth="2" /> : <path d="m16 9 5 6m0-6-5 6" fill="none" strokeWidth="2" />}
+            </svg>
+          </button>
         </div>
       </header>
 
-      <Scoreboard club={season.club.name} role={season.club.role} opponent={match.opponent} us={us} them={them} clock={clock} />
-
-      <main id="stage" style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-        {play.phase.name === "talk" && <TeamTalk ref={setFocus} match={match} replay={play.replay} onKickOff={kickOff} />}
-        {play.phase.name === "question" && (
-          <QuestionView
-            key={play.phase.q}
-            ref={setFocus}
-            question={match.questions[play.phase.q]}
-            index={play.phase.q}
-            opponent={match.opponent}
-            picked={play.phase.picked}
-            hintShown={play.phase.hint}
-            onHint={showHint}
-            onAnswer={answer}
-            onNext={next}
-          />
-        )}
-        {play.phase.name === "fulltime" && (
-          <FullTime
-            ref={setFocus}
-            match={match}
-            day={play.day}
-            goals={play.goals}
-            replay={play.replay}
-            nextTopic={nextTopic}
-            onReplay={() => startReplay(play.matchIndex)}
-            onBackToToday={() => setPlay(dailyPlay(data))}
-          />
-        )}
+      <main id="stage" className="stage">
+        {!data.settings.introSeen ? (
+          <Intro club={season.club.name} onStart={() => update({ ...data, settings: { ...data.settings, introSeen: true } })} />
+        ) : tab === "match" ? matchScreen()
+          : tab === "club" ? <ClubView ref={setFocus} club={club} season={season} position={position} teams={rows.length} />
+          : tab === "table" ? (
+            <TableView ref={setFocus} rows={rows} matches={matches} startDate={season.startDate} today={today.day} save={data}
+              onPick={(day) => {
+                const mi = matchIndexFor(day, N);
+                if (data.records[String(day)]) startPlay("replay", day, mi);
+                else if (day === today.day) startPlay("daily", day, mi);
+                else startPlay("catchup", day, mi);
+              }} />
+          ) : (
+            <CardView ref={setFocus} name={data.settings.name} club={season.club.name} overall={rate.overall} skills={rate.skills}
+              onName={(name) => update({ ...data, settings: { ...data.settings, name } })}
+              onTrain={(mn) => { setTab("match"); setScreen({ s: "drill", match: mn, values: draw(byNumber.get(mn)!.penalty, `${Date.now()}:${mn}`), done: false }); }}
+              onReplay={(mn) => {
+                const idx = matches.findIndex((m) => m.number === mn);
+                const rec = records.find((r) => r.match === mn);
+                startPlay("replay", rec?.day ?? idx + 1, idx);
+              }} />
+          )}
       </main>
-
-      <Fixtures matches={matches} startDate={season.startDate} today={today.day} save={data} onPick={pickFixture} />
-      <p className="foot">A new match every day at midnight, your time. Your results stay on this device. No account, no ads.</p>
+      <p className="foot">A new match every day at midnight, your time. Your club lives on this device. No account, no ads.</p>
+      {data.settings.introSeen && <TabBar tab={tab} onTab={(t) => { setTab(t); if (t === "match" && (screen.s === "fulltime" || screen.s === "call" || (screen.s === "drill" && screen.done))) setScreen({ s: "hub" }); }} badges={{ match: pendingBadge && tab !== "match" }} />}
+      <GoalBurst trigger={burst.n} text={burst.text} />
     </div>
   );
 }

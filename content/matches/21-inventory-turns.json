@@ -1,6 +1,7 @@
 {
   "number": 21,
   "topic": "Inventory Turns",
+  "skill": "CSH",
   "opponent": "Quarrytown Athletic",
   "talk": "Inventory turns count how many times a year you sell through your stock. Stock on a shelf is cash you can't spend, and it can go out of fashion. More turns means less cash stuck and fresher shelves.",
   "terms": [
@@ -105,5 +106,67 @@
       }
     }
   ],
+  "penalty": {
+    "where": [
+      "whole: sold / avg"
+    ],
+    "vars": {
+      "sold": {
+        "value": 600000,
+        "min": 200000,
+        "max": 1200000,
+        "step": 100000,
+        "fmt": "usd"
+      },
+      "avg": {
+        "value": 150000,
+        "min": 50000,
+        "max": 300000,
+        "step": 50000,
+        "fmt": "usd"
+      }
+    },
+    "prompt": "Over a year the shop sold stock that cost {sold}. On average it holds {avg} of stock. How many times a year does stock turn?",
+    "answer": "sold / avg",
+    "fmt": "num",
+    "whole": 1,
+    "hint": "Stock sold in a year divided by average stock.",
+    "working": [
+      "{sold} / {avg} = {sold / avg|num} turns a year."
+    ],
+    "traps": [
+      {
+        "formula": "365 / (sold / avg)",
+        "why": "That's days on the shelf. The question asks for turns a year."
+      }
+    ]
+  },
+  "call": {
+    "title": "The slow stock",
+    "prompt": "The shop has $100,000 of old stock that barely sells. A clearance company will buy it for $70,000 cash today. Or you could buy $50,000 more stock to fill the shelves, which should add $1,000 of profit a matchday.",
+    "options": [
+      {
+        "label": "Clear it for $70,000",
+        "effects": {
+          "cash": 70000
+        },
+        "result": "Good call. You take $100,000 - $70,000 = $30,000 less than it cost, but $70,000 is back in the bank and the shelves turn faster."
+      },
+      {
+        "label": "Keep it and wait",
+        "effects": {},
+        "result": "Stock that isn't selling is cash you can't use. It won't be worth more next season."
+      },
+      {
+        "label": "Buy more stock",
+        "effects": {
+          "cash": -50000,
+          "fixed": -1000
+        },
+        "result": "$50,000 / $1,000 = 50 matchdays to earn it back. Buying more slow stock makes the problem bigger."
+      }
+    ],
+    "best": 0
+  },
   "takeaway": "Stock on a shelf is cash you can't spend. Turn it faster."
 }

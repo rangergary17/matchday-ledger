@@ -21,6 +21,8 @@ function allText(): string[] {
     for (const q of m.questions) {
       out.push(q.prompt, q.hint, ...q.options, ...q.working, ...q.whyNot.filter((w): w is string => !!w));
     }
+    out.push(m.penalty.prompt, m.penalty.hint, ...m.penalty.working, ...m.penalty.traps.map((t) => t.why));
+    out.push(m.call.title, m.call.prompt, ...m.call.options.flatMap((o) => [o.label, o.result, o.later?.text ?? ""]));
   }
   return out;
 }
@@ -31,6 +33,11 @@ describe("season", () => {
   });
   it("has a valid start date", () => {
     expect(season.startDate).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+  });
+  it("every match has a known skill, and every skill has topics", () => {
+    const keys = season.skills.map((s) => s.key);
+    for (const m of matches) expect(keys).toContain(m.skill);
+    for (const k of keys) expect(matches.some((m) => m.skill === k)).toBe(true);
   });
   it("every opponent and topic is unique", () => {
     expect(new Set(matches.map((m) => m.opponent)).size).toBe(matches.length);
