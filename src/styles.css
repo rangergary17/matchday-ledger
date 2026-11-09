@@ -363,66 +363,111 @@ table.league { width: 100%; border-collapse: collapse; font-size: 15px; font-var
   .steps { gap: 22px; }
 }
 
-/* ---------- Goal and concede moments ---------- */
-.moment { position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; padding: 20px; background: rgba(245, 246, 244, 0.86); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); cursor: pointer; }
-.moment-card { width: min(460px, 100%); background: var(--surface); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; box-shadow: 0 20px 60px rgba(11, 19, 16, 0.12); }
-.scene { display: block; width: 100%; height: auto; background: var(--surface); }
-.moment-cap { padding: 4px 22px 18px; display: flex; flex-direction: column; gap: 2px; }
-.moment-kind { font-size: 12px; font-weight: 700; font-stretch: 112%; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
-.moment.goal .moment-kind { color: var(--green); }
-.moment-cap b { font-size: 24px; font-weight: 800; font-stretch: 125%; letter-spacing: -0.01em; }
-.moment-quip { color: var(--ink-2); font-size: 16px; }
-.moment-skip { display: block; text-align: center; font-size: 12px; color: var(--ink-3); padding: 0 0 12px; }
+/* ---------- Goal and concede moments: broadcast takeover ---------- */
+.moment { position: fixed; inset: 0; z-index: 40; overflow: hidden; background: #030b07; cursor: pointer; color: #fff; }
+.cam { position: absolute; inset: 0; transform-origin: 50% 70%; }
+.stadium { width: 100%; height: 100%; display: block; }
+.vignette { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 80% 70% at 50% 60%, transparent 40%, rgba(0,0,0,0.55) 100%); }
+.flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+.moment-text { position: absolute; left: 0; right: 0; top: max(9vh, 56px); display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 0 20px; text-align: center; pointer-events: none; }
+.slam { white-space: nowrap; font-size: clamp(64px, 21vw, 200px); line-height: 0.9; font-weight: 900; font-stretch: 125%; text-transform: uppercase; letter-spacing: -0.02em; color: #fff;
+  text-shadow: 0 1px 0 #cfd8d2, 0 2px 0 #b8c4bd, 0 3px 0 #9fb0a6, 0 4px 0 #85988d, 0 5px 0 #6a7f73, 0 10px 18px rgba(0,0,0,0.6); }
+.goal .slam { text-shadow: 0 1px 0 #11924f, 0 2px 0 #0e8446, 0 3px 0 #0c773f, 0 4px 0 #0a6b3a, 0 5px 0 #085a30, 0 6px 0 #064a27, 0 14px 28px rgba(0,0,0,0.55), 0 0 60px rgba(20,163,90,0.45); }
+.concede .slam { font-size: clamp(34px, 10.5vw, 140px); color: #e9eeeb; white-space: nowrap; }
+.moment-cap { display: flex; flex-direction: column; gap: 2px; text-shadow: 0 2px 10px rgba(0,0,0,0.6); }
+.moment-cap b { font-size: clamp(20px, 5.4vw, 30px); font-weight: 800; font-stretch: 125%; }
+.moment-cap span { font-size: 16px; opacity: 0.85; }
+.moment-skip { position: absolute; bottom: max(4vh, 24px); left: 0; right: 0; text-align: center; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.6; }
+.confetti { position: absolute; inset: 0; pointer-events: none; perspective: 600px; }
+.confetti i { position: absolute; top: -20px; border-radius: 2px; opacity: 0; }
 
-.scene .ground { stroke: var(--line-2); stroke-width: 2; }
-.scene .pitchline { stroke: var(--line); stroke-width: 2; }
-.scene .limb { fill: none; stroke: var(--ink); stroke-width: 9; stroke-linecap: round; stroke-linejoin: round; }
-.scene .torso { stroke: var(--green); stroke-width: 13; }
-.scene .head { fill: var(--ink); }
-.scene .pole { stroke: var(--ink); stroke-width: 3; stroke-linecap: round; }
-.scene .pennant { fill: var(--green); }
-.scene .blade { stroke: var(--green); stroke-width: 3; stroke-linecap: round; opacity: 0; }
-.scene .frame { fill: none; stroke: var(--ink); stroke-width: 6; stroke-linejoin: round; }
-.scene .mesh { stroke: var(--line-2); stroke-width: 1.5; }
-.scene .ballc { fill: #fff; stroke: var(--ink); stroke-width: 3; }
-.scene .seam { stroke: var(--ink); stroke-width: 2; }
-.scene .dots circle { fill: var(--ink-3); }
-.nm .keeper .torso { stroke: var(--ink-2); }
-/* Final pose (what reduced-motion users see): keeper's hands on his head. */
-.nm .arms-out { opacity: 0; }
+/* Stadium details */
+.stadium .blade { stroke: #3fd283; stroke-width: 2.2; stroke-linecap: round; opacity: 0; }
+.stadium .mesh { stroke: #ffffff; stroke-opacity: 0.28; stroke-width: 0.8; fill: none; }
+.stadium .mesh-back { fill: #ffffff; fill-opacity: 0.05; }
+.stadium .puff { fill: #a7b5ad; opacity: 0; }
+.stadium .st { fill: #e9eeeb; opacity: 0; }
+/* Final poses (what reduced-motion users see) */
+.ks .slider { transform: translate(200px, 262px) scale(1.12); }
+.nm .ball { transform: translate(216px, 211px) scale(0.18); }
+.nm .keeper.stand, .nm .keeper.raise { opacity: 0; }
+.concede .cam { filter: grayscale(0.75) brightness(0.8); }
+.concede .stadium .fan { transform: translateY(2px); opacity: 0.75; }
 
 @media (prefers-reduced-motion: no-preference) {
-  .moment { animation: m-fade 0.2s ease-out; }
-  .moment-card { animation: m-pop 0.35s cubic-bezier(.2, .9, .3, 1.2); }
-  @keyframes m-fade { from { opacity: 0; } }
-  @keyframes m-pop { from { transform: translateY(16px) scale(0.96); opacity: 0; } }
+  .moment { animation: mo-in 0.18s ease-out; }
+  @keyframes mo-in { from { opacity: 0; } }
+  .lamp .beam { animation: mo-beam 2.4s ease-in-out infinite alternate; }
+  .lamp.l1 .beam, .lamp.l3 .beam { animation-delay: -1.2s; }
+  @keyframes mo-beam { from { opacity: 0.55; } to { opacity: 1; } }
 
-  /* Knee slide: slides in from the left, grass flies, arms pump, flag waves. */
-  .ks .player { animation: ks-slide 1.05s cubic-bezier(.15, .7, .25, 1) both; }
-  @keyframes ks-slide { 0% { transform: translateX(-330px) translateY(-6px); } 60% { transform: translateX(-12px); } 100% { transform: translateX(0); } }
-  .ks .arms { transform-box: view-box; transform-origin: 279px 130px; animation: ks-pump 0.42s ease-in-out 1.05s 3 alternate both; }
-  @keyframes ks-pump { to { transform: translateY(-7px) scale(1.04); } }
-  .ks .blade { animation: ks-grass 0.75s ease-out both; }
-  .ks .b0 { animation-delay: 0.35s; } .ks .b1 { animation-delay: 0.45s; } .ks .b2 { animation-delay: 0.55s; }
-  .ks .b3 { animation-delay: 0.62s; } .ks .b4 { animation-delay: 0.7s; } .ks .b5 { animation-delay: 0.78s; }
-  @keyframes ks-grass { 0% { opacity: 1; transform: translate(0, 0) rotate(0); } 100% { opacity: 0; transform: translate(-42px, -46px) rotate(-60deg); } }
-  .ks .pennant { transform-box: view-box; transform-origin: 362px 121px; animation: ks-wave 0.5s ease-in-out infinite alternate; }
-  @keyframes ks-wave { to { transform: scaleX(0.82) skewY(6deg); } }
+  /* ---- Goal: joy ---- */
+  .goal .cam { animation: cam-push 1.1s cubic-bezier(.3,0,.2,1) both, cam-punch 0.9s cubic-bezier(.2,.9,.2,1) 1.1s forwards; }
+  @keyframes cam-push { from { transform: scale(1); } to { transform: scale(1.05); } }
+  @keyframes cam-punch { 0% { transform: scale(1.05); } 25% { transform: scale(1.16) rotate(-1.2deg); } 100% { transform: scale(1.1) rotate(-0.6deg); } }
+  .ks .slider { transform-box: view-box; transform-origin: 0 0; animation: ks-slide 1.1s cubic-bezier(.35,.1,.25,1) both; }
+  @keyframes ks-slide { 0% { transform: translate(214px, 166px) scale(0.3); } 45% { transform: translate(208px, 205px) scale(0.62); } 100% { transform: translate(200px, 262px) scale(1.12); } }
+  .ks .blade { transform-box: fill-box; animation: ks-blade 0.6s ease-out both; }
+  .ks .k0 { animation-delay: 300ms; }
+  .ks .k1 { animation-delay: 355ms; }
+  .ks .k2 { animation-delay: 410ms; }
+  .ks .k3 { animation-delay: 465ms; }
+  .ks .k4 { animation-delay: 520ms; }
+  .ks .k5 { animation-delay: 575ms; }
+  .ks .k6 { animation-delay: 630ms; }
+  .ks .k7 { animation-delay: 685ms; }
+  .ks .k8 { animation-delay: 740ms; }
+  .ks .k9 { animation-delay: 795ms; }
+  .ks .k10 { animation-delay: 850ms; }
+  .ks .k11 { animation-delay: 905ms; }
+  .ks .k12 { animation-delay: 960ms; }
+  .ks .k13 { animation-delay: 1015ms; }
+  @keyframes ks-blade { 0% { opacity: 1; transform: translate(0,0) rotate(0); } 100% { opacity: 0; transform: translate(var(--bx, 0), -26px) rotate(80deg); } }
+  .ks .arms { transform-box: view-box; transform-origin: 0 -70px; animation: ks-pump 0.32s ease-in-out 1.1s 6 alternate both; }
+  @keyframes ks-pump { to { transform: translateY(-6px) scale(1.06); } }
+  .ks .shout { transform-box: fill-box; transform-origin: center; animation: ks-shout 0.32s ease-in-out 1.1s 6 alternate both; }
+  @keyframes ks-shout { to { transform: scale(1.3, 1.5); } }
+  .goal .fan { animation: fan-jump 0.36s ease-out 1.1s 6 alternate both; }
+  @keyframes fan-jump { to { transform: translateY(-5px); } }
+  .goal .flash { animation: mo-flash 0.45s ease-out 1.08s forwards; }
+  @keyframes mo-flash { 0% { opacity: 0.85; } 100% { opacity: 0; } }
+  .goal .slam { animation: slam-goal 0.55s cubic-bezier(.2,1.4,.3,1) 1.1s both; }
+  @keyframes slam-goal { 0% { opacity: 0; transform: scale(2.6) translateY(10px); filter: blur(6px); } 60% { opacity: 1; filter: blur(0); } 100% { transform: scale(1); } }
+  .goal .moment-cap { animation: cap-in 0.4s ease-out 1.5s both; }
+  @keyframes cap-in { from { opacity: 0; transform: translateY(10px); } }
+  .confetti i { animation-name: conf-fall, conf-spin; animation-timing-function: cubic-bezier(.3,.1,.6,1), linear; animation-iteration-count: 1, infinite; animation-fill-mode: both, none; }
+  @keyframes conf-fall { 0% { opacity: 1; transform: translate3d(0, -5vh, 0); } 100% { opacity: 0.9; transform: translate3d(var(--sway), 108vh, 0); } }
+  @keyframes conf-spin { from { rotate: x 0deg; } to { rotate: x 360deg; } }
 
-  /* Nutmeg: ball rolls through the keeper's legs, net bulges, hands go to head. */
-  .nm .ball { animation: nm-roll 0.95s cubic-bezier(.35, .1, .3, 1) 0.25s both; transform-box: view-box; }
-  @keyframes nm-roll { 0% { transform: translateX(-380px) rotate(-720deg); } 100% { transform: translateX(0) rotate(0); } }
-  .nm .ball { transform-origin: 362px 182px; }
-  .nm .net { animation: nm-net 0.4s ease-out 1.15s both; transform-box: view-box; transform-origin: 380px 140px; }
-  @keyframes nm-net { 40% { transform: scaleX(1.08); } 100% { transform: scaleX(1); } }
-  .nm .arms-out { animation: nm-out 0.15s linear 1.25s both; }
-  .nm .arms-head { animation: nm-in 0.15s linear 1.25s both; }
-  @keyframes nm-out { from { opacity: 1; } to { opacity: 0; } }
-  @keyframes nm-in { from { opacity: 0; } to { opacity: 1; } }
-  .nm .keeper { transform-box: view-box; transform-origin: 325px 190px; animation: nm-look 0.5s ease-out 1.3s both; }
-  @keyframes nm-look { from { transform: none; } to { transform: rotate(-4deg); } }
-  .nm .dots circle { opacity: 0; animation: nm-dots 0.25s ease-out both; }
-  .nm .dots circle:nth-child(1) { animation-delay: 1.6s; } .nm .dots circle:nth-child(2) { animation-delay: 1.75s; } .nm .dots circle:nth-child(3) { animation-delay: 1.9s; }
-  @keyframes nm-dots { to { opacity: 1; } }
+  /* ---- Concede: anger ---- */
+  .concede .cam { animation: cam-drain 0.6s ease-out 1.15s both, cam-shake 0.35s linear 1.15s, cam-shake-big 0.45s linear 1.95s; }
+  @keyframes cam-drain { from { filter: none; } to { filter: grayscale(0.75) brightness(0.8); } }
+  @keyframes cam-shake { 0%,100% { transform: none; } 20% { transform: translate(-4px, 2px); } 40% { transform: translate(4px, -2px); } 60% { transform: translate(-3px, 1px); } 80% { transform: translate(2px, -1px); } }
+  @keyframes cam-shake-big { 0%,100% { transform: none; } 15% { transform: translate(-9px, 5px) rotate(-0.8deg); } 30% { transform: translate(8px, -5px) rotate(0.8deg); } 50% { transform: translate(-6px, 3px); } 70% { transform: translate(4px, -2px); } 85% { transform: translate(-2px, 1px); } }
+  .nm .ball { transform-box: view-box; transform-origin: 0 0; animation: nm-roll 1.1s cubic-bezier(.25,.1,.25,1) 0.05s both; }
+  @keyframes nm-roll { 0% { transform: translate(150px, 300px) scale(1) rotate(0); } 78% { transform: translate(200px, 224px) scale(0.3) rotate(540deg); } 100% { transform: translate(216px, 211px) scale(0.18) rotate(640deg); } }
+  .nm .net { transform-box: view-box; transform-origin: 200px 214px; animation: nm-net 0.5s ease-out 1.12s both; }
+  @keyframes nm-net { 30% { transform: translateY(-3px) scale(1.06, 1.12); } 100% { transform: none; } }
+  .nm .keeper.stand { animation: show-until 1.3s steps(1, end) both; }
+  .nm .keeper.raise { animation: show-between 1.95s steps(1, end) both; }
+  .nm .keeper.slam { animation: show-from 1.95s steps(1, end) both; }
+  @keyframes show-until { 0% { opacity: 1; } 100% { opacity: 0; } }
+  @keyframes show-between { 0%, 66% { opacity: 0; } 67%, 99% { opacity: 1; } 100% { opacity: 0; } }
+  @keyframes show-from { 0%, 99% { opacity: 0; } 100% { opacity: 1; } }
+  .nm .keeper.stand { transform-box: view-box; transform-origin: 200px 226px; }
+  .nm .puff { transform-box: fill-box; transform-origin: center; animation: nm-puff 0.6s ease-out 1.95s forwards; }
+  .nm .p0 { --px: -10px; } .nm .p1 { --px: -5px; } .nm .p2 { --px: 0px; } .nm .p3 { --px: 6px; } .nm .p4 { --px: 11px; }
+  @keyframes nm-puff { 0% { opacity: 0.9; transform: translate(0, 0) scale(0.5); } 100% { opacity: 0; transform: translate(var(--px), -10px) scale(2.2); } }
+  .nm .st { transform-box: fill-box; transform-origin: center; animation: nm-steam 0.9s ease-out infinite; }
+  .nm .s0 { animation-delay: 2.15s; } .nm .s1 { animation-delay: 2.35s; } .nm .s2 { animation-delay: 2.55s; }
+  @keyframes nm-steam { 0% { opacity: 0.85; transform: translateY(0) scale(0.6); } 100% { opacity: 0; transform: translateY(-22px) scale(1.8); } }
+  .concede .fan { animation: fan-slump 0.6s ease-out 1.2s both; }
+  @keyframes fan-slump { from { transform: none; opacity: 1; } to { transform: translateY(2px); opacity: 0.75; } }
+  .concede .slam { animation: slam-thud 0.4s cubic-bezier(.5,0,.75,0) 1.2s both, slam-shake 0.45s linear 1.95s; }
+  @keyframes slam-thud { 0% { opacity: 0; transform: translateY(-60px) scale(1.15); } 100% { opacity: 1; transform: none; } }
+  @keyframes slam-shake { 0%,100% { transform: none; } 20% { transform: translateX(-8px) rotate(-1deg); } 40% { transform: translateX(7px) rotate(1deg); } 60% { transform: translateX(-4px); } 80% { transform: translateX(3px); } }
+  .concede .moment-cap { animation: cap-in 0.4s ease-out 1.6s both; }
+  .concede .vignette { animation: vig 0.6s ease-out 1.15s both; }
+  @keyframes vig { from { opacity: 0; } to { opacity: 1; } }
 }
-.nm .keeper { transform: rotate(-4deg); transform-box: view-box; transform-origin: 325px 190px; }
+@media (prefers-reduced-motion: reduce) { .confetti { display: none; } }

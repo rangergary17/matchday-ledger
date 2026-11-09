@@ -17,7 +17,7 @@ export interface MomentDef {
 
 export const MOMENTS: MomentDef[] = [
   { id: "knee-slide", kind: "goal", title: "The knee slide", quip: "Two grass stains. Worth it." },
-  { id: "nutmeg", kind: "concede", title: "Through the legs", quip: "He'll be seeing that one in his sleep." },
+  { id: "nutmeg", kind: "concede", title: "Through the legs", quip: "The keeper is blaming the pitch. It's never the pitch." },
 ];
 
 export function pickMoment(kind: MomentKind, seed: string): MomentDef {
