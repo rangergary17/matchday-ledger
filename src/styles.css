@@ -362,3 +362,67 @@ table.league { width: 100%; border-collapse: collapse; font-size: 15px; font-var
   .intro-cta-mobile { display: none; }
   .steps { gap: 22px; }
 }
+
+/* ---------- Goal and concede moments ---------- */
+.moment { position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; padding: 20px; background: rgba(245, 246, 244, 0.86); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); cursor: pointer; }
+.moment-card { width: min(460px, 100%); background: var(--surface); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; box-shadow: 0 20px 60px rgba(11, 19, 16, 0.12); }
+.scene { display: block; width: 100%; height: auto; background: var(--surface); }
+.moment-cap { padding: 4px 22px 18px; display: flex; flex-direction: column; gap: 2px; }
+.moment-kind { font-size: 12px; font-weight: 700; font-stretch: 112%; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+.moment.goal .moment-kind { color: var(--green); }
+.moment-cap b { font-size: 24px; font-weight: 800; font-stretch: 125%; letter-spacing: -0.01em; }
+.moment-quip { color: var(--ink-2); font-size: 16px; }
+.moment-skip { display: block; text-align: center; font-size: 12px; color: var(--ink-3); padding: 0 0 12px; }
+
+.scene .ground { stroke: var(--line-2); stroke-width: 2; }
+.scene .pitchline { stroke: var(--line); stroke-width: 2; }
+.scene .limb { fill: none; stroke: var(--ink); stroke-width: 9; stroke-linecap: round; stroke-linejoin: round; }
+.scene .torso { stroke: var(--green); stroke-width: 13; }
+.scene .head { fill: var(--ink); }
+.scene .pole { stroke: var(--ink); stroke-width: 3; stroke-linecap: round; }
+.scene .pennant { fill: var(--green); }
+.scene .blade { stroke: var(--green); stroke-width: 3; stroke-linecap: round; opacity: 0; }
+.scene .frame { fill: none; stroke: var(--ink); stroke-width: 6; stroke-linejoin: round; }
+.scene .mesh { stroke: var(--line-2); stroke-width: 1.5; }
+.scene .ballc { fill: #fff; stroke: var(--ink); stroke-width: 3; }
+.scene .seam { stroke: var(--ink); stroke-width: 2; }
+.scene .dots circle { fill: var(--ink-3); }
+.nm .keeper .torso { stroke: var(--ink-2); }
+/* Final pose (what reduced-motion users see): keeper's hands on his head. */
+.nm .arms-out { opacity: 0; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .moment { animation: m-fade 0.2s ease-out; }
+  .moment-card { animation: m-pop 0.35s cubic-bezier(.2, .9, .3, 1.2); }
+  @keyframes m-fade { from { opacity: 0; } }
+  @keyframes m-pop { from { transform: translateY(16px) scale(0.96); opacity: 0; } }
+
+  /* Knee slide: slides in from the left, grass flies, arms pump, flag waves. */
+  .ks .player { animation: ks-slide 1.05s cubic-bezier(.15, .7, .25, 1) both; }
+  @keyframes ks-slide { 0% { transform: translateX(-330px) translateY(-6px); } 60% { transform: translateX(-12px); } 100% { transform: translateX(0); } }
+  .ks .arms { transform-box: view-box; transform-origin: 279px 130px; animation: ks-pump 0.42s ease-in-out 1.05s 3 alternate both; }
+  @keyframes ks-pump { to { transform: translateY(-7px) scale(1.04); } }
+  .ks .blade { animation: ks-grass 0.75s ease-out both; }
+  .ks .b0 { animation-delay: 0.35s; } .ks .b1 { animation-delay: 0.45s; } .ks .b2 { animation-delay: 0.55s; }
+  .ks .b3 { animation-delay: 0.62s; } .ks .b4 { animation-delay: 0.7s; } .ks .b5 { animation-delay: 0.78s; }
+  @keyframes ks-grass { 0% { opacity: 1; transform: translate(0, 0) rotate(0); } 100% { opacity: 0; transform: translate(-42px, -46px) rotate(-60deg); } }
+  .ks .pennant { transform-box: view-box; transform-origin: 362px 121px; animation: ks-wave 0.5s ease-in-out infinite alternate; }
+  @keyframes ks-wave { to { transform: scaleX(0.82) skewY(6deg); } }
+
+  /* Nutmeg: ball rolls through the keeper's legs, net bulges, hands go to head. */
+  .nm .ball { animation: nm-roll 0.95s cubic-bezier(.35, .1, .3, 1) 0.25s both; transform-box: view-box; }
+  @keyframes nm-roll { 0% { transform: translateX(-380px) rotate(-720deg); } 100% { transform: translateX(0) rotate(0); } }
+  .nm .ball { transform-origin: 362px 182px; }
+  .nm .net { animation: nm-net 0.4s ease-out 1.15s both; transform-box: view-box; transform-origin: 380px 140px; }
+  @keyframes nm-net { 40% { transform: scaleX(1.08); } 100% { transform: scaleX(1); } }
+  .nm .arms-out { animation: nm-out 0.15s linear 1.25s both; }
+  .nm .arms-head { animation: nm-in 0.15s linear 1.25s both; }
+  @keyframes nm-out { from { opacity: 1; } to { opacity: 0; } }
+  @keyframes nm-in { from { opacity: 0; } to { opacity: 1; } }
+  .nm .keeper { transform-box: view-box; transform-origin: 325px 190px; animation: nm-look 0.5s ease-out 1.3s both; }
+  @keyframes nm-look { from { transform: none; } to { transform: rotate(-4deg); } }
+  .nm .dots circle { opacity: 0; animation: nm-dots 0.25s ease-out both; }
+  .nm .dots circle:nth-child(1) { animation-delay: 1.6s; } .nm .dots circle:nth-child(2) { animation-delay: 1.75s; } .nm .dots circle:nth-child(3) { animation-delay: 1.9s; }
+  @keyframes nm-dots { to { opacity: 1; } }
+}
+.nm .keeper { transform: rotate(-4deg); transform-box: view-box; transform-origin: 325px 190px; }

@@ -24,7 +24,8 @@ import { TableView } from "./ui/TableView";
 import { CardView } from "./ui/CardView";
 import { Intro } from "./ui/Intro";
 import { TabBar, type Tab } from "./ui/TabBar";
-import { GoalBurst } from "./ui/GoalBurst";
+import { Moment } from "./ui/Moment";
+import { pickMoment, type MomentDef } from "./lib/moments";
 import { reducedMotion } from "./ui/fmt";
 
 const { season, matches } = pack;
@@ -61,7 +62,8 @@ export function App() {
   const [today, setToday] = useState(todayInfo);
   const [screen, setScreen] = useState<Screen>({ s: "hub" });
   const [tab, setTab] = useState<Tab>("match");
-  const [burst, setBurst] = useState({ n: 0, text: "" });
+  const [moment, setMoment] = useState<MomentDef | null>(null);
+  const closeMoment = useCallback(() => setMoment(null), []);
   const focusRef = useRef<HTMLElement | null>(null);
   const firstRender = useRef(true);
   const setFocus = (el: HTMLElement | null) => { focusRef.current = el; };
@@ -119,8 +121,9 @@ export function App() {
     update({ ...data, progress: { day: play.day, date: play.date, match: matches[play.matchIndex].number, kind: play.kind, goals: play.goals, hints: play.hints } });
   }
 
-  function celebrate(goal: boolean, text = "Goal") {
-    if (goal) { setBurst((b) => ({ n: b.n + 1, text })); playSound("goal", sound); buzz([40, 60, 120]); }
+  function celebrate(goal: boolean, seed?: string) {
+    if (seed) setMoment(pickMoment(goal ? "goal" : "concede", seed));
+    if (goal) { playSound("goal", sound); buzz([40, 60, 120]); }
     else { playSound("conceded", sound); buzz([80]); }
   }
 
@@ -179,7 +182,7 @@ export function App() {
               const p = { ...play, goals: [...play.goals, ok] };
               setScreen({ ...screen, play: p, picked: i });
               saveProgress(p);
-              celebrate(ok);
+              celebrate(ok, `${today.date}:${sd}`);
             }}
             onNext={() => setScreen(q < 2 ? { s: "chance", play, q: q + 1, picked: null, hint: false } : { s: "penalty", play, done: false })} />
         </>);
@@ -195,7 +198,7 @@ export function App() {
             onResult={(ok) => {
               const p = { ...play, pen: ok };
               setScreen({ s: "penalty", play: p, done: true });
-              if (ok) celebrate(true); else { playSound("saved", sound); buzz([80]); }
+              if (ok) celebrate(true, `${today.date}:${seed(play)}:pen`); else { playSound("saved", sound); buzz([80]); }
               if (play.kind === "replay") update(recordReplay(data, m.number, p.goals, ok));
               else {
                 update(recordMatch(data, { day: play.day, date: play.date, match: m.number, kind: play.kind, goals: p.goals, pen: ok, hints: p.hints }));
@@ -246,7 +249,7 @@ export function App() {
             onResult={(ok) => {
               update(recordDrill(data, m.number, today.date, ok));
               setScreen({ ...screen, done: true });
-              if (ok) celebrate(true, "Spot on"); else playSound("saved", sound);
+              if (ok) celebrate(true); else playSound("saved", sound);
               track("/drill");
             }}
             nextLabel="Back to the club" onNext={() => setScreen({ s: "hub" })} />
@@ -294,7 +297,7 @@ export function App() {
           )}
       </main>
       {data.settings.introSeen && <TabBar tab={tab} onTab={(t) => { setTab(t); if (t === "match" && (screen.s === "fulltime" || screen.s === "call" || (screen.s === "drill" && screen.done))) setScreen({ s: "hub" }); }} badges={{ match: pendingBadge && tab !== "match" }} />}
-      <GoalBurst trigger={burst.n} text={burst.text} />
+      {moment && <Moment moment={moment} onDone={closeMoment} />}
     </div>
   );
 }
