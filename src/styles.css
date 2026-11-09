@@ -310,3 +310,55 @@ table.league { width: 100%; border-collapse: collapse; font-size: 15px; font-var
 .tabbar svg { width: 22px; height: 22px; fill: currentColor; }
 .tabbar button.on { color: var(--ink); }
 .tabbar .dot { position: absolute; top: 8px; left: calc(50% + 9px); width: 8px; height: 8px; border-radius: 50%; background: var(--ink); border: 2px solid #fff; }
+
+/* Intro: one Start button per layout */
+.intro-main { display: flex; flex-direction: column; gap: 18px; }
+.intro-cta { display: none; }
+
+/* ---------- Desktop and tablet ---------- */
+@media (min-width: 900px) {
+  body { font-size: 18px; }
+  .app { max-width: 800px; padding-top: 0; padding-bottom: 64px; gap: 28px; }
+
+  /* Header becomes a site bar: logo, menu, status */
+  .top { position: sticky; top: 0; z-index: 10; min-height: 76px; background: rgba(245, 246, 244, 0.9); -webkit-backdrop-filter: saturate(180%) blur(16px); backdrop-filter: saturate(180%) blur(16px); margin: 0 -20px; padding: 0 20px; border-bottom: 1px solid var(--line); }
+  .top h1 { font-size: 24px; }
+
+  /* Bottom tab bar becomes the top menu */
+  .tabbar { position: fixed; top: 0; bottom: auto; left: 50%; right: auto; transform: translateX(-50%); z-index: 11; display: flex; gap: 4px; background: none; border: 0; -webkit-backdrop-filter: none; backdrop-filter: none; padding: 0; height: 76px; align-items: center; }
+  .tabbar button { flex-direction: row; min-height: 40px; padding: 0 16px; border-radius: 999px; font-size: 13px; }
+  .tabbar svg { display: none; }
+  .tabbar button:hover { color: var(--ink); background: var(--surface); }
+  .tabbar button.on { background: var(--ink); color: #fff; }
+  .tabbar .dot { top: 6px; left: auto; right: 6px; border-color: var(--bg); }
+
+  /* Bigger type */
+  .fixture-card { padding: 36px; }
+  .fixture-card h2 { font-size: 44px; }
+  .fixture-card .btn { max-width: 320px; }
+  .prompt { font-size: 26px; }
+  .tactics h2, .call h2, .page-title { font-size: 34px; }
+  .ft h2 { font-size: 96px; }
+  .hub-result { font-size: 72px; }
+  .score { font-size: 56px; }
+  .team { font-size: 16px; }
+  .wealth > b { font-size: 60px; }
+  .stats-grid { grid-template-columns: repeat(3, 1fr); }
+  .stat:nth-child(-n+3) { border-top: 0; }
+  .stat:nth-child(odd) { border-right: 0; }
+  .stat:not(:nth-child(3n)) { border-right: 1px solid var(--line); }
+  .stat b { font-size: 26px; }
+
+  /* Answers in a 2 x 2 grid */
+  .opts { grid-template-columns: 1fr 1fr; }
+  .ref .btn.block, .q > .btn.block, .tactics + .btn.block, .ft .btn.block, .call .btn.block, .pen-form .btn { max-width: 320px; }
+  .btn-row .btn { flex: 0 1 200px; }
+
+  /* Intro: two columns */
+  .intro { display: grid; grid-template-columns: 1.4fr 1fr; gap: 48px; align-items: center; padding: 56px; margin-top: 24px; }
+  .intro h2 { font-size: 40px; line-height: 1.08; }
+  .intro .lede { font-size: 19px; }
+  .intro-cta { display: inline-flex; max-width: 240px; margin-top: 8px; }
+  .intro-cta-mobile { display: none; }
+  .steps { gap: 22px; }
+}
