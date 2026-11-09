@@ -27,6 +27,9 @@ export const CAST = {
   striker: { ...KIT, skin: "#7a4a2e", shade: "#5a3420", hair: "short", hairColor: "#15100c" },
   /** Bald playmaker. Pure genius, short fuse. */
   maestro: { ...KIT, skin: "#dca37a", shade: "#b98059", hair: "bald", hairColor: "#3b2a1e" },
+  /** Big ginger centre-back. Wins every header, including the wrong ones. */
+  stopper: { ...KIT, skin: "#f0c3a4", shade: "#d19a78", hair: "short", hairColor: "#b5562a", brows: "#b5562a" },
+  homeKeeper: { skin: "#e8b796", shade: "#c7926f", hair: "swept", hairColor: "#3a2a1c", shirt: "#e1e7e3", shirtShade: "#aab5af", shorts: "#1d2522", socks: "#e1e7e3", trim: "#0a6b3a", gloves: true },
   rival: { skin: "#d9a07c", shade: "#b47b58", hair: "swept", hairColor: "#2a1d14", shirt: "#4a5550", shirtShade: "#323a37", shorts: "#1d2522", socks: "#4a5550", trim: "#c9d1cc" },
   keeper: { skin: "#e3ad88", shade: "#c08a66", hair: "short", hairColor: "#6b4a2c", shirt: "#8a9590", shirtShade: "#5b6662", shorts: "#2a3330", socks: "#8a9590", trim: "#f4f7f5", gloves: true },
   referee: { skin: "#e0a986", shade: "#bf8763", hair: "short", hairColor: "#2b211a", shirt: "#141a18", shirtShade: "#060908", shorts: "#141a18", socks: "#141a18", trim: "#e9eeeb" },
@@ -260,7 +263,7 @@ export function SidePlayer({ look: L, cls, x, y, s = 1 }: { look: Look; cls: str
 
 /* ---------------- Front view rig (origin at the waist) ---------------- */
 
-export type Face = "neutral" | "roar" | "anguish" | "angry" | "stern";
+export type Face = "neutral" | "roar" | "anguish" | "angry" | "stern" | "smug";
 
 function FrontHead({ L, face }: { L: Look; face: Face }) {
   const show = (f: Face) => (f === face ? 1 : 0);
@@ -289,6 +292,12 @@ function FrontHead({ L, face }: { L: Look; face: Face }) {
         <circle cx="-7" cy="-24" r="1.8" fill={INK} /><circle cx="7" cy="-24" r="1.8" fill={INK} />
         <path d="M-12 -28.6 L-3 -27.4 M3 -27.4 L12 -28.6" stroke={brow} strokeWidth="2.4" strokeLinecap="round" />
         <path d="M-6 -6 L6 -6" stroke={INK} strokeWidth="1.6" strokeLinecap="round" />
+      </g>
+      <g className="f-smug" opacity={show("smug")}>
+        <path d="M-11 -24.6 L-3.4 -24.6 M3.4 -24.6 L11 -24.6" stroke={INK} strokeWidth="1.6" strokeLinecap="round" />
+        <path d="M-9.6 -24.4 A2.4 2.4 0 0 0 -4.8 -24.4 Z M4.8 -24.4 A2.4 2.4 0 0 0 9.6 -24.4 Z" fill={INK} />
+        <path d="M-11.6 -32.6 Q-7 -35.4 -3 -31.4 M3 -29 L11.6 -29.4" fill="none" stroke={brow} strokeWidth="2.2" strokeLinecap="round" />
+        <path d="M-6 -6.4 Q1 -4 7.4 -9" fill="none" stroke={INK} strokeWidth="1.6" strokeLinecap="round" />
       </g>
       <g className="f-roar" opacity={show("roar")}>
         <path d="M-11.4 -26.4 L-4 -23.6 L-11 -21.4 M11.4 -26.4 L4 -23.6 L11 -21.4" fill="none" stroke={INK} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
@@ -407,4 +416,32 @@ export function Impact({ x, y, cls, r = 14 }: { x: number; y: number; cls: strin
       <circle className={cls} r={r} fill="none" stroke="#ffffff" strokeWidth="3" opacity="0" />
     </g>
   );
+}
+
+/** A goal seen side-on. dir -1 puts the net to the left of the posts. */
+export function SideGoal({ x, ground, bar, dir, cls }: { x: number; ground: number; bar: number; dir: 1 | -1; cls?: string }) {
+  const d = dir, back = x + d * 34, foot = x + d * 64;
+  const rows = Array.from({ length: 7 }, (_, i) => bar + ((ground - bar) * (i + 1)) / 8);
+  return (
+    <g>
+      <g className={cls} style={{ transformOrigin: `${x}px ${ground}px` }}>
+        <path d={`M${x} ${bar} L${back} ${bar} L${foot} ${ground} L${x} ${ground} Z`} fill="#ffffff" fillOpacity="0.06" />
+        {rows.map((y, i) => {
+          const t = (y - bar) / (ground - bar);
+          return <line key={i} x1={x} y1={y} x2={back + (foot - back) * t} y2={y} className="mesh" />;
+        })}
+        {Array.from({ length: 6 }, (_, i) => {
+          const f = (i + 1) / 7, top = x + (back - x) * f, bot = x + (foot - x) * f;
+          return <line key={`v${i}`} x1={top} y1={bar} x2={bot} y2={ground} className="mesh" />;
+        })}
+        <path d={`M${back} ${bar} L${foot} ${ground}`} stroke="#c9d1cc" strokeWidth="1.6" />
+      </g>
+      <path d={`M${x} ${ground} L${x} ${bar} L${back} ${bar}`} fill="none" stroke="#f4f7f5" strokeWidth="4.4" strokeLinejoin="round" />
+    </g>
+  );
+}
+
+/** A raised index finger, held in a front-view fist. */
+export function Finger({ skin }: { skin: string }) {
+  return <rect x="-2.6" y="31" width="5.2" height="14" rx="2.6" fill={skin} stroke={INK} strokeWidth="1.1" />;
 }

@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Ball, CAST, CloseBg, Defs, FrontBust, Impact, Rain, SidePlayer, Splash, Stadium, Trophy, INK } from "./rig";
+import { Ball, CAST, CloseBg, Defs, Finger, FrontBust, Impact, Rain, SideGoal, SidePlayer, Splash, Stadium, Trophy, INK } from "./rig";
 import { cut, O, R, S, T, timeline, wave, type Key, type Track } from "./timeline";
 
 /*
@@ -301,9 +301,244 @@ export function LastAct() {
   );
 }
 
+/* ---------------- Shared pieces for the next four ---------------- */
+
+/** The goal seen from in front, with a net that can bulge. */
+function GoalFront({ net, bulgeAt = "200px 160px" }: { net: string; bulgeAt?: string }) {
+  return (
+    <>
+      <g className={net} style={{ transformOrigin: bulgeAt }}>
+        <path d="M136 120 L264 120 L264 206 L136 206 Z" fill="#ffffff" fillOpacity="0.06" />
+        {Array.from({ length: 13 }, (_, i) => <line key={`v${i}`} x1={136 + i * 10.6} y1="120" x2={136 + i * 10.6} y2="206" className="mesh" />)}
+        {Array.from({ length: 8 }, (_, i) => <line key={`h${i}`} x1="136" y1={120 + i * 12.3} x2="264" y2={120 + i * 12.3} className="mesh" />)}
+        <path d="M130 112 L136 120 M270 112 L264 120 M130 214 L136 206 M270 214 L264 206" className="mesh" />
+      </g>
+    </>
+  );
+}
+const GoalFrame = () => (
+  <>
+    <path d="M130 214 L130 112 L270 112 L270 214" fill="none" stroke="#f4f7f5" strokeWidth="5" strokeLinejoin="round" />
+    <path d="M110 214 L290 214" stroke="#ffffff" strokeOpacity="0.4" strokeWidth="1.5" />
+  </>
+);
+
+const bulge = (sel: string, t: number): Track => S(sel, [[0, "1"], [t - 40, "1", "ease-out"], [t, "1.04 1.06"], [t + 200, "1"]]);
+
+/** Hands on head, then both fists into the turf at tHit, face turning from anguish to anger. */
+function meltdown(cls: string, t0: number, tHit: number): Track[] {
+  const fast = "cubic-bezier(.6,0,1,1)";
+  return [
+    T(`${cls} .pos`, [[t0, 0, 0], [tHit - 50, 0, 0, "ease-in"], [tHit + 10, 0, 8, "ease-out"], [tHit + 350, 0, 6]]),
+    R(`${cls} .uaL`, [[t0, 165], [tHit - 50, 165, fast], [tHit + 10, 18]]),
+    R(`${cls} .faL`, [[t0, 62], [tHit - 50, 62, fast], [tHit + 10, 0]]),
+    R(`${cls} .uaR`, [[t0, -165], [tHit - 50, -165, fast], [tHit + 10, -18]]),
+    R(`${cls} .faR`, [[t0, -62], [tHit - 50, -62, fast], [tHit + 10, 0]]),
+    O(`${cls} .f-anguish`, [[0, 1], [tHit, 0]]), O(`${cls} .f-angry`, [[0, 0], [tHit, 1]]),
+    R(`${cls} .head`, [[t0, 0], [tHit, 0], [tHit + 100, -6], [tHit + 200, 5], [tHit + 300, -3], [tHit + 450, 0]]),
+  ];
+}
+
+/* ------------------------------------------------------------------
+ * 5. The overhead (goal)
+ * Back to goal, a looping cross, upside down, top corner.
+ * ------------------------------------------------------------------ */
+const overheadTracks: Track[] = [
+  cut(".s1", 0, 850), cut(".s2", 850, 1100), cut(".s3", 1100, null),
+  S(".nine .flip", [[0, "-1 1"]]),
+  T(".nine .pos", [[0, 0, 0], [260, 2, -22, "ease-out"], [520, 4, -40], [620, 4, -38, "ease-in"], [850, 6, 36]]),
+  R(".nine .body", [[0, 0], [260, -40], [460, -150], [620, -178, "ease-in"], [850, -96]]),
+  R(".nine .thF", [[0, 0], [260, -80], [440, -60], [520, 20], [850, -20]]),
+  R(".nine .shF", [[0, 0], [260, 30], [520, 40], [850, 30]]),
+  R(".nine .thN", [[0, 0], [260, 20], [440, 34, "cubic-bezier(.5,0,.2,1)"], [520, -30], [620, -70], [850, -30]]),
+  R(".nine .shN", [[0, 0], [260, 70], [440, 92], [520, 4], [850, 30]]),
+  R(".nine .uaN", [[0, 10], [260, -60], [520, 60], [850, 100]]),
+  R(".nine .uaF", [[0, -10], [260, 60], [520, 120], [850, 110]]),
+  R(".nine .head", [[0, 0], [520, -24], [850, -10]]),
+  O(".nine .shadow", [[0, 1], [100, 0.4, "linear"], [850, 1]]),
+  T(".ball5", [[0, 40, 40, "linear"], [260, 130, 34, "linear"], [520, 220, 80, "cubic-bezier(.2,.6,.4,1)"], [700, 430, 40]]),
+  R(".ball5", [[0, 0, "linear"], [700, 720]]),
+  ...ring(".hit5", 520),
+  T(".ball6", [[850, 150, 330, "cubic-bezier(.15,.5,.35,1)"], [1060, 146, 124], [1100, 142, 120]]),
+  S(".ball6", [[850, "2.6", "cubic-bezier(.15,.5,.35,1)"], [1060, "0.55"], [1100, "0.5"]]),
+  R(".ball6", [[850, 0, "linear"], [1100, -700]]),
+  bulge(".net6", 1080),
+  R(".gk6 .uaN", [[850, 10]]), R(".gk6 .uaF", [[850, -10]]), R(".gk6 .head", [[850, -20]]),
+  // "Can't hear you"
+  R(".ninef .uaL", [[1100, 10, "cubic-bezier(.2,.9,.3,1.2)"], [1350, 120]]),
+  R(".ninef .faL", [[1100, 0, "cubic-bezier(.2,.9,.3,1.2)"], [1350, 108]]),
+  R(".ninef .uaR", [[1100, -10, "cubic-bezier(.2,.9,.3,1.2)"], [1350, -120]]),
+  R(".ninef .faR", [[1100, 0, "cubic-bezier(.2,.9,.3,1.2)"], [1350, -108]]),
+  R(".ninef .head", [[1100, 0], ...wave(1400, DUR, 700, -6, 6)]),
+  S(".ninef .pos", [[1100, "0.92", "linear"], [DUR, "1.03"]]),
+];
+
+export function Overhead() {
+  return (
+    <Scene scope="overhead" tracks={overheadTracks}>
+      <g className="s1">
+        <Stadium />
+        <SidePlayer look={CAST.striker} cls="nine" x={215} y={205} s={1.35} />
+        <g className="ball5"><Ball r={10} /></g>
+        <Impact x={220} y={80} cls="hit5" />
+      </g>
+      <g className="s2">
+        <Stadium />
+        <GoalFront net="net6" bulgeAt="142px 124px" />
+        <SidePlayer look={CAST.keeper} cls="gk6" x={205} y={178} s={0.75} />
+        <g className="ball6"><Ball r={10} /></g>
+        <GoalFrame />
+      </g>
+      <g className="s3">
+        <CloseBg />
+        <FrontBust look={CAST.striker} cls="ninef" x={200} y={322} s={1.6} face="smug" />
+      </g>
+    </Scene>
+  );
+}
+
+/* ------------------------------------------------------------------
+ * 6. The chip (goal)
+ * The keeper goes early. The ball floats down the middle.
+ * ------------------------------------------------------------------ */
+const chipTracks: Track[] = [
+  cut(".s1", 0, 1250), cut(".s2", 1250, null),
+  T(".gk7 .pos", [[0, 0, 0], [110, 0, -4], [220, 0, 0], [330, 0, -2, "ease-out"], [620, 46, -14, "ease-in"], [880, 54, 22], [1250, 54, 24]]),
+  R(".gk7 .body", [[0, 0], [330, 0], [620, 78], [880, 90]]),
+  R(".gk7 .uaN", [[0, 30], [330, 40], [600, -170]]), R(".gk7 .uaF", [[0, -30], [330, -40], [600, -160]]),
+  R(".gk7 .thN", [[330, 0], [620, 20], [880, 4]]), R(".gk7 .thF", [[330, 0], [620, 40], [880, 10]]),
+  R(".gk7 .shF", [[330, 0], [620, 50], [880, 10]]),
+  R(".gk7 .head", [[0, 0], [880, 0], [1000, -60]]),
+  T(".ball7", [[0, 200, 330], [300, 200, 330, "cubic-bezier(.2,.7,.4,1)"], [760, 200, 132, "cubic-bezier(.5,0,.8,.4)"], [1180, 200, 168], [1250, 200, 170]]),
+  S(".ball7", [[300, "2.4", "cubic-bezier(.2,.7,.4,1)"], [760, "0.95", "linear"], [1180, "0.55"]]),
+  R(".ball7", [[300, 0, "linear"], [1250, 220]]),
+  bulge(".net7", 1180),
+  // the shrug
+  R(".chipf .uaL", [[1250, 0, "cubic-bezier(.2,.9,.3,1.2)"], [1500, 26]]),
+  R(".chipf .faL", [[1250, 0, "cubic-bezier(.2,.9,.3,1.2)"], [1500, 78]]),
+  R(".chipf .uaR", [[1250, 0, "cubic-bezier(.2,.9,.3,1.2)"], [1500, -26]]),
+  R(".chipf .faR", [[1250, 0, "cubic-bezier(.2,.9,.3,1.2)"], [1500, -78]]),
+  T(".chipf .pos", [[1250, 0, 0], [1500, 0, -8], [1900, 0, -8], [2100, 0, 0]]),
+  R(".chipf .head", [[1250, 0], [1500, 8], [2200, 8], [2500, -4]]),
+];
+
+export function Chip() {
+  return (
+    <Scene scope="mo-chip" tracks={chipTracks}>
+      <g className="s1">
+        <Stadium />
+        <GoalFront net="net7" bulgeAt="200px 170px" />
+        <SidePlayer look={CAST.keeper} cls="gk7" x={200} y={178} s={0.75} />
+        <g className="ball7"><Ball r={10} /></g>
+        <GoalFrame />
+      </g>
+      <g className="s2">
+        <CloseBg />
+        <FrontBust look={CAST.maestro} cls="chipf" x={200} y={322} s={1.6} face="smug" />
+      </g>
+    </Scene>
+  );
+}
+
+/* ------------------------------------------------------------------
+ * 7. The own goal (concede)
+ * A towering header. Perfect technique. Wrong net.
+ * ------------------------------------------------------------------ */
+const ownGoalTracks: Track[] = [
+  cut(".s1", 0, 1500), cut(".s2", 1500, null),
+  S(".cb .flip", [[0, "1 1", "steps(1, end)"], [1180, "-1 1"]]),
+  T(".cb .pos", [[0, 0, 0], [400, 0, 0, "ease-out"], [620, 0, -24, "ease-in"], [880, 0, 0]]),
+  R(".cb .body", [[0, 0], [500, 0], [620, -18], [880, 0]]),
+  R(".cb .head", [[0, 0], [540, -10], [620, -34], [880, 0], [1180, 0], [1300, 14]]),
+  R(".cb .thN", [[400, 0], [620, -24], [880, 0]]), R(".cb .shN", [[400, 0], [620, 50], [880, 0]]),
+  R(".cb .thF", [[400, 0], [620, 10], [880, 0]]), R(".cb .shF", [[400, 0], [620, 60], [880, 0]]),
+  R(".cb .uaN", [[0, 0], [620, -130], [880, 10], [1180, 10], [1300, -160]]),
+  R(".cb .faN", [[0, 0], [880, 0], [1300, -110]]),
+  R(".cb .uaF", [[0, 0], [620, -110], [880, -10], [1180, -10], [1300, -150]]),
+  R(".cb .faF", [[0, 0], [880, 0], [1300, -110]]),
+  O(".cb .m-shut", [[0, 1], [1180, 0]]), O(".cb .m-open", [[0, 0], [1180, 1]]),
+  T(".ball8", [[0, 390, 20, "linear"], [620, 228, 100, "cubic-bezier(.2,.5,.5,1)"], [850, 180, 70, "cubic-bezier(.5,0,.9,.6)"], [1120, 120, 142], [1500, 118, 146]]),
+  R(".ball8", [[0, 0, "linear"], [1120, -800]]),
+  ...ring(".hit8", 620),
+  T(".gk8 .pos", [[0, 0, 0], [850, 0, 0, "ease-out"], [1020, -4, -18, "ease-in"], [1200, -2, 0]]),
+  R(".gk8 .body", [[850, 0], [1020, -16], [1200, -4]]),
+  R(".gk8 .head", [[0, 0], [700, -20], [900, -40], [1300, -10]]),
+  R(".gk8 .uaN", [[850, 20], [1020, -170], [1300, 30]]), R(".gk8 .uaF", [[850, -10], [1020, -160], [1300, -20]]),
+  bulge(".net8", 1140),
+  ...meltdown(".cbf", 1500, 1960),
+  ...burst(".sp8a", 1970, 9, 2.4), ...burst(".sp8b", 1980, 9, 2.4),
+];
+
+export function OwnGoal() {
+  return (
+    <Scene scope="owngoal" tracks={ownGoalTracks}>
+      <g className="s1">
+        <Stadium />
+        <SideGoal x={148} ground={268} bar={104} dir={-1} cls="net8" />
+        <SidePlayer look={CAST.homeKeeper} cls="gk8" x={174} y={205} s={1.3} />
+        <SidePlayer look={CAST.stopper} cls="cb" x={240} y={205} s={1.3} />
+        <g className="ball8"><Ball r={10} /></g>
+        <Impact x={228} y={100} cls="hit8" r={12} />
+      </g>
+      <g className="s2">
+        <CloseBg />
+        <FrontBust look={CAST.stopper} cls="cbf" x={200} y={336} s={1.6} face="anguish" />
+        <Splash x={150} y={300} cls="sp8a" s={2} />
+        <Splash x={250} y={300} cls="sp8b" s={2} />
+      </g>
+    </Scene>
+  );
+}
+
+/* ------------------------------------------------------------------
+ * 8. The scorpion save (concede)
+ * Their keeper dives forward and clears it with his heels. Then he lets you know.
+ * ------------------------------------------------------------------ */
+const scorpionTracks: Track[] = [
+  cut(".s1", 0, 1350), cut(".s2", 1350, null),
+  S(".sk .flip", [[0, "-1 1"]]),
+  T(".sk .pos", [[0, 0, 0], [320, 0, 2, "ease-out"], [640, -20, -30, "ease-in"], [900, -26, 30], [1000, -26, 36]]),
+  R(".sk .body", [[0, 0], [320, 10], [640, 80], [900, 88]]),
+  R(".sk .thN", [[320, 0], [640, 40], [900, 0]]), R(".sk .thF", [[320, 0], [640, 34], [900, 4]]),
+  R(".sk .shN", [[320, 10], [640, 150], [900, 10]]), R(".sk .shF", [[320, 10], [640, 140], [900, 20]]),
+  R(".sk .uaN", [[0, -30], [640, -150], [900, -100]]), R(".sk .uaF", [[0, -20], [640, -140], [900, -90]]),
+  R(".sk .head", [[0, 0], [640, -30], [900, -40]]),
+  T(".ball9", [[0, 50, 40, "linear"], [640, 206, 148, "cubic-bezier(.2,.6,.4,1)"], [1000, 70, 20]]),
+  R(".ball9", [[0, 0, "linear"], [640, 400, "linear"], [1000, -200]]),
+  ...ring(".hit9", 640),
+  // the finger wag
+  R(".skf .uaR", [[1350, -10, "cubic-bezier(.2,.9,.3,1.2)"], [1560, -35]]),
+  R(".skf .faR", [[1350, 0, "cubic-bezier(.2,.9,.3,1.2)"], [1560, -145], ...wave(1700, DUR, 300, -132, -158)]),
+  R(".skf .uaL", [[1350, 8]]),
+  R(".skf .head", [[1350, 0], ...wave(1700, DUR, 600, -5, 5)]),
+  S(".skf .pos", [[1350, "0.94", "linear"], [DUR, "1.03"]]),
+];
+
+export function Scorpion() {
+  return (
+    <Scene scope="scorpion" tracks={scorpionTracks}>
+      <g className="s1">
+        <Stadium />
+        <SideGoal x={268} ground={268} bar={104} dir={1} />
+        <SidePlayer look={CAST.keeper} cls="sk" x={236} y={205} s={1.3} />
+        <g className="ball9"><Ball r={10} /></g>
+        <Impact x={206} y={148} cls="hit9" r={12} />
+      </g>
+      <g className="s2">
+        <CloseBg />
+        <FrontBust look={CAST.keeper} cls="skf" x={200} y={322} s={1.6} face="smug" itemR={<Finger skin="#f4f7f5" />} />
+      </g>
+    </Scene>
+  );
+}
+
 export const SCENES: Record<string, () => React.JSX.Element> = {
   thunderbolt: Thunderbolt,
   "rain-slide": RainSlide,
   "the-slip": TheSlip,
   "last-act": LastAct,
+  overhead: Overhead,
+  "the-chip": Chip,
+  "own-goal": OwnGoal,
+  scorpion: Scorpion,
 };
