@@ -59,7 +59,7 @@ export const Chance = forwardRef<HTMLParagraphElement, Props>(function Chance(p,
           return (
             <li key={i}>
               <button className={`opt ${cls}`} disabled={answered} onClick={() => p.onAnswer(i)} aria-label={`${KEYS[i]}: ${o}${state}`}>
-                <span className="key" aria-hidden="true">{KEYS[i]}</span>
+                <span className="key" aria-hidden="true">{answered && i === q.answer ? "✓" : answered && i === picked ? "✕" : KEYS[i]}</span>
                 <span>{o}</span>
               </button>
             </li>

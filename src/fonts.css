@@ -1,5 +1,9 @@
-/* Inter, self-hosted (SIL Open Font License). Latin subset, woff2. */
-@font-face { font-family: 'Inter'; font-style: normal; font-weight: 400; font-display: swap; src: url('./fonts/inter-latin-400-normal.woff2') format('woff2'); }
-@font-face { font-family: 'Inter'; font-style: normal; font-weight: 500; font-display: swap; src: url('./fonts/inter-latin-500-normal.woff2') format('woff2'); }
-@font-face { font-family: 'Inter'; font-style: normal; font-weight: 600; font-display: swap; src: url('./fonts/inter-latin-600-normal.woff2') format('woff2'); }
-@font-face { font-family: 'Inter'; font-style: normal; font-weight: 700; font-display: swap; src: url('./fonts/inter-latin-700-normal.woff2') format('woff2'); }
+/* Archivo (SIL Open Font License). One variable file: weight 100-900, width 62%-125%. */
+@font-face {
+  font-family: "Archivo";
+  font-style: normal;
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-display: swap;
+  src: url("./fonts/archivo-latin-wdth-normal.woff2") format("woff2-variations"), url("./fonts/archivo-latin-wdth-normal.woff2") format("woff2");
+}
