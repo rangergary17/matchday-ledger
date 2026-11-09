@@ -1,7 +1,6 @@
 import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import type { Penalty as P, Values } from "../lib/template";
 import { judge, parseInput, renderPenalty, type Judged } from "../lib/template";
-import { PitchStrip } from "./PitchStrip";
 import { reducedMotion } from "./fmt";
 
 interface Props {
@@ -47,9 +46,8 @@ export const PenaltyView = forwardRef<HTMLParagraphElement, Props>(function Pena
 
   return (
     <section className="q" aria-labelledby="pen-prompt">
-      {p.mode === "penalty" && <PitchStrip state={!result ? "spot" : ok ? "goal" : "saved"} />}
       <p className="commentary">{p.intro}</p>
-      <p className="eyebrow">{p.mode === "penalty" ? "Penalty · type your answer" : "Training drill · fresh numbers"}</p>
+      <p className="eyebrow">{p.mode === "penalty" ? "Penalty. Type your answer." : "Training. Same idea, new numbers."}</p>
       <p className="prompt" id="pen-prompt" ref={ref} tabIndex={-1}>{r.prompt}</p>
       <form className="pen-form" onSubmit={submit}>
         <label htmlFor="pen-input" className="sr-only">Your answer</label>
@@ -72,13 +70,13 @@ export const PenaltyView = forwardRef<HTMLParagraphElement, Props>(function Pena
       </form>
       <p id="pen-help" className="dim small">{error || (fmt === "usd" ? "Shortcuts work: 500k, 1.2m." : fmt === "pct" ? "Just the number, like 30 for 30%." : "Just the number.")}</p>
 
-      {!result && !hint && <button className="hint-btn" onClick={() => { setHint(true); p.onHint(); }}>Ask the assistant coach</button>}
-      {hint && <p className="hint" role="note"><b>Coach:</b> {r.hint}</p>}
+      {!result && !hint && <button className="hint-btn" onClick={() => { setHint(true); p.onHint(); }}>Show a hint</button>}
+      {hint && <p className="hint" role="note"><b>Hint.</b> {r.hint}</p>}
 
       {result && (
         <div className="ref">
           <h2 ref={verdictRef} tabIndex={-1} className={`verdict ${ok ? "goal" : "conc"}`}>
-            {ok ? (p.mode === "penalty" ? "Goal! Top corner." : "Spot on.") : p.mode === "penalty" ? "Saved." : "Not quite."}
+            {ok ? (p.mode === "penalty" ? "Goal" : "Spot on") : p.mode === "penalty" ? "Saved" : "Not quite"}
           </h2>
           {!ok && (
             <p className="whynot">
@@ -86,9 +84,9 @@ export const PenaltyView = forwardRef<HTMLParagraphElement, Props>(function Pena
               {trapIndex >= 0 ? r.traps[trapIndex].why : "Walk through the working below and see where yours split off."}
             </p>
           )}
-          <h3>The working</h3>
+          <h3>How it works</h3>
           <ol className="working">{r.working.map((w, i) => <li key={i}>{w}</li>)}</ol>
-          <button className="btn" onClick={p.onNext}>{p.nextLabel}</button>
+          <button className="btn block" onClick={p.onNext}>{p.nextLabel}</button>
         </div>
       )}
     </section>

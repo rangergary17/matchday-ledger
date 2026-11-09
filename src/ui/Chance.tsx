@@ -1,6 +1,5 @@
 import { forwardRef, useEffect, useRef } from "react";
 import type { Question } from "../lib/types";
-import { PitchStrip } from "./PitchStrip";
 import { reducedMotion } from "./fmt";
 
 export const HALVES = ["First half", "Second half", "Late on"];
@@ -51,9 +50,7 @@ export const Chance = forwardRef<HTMLParagraphElement, Props>(function Chance(p,
 
   return (
     <section className="q" aria-labelledby="q-prompt">
-      <PitchStrip state={answered ? (right ? "goal" : "conceded") : "build"} />
-      <p className="commentary">{answered ? p.after : p.build}</p>
-      <p className="eyebrow">{HALVES[p.index]} · chance {p.index + 1} of 3</p>
+      {!answered && <p className="commentary">{p.build}</p>}
       <p className="prompt" id="q-prompt" ref={ref} tabIndex={-1}>{q.prompt}</p>
       <ul className="opts">
         {q.options.map((o, i) => {
@@ -70,16 +67,16 @@ export const Chance = forwardRef<HTMLParagraphElement, Props>(function Chance(p,
         })}
       </ul>
 
-      {!answered && !p.hintShown && <button className="hint-btn" onClick={p.onHint}>Ask the assistant coach</button>}
-      {p.hintShown && <p className="hint" role="note"><b>Coach:</b> {q.hint}</p>}
+      {!answered && !p.hintShown && <button className="hint-btn" onClick={p.onHint}>Show a hint</button>}
+      {p.hintShown && <p className="hint" role="note"><b>Hint.</b> {q.hint}</p>}
 
       {answered && (
         <div className="ref">
           <h2 ref={verdictRef} tabIndex={-1} className={`verdict ${right ? "goal" : "conc"}`}>
-            {right ? "Goal!" : `Conceded. ${p.opponent} score.`}
+            {right ? "Goal" : `${p.opponent} score`}
           </h2>
           {!right && <p className="whynot"><b>Why not {q.options[picked!]}?</b> {q.whyNot[picked!]}</p>}
-          <h3>The working</h3>
+          <h3>How it works</h3>
           <ol className="working">{q.working.map((w, i) => <li key={i}>{w}</li>)}</ol>
           {others.length > 0 && (
             <details className="others">
@@ -87,7 +84,7 @@ export const Chance = forwardRef<HTMLParagraphElement, Props>(function Chance(p,
               <ul>{others.map(({ w, i }) => <li key={i}><b>{q.options[i]}:</b> {w}</li>)}</ul>
             </details>
           )}
-          <button className="btn" onClick={p.onNext}>{p.index === 2 ? "Penalty!" : "Play on"}</button>
+          <button className="btn block" onClick={p.onNext}>{p.index === 2 ? "Take the penalty" : "Next chance"}</button>
         </div>
       )}
     </section>

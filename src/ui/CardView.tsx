@@ -9,6 +9,8 @@ interface Props {
   club: string;
   overall: number;
   skills: SkillRating[];
+  sound: boolean;
+  onSound: (on: boolean) => void;
   onName: (n: string) => void;
   onTrain: (match: number) => void;
   onReplay: (match: number) => void;
@@ -22,28 +24,28 @@ export const CardView = forwardRef<HTMLHeadingElement, Props>(function CardView(
   async function share() {
     const blob = await cardPng({ name: p.name, club: p.club, overall: p.overall, tier: t, skills: p.skills, site: SITE_URL });
     if (!blob) { setMsg("Couldn't make the image on this browser."); return; }
-    const file = new File([blob], "chairman-card.png", { type: "image/png" });
+    const file = new File([blob], "bizball-card.png", { type: "image/png" });
     try {
       if (navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file], text: `My BizBall chairman rating: ${p.overall}. ${SITE_URL}` });
+        await navigator.share({ files: [file], text: `My BizBall rating: ${p.overall}. ${SITE_URL}` });
         return;
       }
-    } catch { /* user cancelled or not allowed: fall back to download */ }
+    } catch { /* cancelled or not allowed: fall back to download */ }
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = "chairman-card.png";
+    a.download = "bizball-card.png";
     a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-    setMsg("Card saved as an image.");
+    setMsg("Saved as an image.");
   }
 
   return (
-    <div>
-      <h2 ref={ref} tabIndex={-1} className="page-title">Chairman card</h2>
-      <div className={`fut ${t}`}>
+    <div className="club">
+      <h2 ref={ref} tabIndex={-1} className="page-title">Your card</h2>
+      <div className="fut" aria-label={`Rating ${p.overall}, ${t}`}>
         <div className="fut-top">
-          <span className="fut-ovr">{p.overall}</span>
-          <span className="fut-pos">Chairman</span>
+          <div><div className="fut-ovr">{p.overall}</div><span className="fut-tier">{t}</span></div>
+          <span className="fut-pos">BizBall<br />Chairman</span>
         </div>
         <div className="fut-name">{p.name || "The Chairman"}</div>
         <div className="fut-club">{p.club}</div>
@@ -53,32 +55,25 @@ export const CardView = forwardRef<HTMLHeadingElement, Props>(function CardView(
           ))}
         </dl>
       </div>
-      <label className="name-field">
-        <span>Name on your card</span>
-        <input value={p.name} maxLength={16} onChange={(e) => p.onName(e.target.value)} placeholder="The Chairman" autoComplete="nickname" />
-      </label>
-      <div className="btn-row">
-        <button className="btn" onClick={share}>Share my card</button>
-      </div>
-      <p className="toast" role="status">{msg}</p>
-      <p className="dim small">Ratings run from 40 to 99. Each match sets a topic's score, and training drills move it up or down. Gold from 70.</p>
+      <button className="btn block" onClick={share}>Share card</button>
+      <p className="toast" role="status" style={msg ? undefined : { minHeight: 0, margin: "-16px 0 0" }}>{msg}</p>
 
-      <h3 className="section-title">Skills</h3>
+      <p className="section-title">Skills</p>
       <ul className="skills">
         {p.skills.map((s) => (
           <li key={s.key}>
             <button className="skill-head" aria-expanded={open === s.key} onClick={() => setOpen(open === s.key ? null : s.key)}>
-              <span className="sk-key">{s.key}</span><span className="sk-name">{s.name}</span><span className="sk-r">{s.rating}</span>
+              <span className="sk-name">{s.name}</span><span className="sk-r">{s.rating}</span>
             </button>
             {open === s.key && (
               <ul className="topics">
                 {s.topics.map((tp) => (
                   <li key={tp.number}>
-                    <span className="tp-name">{tp.topic}</span>
+                    <span>{tp.topic}</span>
                     <span className="bar" aria-label={tp.score === null ? "Not played yet" : `${Math.round(tp.score * 100)}% mastered`}><span style={{ width: `${(tp.score ?? 0) * 100}%` }} /></span>
-                    {tp.score !== null ? (
+                    {tp.score !== null && (
                       <span className="tp-act"><button onClick={() => p.onTrain(tp.number)}>Train</button><button onClick={() => p.onReplay(tp.number)}>Replay</button></span>
-                    ) : <span className="tp-act dim small">Not played</span>}
+                    )}
                   </li>
                 ))}
               </ul>
@@ -86,6 +81,18 @@ export const CardView = forwardRef<HTMLHeadingElement, Props>(function CardView(
           </li>
         ))}
       </ul>
+      <p className="dim small">Ratings run from 40 to 99. Matches set them, training moves them.</p>
+
+      <p className="section-title">Settings</p>
+      <label className="name-field">
+        <span>Name on your card</span>
+        <input value={p.name} maxLength={16} onChange={(e) => p.onName(e.target.value)} placeholder="The Chairman" autoComplete="nickname" />
+      </label>
+      <div className="setting">
+        <span>Sound</span>
+        <button className="switch" role="switch" aria-checked={p.sound} aria-label="Sound" onClick={() => p.onSound(!p.sound)} />
+      </div>
+      <p className="dim small">A new match every day at midnight, your time. Your club lives on this device. No account, no ads.</p>
     </div>
   );
 });

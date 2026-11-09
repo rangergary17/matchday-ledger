@@ -119,15 +119,16 @@ export function App() {
     update({ ...data, progress: { day: play.day, date: play.date, match: matches[play.matchIndex].number, kind: play.kind, goals: play.goals, hints: play.hints } });
   }
 
-  function celebrate(goal: boolean, text = "GOAL!") {
+  function celebrate(goal: boolean, text = "Goal") {
     if (goal) { setBurst((b) => ({ n: b.n + 1, text })); playSound("goal", sound); buzz([40, 60, 120]); }
     else { playSound("conceded", sound); buzz([80]); }
   }
 
   // ---------- render helpers ----------
-  const scoreboard = (play: Play, clock: string) => {
+  const scoreboard = (play: Play, clock: string, now = -1) => {
     const s = score(play.goals, play.pen);
-    return <Scoreboard club={season.club.name} opponent={matches[play.matchIndex].opponent} us={s.us} them={s.them} clock={clock} />;
+    const dots = [0, 1, 2, 3].map((i) => (i < play.goals.length ? (play.goals[i] ? "g" : "c") : i === 3 && play.pen !== null ? (play.pen ? "g" : "c") : i === now ? "now" : ""));
+    return <Scoreboard club={season.club.name} opponent={matches[play.matchIndex].opponent} us={s.us} them={s.them} clock={clock} dots={dots} />;
   };
   const seed = (play: Play) => `${play.kind}:${play.day}:${play.matchIndex}`;
 
@@ -167,7 +168,7 @@ export function App() {
         const sd = `${seed(play)}:${q}`;
         const right = picked !== null && picked === m.questions[q].answer;
         return (<>
-          {scoreboard(play, `${HALVES[q]} · ${MINUTES[q]}`)}
+          {scoreboard(play, `${HALVES[q]} · ${MINUTES[q]}`, q)}
           <Chance key={q} ref={setFocus} question={m.questions[q]} index={q} opponent={m.opponent} picked={picked} hintShown={hint}
             build={commentary.build(sd, season.club.name, m.opponent)}
             after={right ? commentary.goal(sd, season.club.name, m.opponent) : commentary.conceded(sd, season.club.name, m.opponent)}
@@ -187,7 +188,7 @@ export function App() {
         const { play } = screen;
         const m = matches[play.matchIndex];
         return (<>
-          {scoreboard(play, "90+2' · Penalty")}
+          {scoreboard(play, "90+2' · Penalty", 3)}
           <PenaltyView ref={setFocus} penalty={m.penalty} values={baseValues(m.penalty)} mode="penalty"
             intro={commentary.penalty(seed(play), season.club.name, m.opponent)}
             onHint={() => setScreen({ ...screen, play: { ...play, hints: play.hints + 1 } })}
@@ -211,7 +212,6 @@ export function App() {
         const rec = data.records[String(play.day)];
         const pen = play.pen ?? false;
         return (<>
-          {scoreboard({ ...play, pen }, "Full time")}
           <FullTime ref={setFocus} match={m} day={play.day} goals={play.goals} pen={pen} kind={play.kind}
             news={club.news.filter((n) => n.day === play.day)}
             rating={rate.overall} position={ordinal(position)}
@@ -246,7 +246,7 @@ export function App() {
             onResult={(ok) => {
               update(recordDrill(data, m.number, today.date, ok));
               setScreen({ ...screen, done: true });
-              if (ok) celebrate(true, "SPOT ON"); else playSound("saved", sound);
+              if (ok) celebrate(true, "Spot on"); else playSound("saved", sound);
               track("/drill");
             }}
             nextLabel="Back to the club" onNext={() => setScreen({ s: "hub" })} />
@@ -262,18 +262,10 @@ export function App() {
     <div className="app">
       <a className="skip" href="#stage">Skip to the game</a>
       <header className="top">
-        <div>
-          <p className="eyebrow">Matchday {today.day} · {rows.find((r) => r.you)!.p ? ordinal(position) : "pre-season"} · worth {money(wealth(club.state, cfgOf(season)))}</p>
-          <h1>BizBall</h1>
-        </div>
+        <h1>Biz<span>Ball</span></h1>
         <div className="top-right">
-          <span className="streak" aria-label={`${s} day streak`}>{s ? `${s}-day streak` : "Start a streak"}</span>
-          <button className="icon-btn" aria-pressed={sound} aria-label={sound ? "Sound on" : "Sound off"} onClick={() => update({ ...data, settings: { ...data.settings, sound: !sound } })}>
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M4 9h4l5-4v14l-5-4H4V9Z" />
-              {sound ? <path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" strokeWidth="2" /> : <path d="m16 9 5 6m0-6-5 6" fill="none" strokeWidth="2" />}
-            </svg>
-          </button>
+          {data.settings.introSeen && <span className="pill" aria-label="Your wealth">{money(wealth(club.state, cfgOf(season)))}</span>}
+          {s > 0 && <span className="pill on">{s} day streak</span>}
         </div>
       </header>
 
@@ -291,7 +283,7 @@ export function App() {
                 else startPlay("catchup", day, mi);
               }} />
           ) : (
-            <CardView ref={setFocus} name={data.settings.name} club={season.club.name} overall={rate.overall} skills={rate.skills}
+            <CardView ref={setFocus} sound={sound} onSound={(on: boolean) => update({ ...data, settings: { ...data.settings, sound: on } })} name={data.settings.name} club={season.club.name} overall={rate.overall} skills={rate.skills}
               onName={(name) => update({ ...data, settings: { ...data.settings, name } })}
               onTrain={(mn) => { setTab("match"); setScreen({ s: "drill", match: mn, values: draw(byNumber.get(mn)!.penalty, `${Date.now()}:${mn}`), done: false }); }}
               onReplay={(mn) => {
@@ -301,7 +293,6 @@ export function App() {
               }} />
           )}
       </main>
-      <p className="foot">A new match every day at midnight, your time. Your club lives on this device. No account, no ads.</p>
       {data.settings.introSeen && <TabBar tab={tab} onTab={(t) => { setTab(t); if (t === "match" && (screen.s === "fulltime" || screen.s === "call" || (screen.s === "drill" && screen.done))) setScreen({ s: "hub" }); }} badges={{ match: pendingBadge && tab !== "match" }} />}
       <GoalBurst trigger={burst.n} text={burst.text} />
     </div>

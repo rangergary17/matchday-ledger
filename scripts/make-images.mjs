@@ -1,46 +1,40 @@
-// Renders the share image (og.png) and app icons with the game's own fonts.
-// Run: node scripts/make-images.mjs   (uses the pre-installed Playwright Chromium)
+// Renders the share image (og.png) and app icons with Inter.
+// Run: NODE_PATH=$(npm root -g) node scripts/make-images.mjs
 import { createRequire } from "node:module";
-const { chromium } = createRequire(import.meta.url)("playwright");
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
+const { chromium } = createRequire(import.meta.url)("playwright");
 
 const root = fileURLToPath(new URL("..", import.meta.url));
-const font = (f) => `data:font/woff2;base64,${readFileSync(root + "src/fonts/" + f).toString("base64")}`;
-const css = `
-@font-face{font-family:BSD;font-weight:900;src:url(${font("big-shoulders-display-latin-900-normal.woff2")})}
-@font-face{font-family:BSD;font-weight:800;src:url(${font("big-shoulders-display-latin-800-normal.woff2")})}
-@font-face{font-family:BC;font-weight:600;src:url(${font("barlow-condensed-latin-600-normal.woff2")})}
-@font-face{font-family:B;font-weight:500;src:url(${font("barlow-latin-500-normal.woff2")})}
-*{box-sizing:border-box;margin:0}
-body{background:#0d261a;color:#eef2e8;
- background:radial-gradient(ellipse 120% 60% at 50% -10%,rgba(244,194,77,.16),transparent 60%),repeating-linear-gradient(90deg,#0d261a 0 100px,#12321f 100px 200px)}
-`;
+const font = (w) => `@font-face{font-family:Inter;font-weight:${w};src:url(data:font/woff2;base64,${readFileSync(`${root}src/fonts/inter-latin-${w}-normal.woff2`).toString("base64")})}`;
+const css = [400, 500, 600, 700].map(font).join("") + `*{box-sizing:border-box;margin:0}body{font-family:Inter;-webkit-font-smoothing:antialiased}`;
 
 const og = `<html><head><style>${css}
-body{width:1200px;height:630px;padding:64px 72px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
-.ring{position:absolute;width:420px;height:420px;border:4px solid rgba(238,242,232,.14);border-radius:50%;right:-160px;top:105px}
-.half{position:absolute;left:0;right:0;top:315px;border-top:4px solid rgba(238,242,232,.08)}
-.eyebrow{font:600 28px BC;letter-spacing:.16em;text-transform:uppercase;color:#b4c4b4}
-h1{font:900 150px/0.9 BSD;text-transform:uppercase;letter-spacing:.01em}
-.sub{font:600 30px BC;letter-spacing:.08em;text-transform:uppercase;color:#f4c24d;margin-top:8px}
-.board{display:flex;align-items:center;gap:36px;background:#071810;border:2px solid rgba(238,242,232,.18);border-radius:10px;padding:22px 34px;width:max-content;box-shadow:0 0 0 6px rgba(0,0,0,.25)}
-.team{font:800 38px BSD;text-transform:uppercase;line-height:1}
-.team small{display:block;font:600 20px BC;letter-spacing:.14em;color:#b4c4b4;margin-top:6px}
-.score{font:900 92px BSD;color:#f4c24d;text-shadow:0 0 30px rgba(244,194,77,.4)}
-.tag{font:500 32px B;color:#eef2e8;max-width:900px}
-</style></head><body><div class="ring"></div><div class="half"></div>
-<div><p class="eyebrow">Free daily game · 3 minutes</p><h1>BizBall</h1><p class="sub">Venture capital · Private equity · Business finance</p></div>
-<div class="board"><div class="team">Founder<small>Chairman</small></div><div class="score">3-1</div><div class="team">The<br>Buyout<small>Away</small></div></div>
-<p class="tag">Raise the money. Run the club. Survive the buyout. Right answers are goals.</p>
+body{width:1200px;height:630px;background:#f5f6f4;color:#0b1310;padding:72px 80px;display:flex;justify-content:space-between;align-items:center;gap:56px}
+.l{display:flex;flex-direction:column;gap:22px;max-width:560px}
+.logo{font:700 44px Inter;letter-spacing:-.03em}.logo span{color:#0a7a3e}
+h1{font:700 64px/1.05 Inter;letter-spacing:-.04em}h1 span{color:#0a7a3e}
+p{font:500 26px/1.4 Inter;color:#4a5550}
+.card{width:440px;height:520px;border-radius:32px;background:#fff;border:2px solid #e3e7e4;padding:36px;display:flex;flex-direction:column;gap:22px}
+.lab{font:600 20px Inter;color:#85908b}
+.score{display:flex;justify-content:space-between;align-items:center}
+.t{font:600 22px Inter}.t small{display:block;font:400 18px Inter;color:#85908b}
+.s{font:700 84px Inter;letter-spacing:-.04em}.s i{color:#d3d9d5;font-style:normal;font-weight:400;padding:0 8px}
+.dots{display:flex;gap:10px}.dots b{width:16px;height:16px;border-radius:50%;background:#0a7a3e}.dots b.c{background:#c4372c}
+.w{margin-top:auto;background:#0a7a3e;color:#fff;border-radius:20px;padding:22px 24px}
+.w span{font:600 18px Inter;opacity:.8}.w div{font:700 52px Inter;letter-spacing:-.04em}
+</style></head><body>
+<div class="l"><div class="logo">Biz<span>Ball</span></div><h1>Learn how money works. <span>One match a day.</span></h1><p>Venture capital, private equity and business finance, taught through football.</p></div>
+<div class="card"><div class="lab">Matchday 1 · Act 1, The Raise</div>
+<div class="score"><div class="t">Your club<small>Home</small></div><div class="s">3<i>:</i>1</div><div class="t" style="text-align:right">Rivals<small>Away</small></div></div>
+<div class="dots"><b></b><b></b><b class="c"></b><b></b></div>
+<div class="w"><span>Your wealth</span><div>$15.3M</div></div></div>
 </body></html>`;
 
 const icon = (size, pad) => `<html><head><style>${css}
-body{width:${size}px;height:${size}px;display:grid;place-items:center;background:#071810}
-.inner{width:${size - pad * 2}px;height:${size - pad * 2}px;border:${Math.round(size / 64)}px solid rgba(238,242,232,.22);border-radius:${Math.round(size / 8)}px;display:grid;place-items:center;align-content:center;gap:${Math.round(size / 40)}px}
-.s{font:900 ${Math.round((size - pad * 2) * 0.42)}px/0.9 BSD;color:#f4c24d;text-shadow:0 0 ${size / 20}px rgba(244,194,77,.4)}
-.l{font:600 ${Math.round((size - pad * 2) * 0.1)}px BC;letter-spacing:.14em;color:#eef2e8;text-transform:uppercase}
-</style></head><body><div class="inner"><div class="s">3-0</div><div class="l">BizBall</div></div></body></html>`;
+body{width:${size}px;height:${size}px;display:grid;place-items:center;background:#0a7a3e}
+.m{width:${size - pad * 2}px;height:${size - pad * 2}px;display:grid;place-items:center;color:#fff;font:700 ${Math.round((size - pad * 2) * 0.5)}px/1 Inter;letter-spacing:-.06em}
+</style></head><body><div class="m">B</div></body></html>`;
 
 const browser = await chromium.launch();
 const shot = async (html, w, h, out) => {

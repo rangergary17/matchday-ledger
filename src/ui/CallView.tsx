@@ -37,7 +37,6 @@ export const CallView = forwardRef<HTMLHeadingElement, Props>(function CallView(
       <p className="eyebrow">Chairman's call</p>
       <h2 id="call-title" ref={ref} tabIndex={-1}>{call.title}</h2>
       <p>{call.prompt}</p>
-      <p className="dim small">Do the sums. Your choice changes the club, your stake and your wealth for the rest of the season.</p>
       <ul className="choices">
         {call.options.map((o, i) => (
           <li key={i}>
@@ -50,11 +49,11 @@ export const CallView = forwardRef<HTMLHeadingElement, Props>(function CallView(
       </ul>
       {chosen !== null && (
         <div className="ref">
-          <h3 ref={resultRef} tabIndex={-1} className={`verdict ${good ? "goal" : "conc"}`}>{good ? "The board approves" : "The board isn't convinced"}</h3>
-          <p>{call.options[chosen].result}</p>
+          <h3 ref={resultRef} tabIndex={-1} className={`verdict ${good ? "goal" : "conc"}`}>{good ? "Good call" : "Not the best call"}</h3>
+          <p>{call.options[chosen].result.replace(/^Good call\. /, "")}</p>
           {!good && <p className="whynot"><b>Better call: {call.options[call.best].label}.</b> {call.options[call.best].result.replace(/^Good call\. /, "")}</p>}
           {call.options[chosen].later && <p className="dim small">Something from this decision will land in a few matchdays. Watch the club news.</p>}
-          <button className="btn" onClick={onDone}>Back to the club</button>
+          <button className="btn block" onClick={onDone}>Done</button>
         </div>
       )}
     </section>

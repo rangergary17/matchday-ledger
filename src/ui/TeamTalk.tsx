@@ -6,7 +6,7 @@ export const TeamTalk = forwardRef<HTMLHeadingElement, { match: Match; label: st
     return (
       <>
         <section className="tactics" aria-labelledby="talk-title">
-          <p className="eyebrow">Team talk · {label}</p>
+          <p className="eyebrow">Before kick-off · {label}</p>
           <h2 id="talk-title" ref={ref} tabIndex={-1}>{match.topic}</h2>
           <p>{match.talk}</p>
           <ul className="terms" aria-label="Key terms">
@@ -15,8 +15,7 @@ export const TeamTalk = forwardRef<HTMLHeadingElement, { match: Match; label: st
             ))}
           </ul>
         </section>
-        <p className="dim small">3 chances, then a penalty. Right answers are goals. Wrong ones are goals for {match.opponent}.</p>
-        <button className="btn" onClick={onKickOff}>Kick off</button>
+        <button className="btn block" onClick={onKickOff}>Kick off</button>
       </>
     );
   },

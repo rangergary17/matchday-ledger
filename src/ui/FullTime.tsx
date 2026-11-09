@@ -22,9 +22,9 @@ interface Props {
 }
 
 const LINES = {
-  win: ["Win", "Three points. You read the numbers like a chairman."],
-  draw: ["Draw", "A point. Check the working on the ones you missed."],
-  loss: ["Defeat", "The board wants a word. The topics you missed will come back in training."],
+  win: ["Win", ""],
+  draw: ["Draw", ""],
+  loss: ["Loss", ""],
 } as const;
 
 export const FullTime = forwardRef<HTMLHeadingElement, Props>(function FullTime(p, ref) {
@@ -39,12 +39,11 @@ export const FullTime = forwardRef<HTMLHeadingElement, Props>(function FullTime(
 
   return (
     <section className="ft" aria-labelledby="ft-title">
-      <p className="eyebrow">Full time · {p.match.topic}{p.kind === "replay" ? " · replay, doesn't count" : p.kind === "catchup" ? " · catch-up" : ""}</p>
-      <h2 id="ft-title" ref={ref} tabIndex={-1} className={o}>{LINES[o][0]} {us}-{them}</h2>
+      <p className="eyebrow">Full time · {LINES[o][0]}{p.kind === "replay" ? " · Replay, doesn't count" : p.kind === "catchup" ? " · Catch-up" : ""}</p>
+      <h2 id="ft-title" ref={ref} tabIndex={-1} className={o}>{us}:{them}</h2>
       <p className="balls" aria-label={`${p.goals.map((g) => (g ? "goal" : "conceded")).join(", ")}, penalty ${p.pen ? "scored" : "saved"}`}>
-        {p.goals.map((g) => (g ? "⚽" : "❌")).join("")} <span className="pen-tag">pen</span> {p.pen ? "⚽" : "❌"}
+        {p.goals.map((g, i) => <i key={i} className={g ? "g" : ""} />)}<span className="pen-tag">Pen</span><i className={p.pen ? "g" : ""} />
       </p>
-      <p className="dim">{LINES[o][1]}</p>
       <p className="takeaway">{p.match.takeaway}</p>
 
       {p.kind !== "replay" && p.news.length > 0 && (
@@ -62,10 +61,12 @@ export const FullTime = forwardRef<HTMLHeadingElement, Props>(function FullTime(
       )}
 
       <div className="btn-row">
-        {p.kind !== "replay" && p.callPending && <button className="btn" onClick={p.onCall}>Chairman's call</button>}
-        {p.kind !== "replay" && !p.callPending && <button className="btn" onClick={p.onDone}>Back to the club</button>}
-        {p.kind === "replay" && <button className="btn" onClick={p.onDone}>Done</button>}
-        {p.kind === "daily" && <button className="btn ghost" onClick={share}>Share result</button>}
+        {p.kind !== "replay" && p.callPending && <button className="btn block" onClick={p.onCall}>Make the Chairman's call</button>}
+        {p.kind !== "replay" && !p.callPending && <button className="btn block" onClick={p.onDone}>Done</button>}
+        {p.kind === "replay" && <button className="btn block" onClick={p.onDone}>Done</button>}
+      </div>
+      <div className="btn-row">
+        {p.kind === "daily" && <button className="btn ghost" onClick={share}>Share</button>}
         <button className="btn ghost" onClick={p.onReplay}>Replay</button>
       </div>
       <p className="toast" role="status">{toast}</p>

@@ -30,71 +30,65 @@ export const Hub = forwardRef<HTMLHeadingElement, Props>(function Hub(p, ref) {
     return () => clearInterval(id);
   }, []);
   const played = p.today;
+  const label = `Matchday ${p.day}${p.act ? ` · Act ${p.act.n}, ${p.act.title}` : ""}`;
   return (
     <div className="hub">
-      {p.act && (
-        <p className="act"><b>Act {p.act.n}: {p.act.title}</b> {p.act.blurb}</p>
-      )}
       <section className="fixture-card" aria-labelledby="hub-title">
-        <p className="eyebrow">Today · Matchday {p.day}</p>
-        <h2 id="hub-title" ref={ref} tabIndex={-1}>v {p.match.opponent}</h2>
-        <p className="topic">{p.match.topic}</p>
-        {!played && <button className="btn" onClick={p.onPlay}>{p.inProgress ? "Back to the match" : "Play today's match"}</button>}
+        <p className="eyebrow">{label}</p>
+        <h2 id="hub-title" ref={ref} tabIndex={-1}>{p.match.topic}</h2>
+        <p className="opp">vs {p.match.opponent}</p>
+        {!played && <button className="btn block" onClick={p.onPlay}>{p.inProgress ? "Resume match" : "Play"}</button>}
         {played && (() => {
           const s = score(played.goals, played.pen);
           const o = outcome(played.goals, played.pen);
           return (
             <>
-              <p className={`hub-result ${o}`}>{o === "win" ? "Won" : o === "draw" ? "Drew" : "Lost"} {s.us}-{s.them}</p>
-              <p className="dim">Next match in <span className="countdown-sm">{formatCountdown(left)}</span>: {p.nextTopic}</p>
+              <p className={`hub-result ${o}`}>{s.us}:{s.them}</p>
+              <p className="next">{o === "win" ? "Won" : o === "draw" ? "Drew" : "Lost"}. Next match in <b>{formatCountdown(left)}</b></p>
             </>
           );
         })()}
       </section>
 
-      {p.seasonOver && (
-        <section className="panel gold" aria-label="Season review">
-          <h3>Season over</h3>
-          <p>You finished {p.position}. Check the Club tab for the board's verdict. A new season starts at the next matchday with the same club.</p>
-        </section>
-      )}
-
       {p.pendingCalls.length > 0 && (
-        <section className="panel" aria-labelledby="calls-title">
-          <h3 id="calls-title">Waiting for your call</h3>
+        <div className="list" role="group" aria-label="Decisions waiting">
           {p.pendingCalls.map(({ record, match }) => (
             <button key={record.day} className="row-btn" onClick={() => p.onCall(record.day)}>
-              <span><b>{match.call.title}</b><small>Matchday {record.day} · {match.topic}</small></span><span aria-hidden="true">›</span>
+              <span>{match.call.title}<small>Chairman's call · Matchday {record.day}</small></span>
+              <span className="tag">Decide</span>
             </button>
           ))}
-        </section>
+        </div>
       )}
 
-      <section className="panel" aria-labelledby="train-title">
-        <h3 id="train-title">Training ground</h3>
-        {p.drills.length === 0 ? (
-          <p className="dim small">No drills due. Topics you struggle with come back here with fresh numbers, a day later. Ones you nail come back in a week.</p>
-        ) : (
-          <>
-            <p className="dim small">Quick typed-answer drills with new numbers. They raise your Chairman rating.</p>
-            {p.drills.map(({ due, match }) => (
-              <button key={due.match} className="row-btn" onClick={() => p.onDrill(due.match)}>
-                <span><b>{match.topic}</b><small>{due.box === 0 ? "You missed some of this" : "Keep it sharp"}</small></span><span aria-hidden="true">›</span>
-              </button>
-            ))}
-          </>
-        )}
-      </section>
-
-      {p.missed.length > 0 && (
-        <section className="panel" aria-labelledby="missed-title">
-          <h3 id="missed-title">Catch up</h3>
-          <p className="dim small">Missed matchdays still count for the league and the club. They don't count for your streak.</p>
-          {p.missed.slice(0, 3).map(({ day, match }) => (
-            <button key={day} className="row-btn" onClick={() => p.onCatchUp(day)}>
-              <span><b>Matchday {day} v {match.opponent}</b><small>{match.topic}</small></span><span aria-hidden="true">›</span>
+      {p.drills.length > 0 && (
+        <div className="list" role="group" aria-label="Training">
+          <p className="eyebrow">Training</p>
+          {p.drills.map(({ due, match }) => (
+            <button key={due.match} className="row-btn" onClick={() => p.onDrill(due.match)}>
+              <span>{match.topic}<small>{due.box === 0 ? "You missed some of this" : "Keep it sharp"}</small></span>
+              <span className="chev" aria-hidden="true">›</span>
             </button>
           ))}
+        </div>
+      )}
+
+      {p.missed.length > 0 && (
+        <div className="list" role="group" aria-label="Catch up">
+          <p className="eyebrow">Catch up. Counts for the league, not your streak.</p>
+          {p.missed.slice(0, 3).map(({ day, match }) => (
+            <button key={day} className="row-btn" onClick={() => p.onCatchUp(day)}>
+              <span>{match.topic}<small>Matchday {day} · vs {match.opponent}</small></span>
+              <span className="chev" aria-hidden="true">›</span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {p.seasonOver && (
+        <section className="panel">
+          <h3>Season over</h3>
+          <p className="dim small">You finished {p.position}. A new season starts tomorrow with the same club.</p>
         </section>
       )}
     </div>
