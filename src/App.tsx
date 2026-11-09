@@ -25,7 +25,7 @@ import { CardView } from "./ui/CardView";
 import { Intro } from "./ui/Intro";
 import { TabBar, type Tab } from "./ui/TabBar";
 import { Moment } from "./ui/Moment";
-import { pickMoment, type MomentDef } from "./lib/moments";
+import { pickMoment, previewMoment, type MomentDef } from "./lib/moments";
 import { reducedMotion } from "./ui/fmt";
 
 const { season, matches } = pack;
@@ -62,7 +62,7 @@ export function App() {
   const [today, setToday] = useState(todayInfo);
   const [screen, setScreen] = useState<Screen>({ s: "hub" });
   const [tab, setTab] = useState<Tab>("match");
-  const [moment, setMoment] = useState<MomentDef | null>(null);
+  const [moment, setMoment] = useState<MomentDef | null>(previewMoment);
   const closeMoment = useCallback(() => setMoment(null), []);
   const focusRef = useRef<HTMLElement | null>(null);
   const firstRender = useRef(true);

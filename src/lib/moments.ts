@@ -16,11 +16,20 @@ export interface MomentDef {
 }
 
 export const MOMENTS: MomentDef[] = [
-  { id: "knee-slide", kind: "goal", title: "The knee slide", quip: "Two grass stains. Worth it." },
-  { id: "nutmeg", kind: "concede", title: "Through the legs", quip: "The keeper is blaming the pitch. It's never the pitch." },
+  { id: "thunderbolt", kind: "goal", title: "The captain's thunderbolt", quip: "Thirty-five yards, deep in stoppage time. Of course it was him." },
+  { id: "rain-slide", kind: "goal", title: "The rain slide", quip: "He has been praying for a wet pitch all season." },
+  { id: "the-slip", kind: "concede", title: "The slip", quip: "Rain, a final, the winning kick. The grass had other plans." },
+  { id: "last-act", kind: "concede", title: "The last act", quip: "Fifteen years of genius. Everyone will remember the chest." },
 ];
 
 export function pickMoment(kind: MomentKind, seed: string): MomentDef {
   const pool = MOMENTS.filter((m) => m.kind === kind);
   return pool[Math.floor(rng(`moment:${seed}`)() * pool.length)];
+}
+
+/** `?moment=<id>` plays one moment straight away, for previews and screenshots. */
+export function previewMoment(): MomentDef | null {
+  if (typeof location === "undefined") return null;
+  const id = new URLSearchParams(location.search).get("moment");
+  return MOMENTS.find((m) => m.id === id) ?? null;
 }

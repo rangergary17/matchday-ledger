@@ -382,15 +382,14 @@ table.league { width: 100%; border-collapse: collapse; font-size: 15px; font-var
 .confetti i { position: absolute; top: -20px; border-radius: 2px; opacity: 0; }
 
 /* Stadium details */
-.stadium .blade { stroke: #3fd283; stroke-width: 2.2; stroke-linecap: round; opacity: 0; }
 .stadium .mesh { stroke: #ffffff; stroke-opacity: 0.28; stroke-width: 0.8; fill: none; }
-.stadium .mesh-back { fill: #ffffff; fill-opacity: 0.05; }
-.stadium .puff { fill: #a7b5ad; opacity: 0; }
-.stadium .st { fill: #e9eeeb; opacity: 0; }
+.stadium .far { filter: brightness(0.72); }
+.stadium .rain line { stroke: #cfe3ea; stroke-opacity: 0.32; stroke-width: 0.9; stroke-linecap: round; }
+.stadium .f-roar .mouth { transform-origin: 0 -12px; }
+.stadium .mourn { filter: grayscale(0.8) brightness(0.75); }
+/* The red card stays red: this scene keeps its colour and drains only the last shot. */
+.moment.m-last-act .cam { filter: none; }
 /* Final poses (what reduced-motion users see) */
-.ks .slider { transform: translate(200px, 262px) scale(1.12); }
-.nm .ball { transform: translate(216px, 211px) scale(0.18); }
-.nm .keeper.stand, .nm .keeper.raise { opacity: 0; }
 .concede .cam { filter: grayscale(0.75) brightness(0.8); }
 .concede .stadium .fan { transform: translateY(2px); opacity: 0.75; }
 
@@ -405,28 +404,11 @@ table.league { width: 100%; border-collapse: collapse; font-size: 15px; font-var
   .goal .cam { animation: cam-push 1.1s cubic-bezier(.3,0,.2,1) both, cam-punch 0.9s cubic-bezier(.2,.9,.2,1) 1.1s forwards; }
   @keyframes cam-push { from { transform: scale(1); } to { transform: scale(1.05); } }
   @keyframes cam-punch { 0% { transform: scale(1.05); } 25% { transform: scale(1.16) rotate(-1.2deg); } 100% { transform: scale(1.1) rotate(-0.6deg); } }
-  .ks .slider { transform-box: view-box; transform-origin: 0 0; animation: ks-slide 1.1s cubic-bezier(.35,.1,.25,1) both; }
-  @keyframes ks-slide { 0% { transform: translate(214px, 166px) scale(0.3); } 45% { transform: translate(208px, 205px) scale(0.62); } 100% { transform: translate(200px, 262px) scale(1.12); } }
-  .ks .blade { transform-box: fill-box; animation: ks-blade 0.6s ease-out both; }
-  .ks .k0 { animation-delay: 300ms; }
-  .ks .k1 { animation-delay: 355ms; }
-  .ks .k2 { animation-delay: 410ms; }
-  .ks .k3 { animation-delay: 465ms; }
-  .ks .k4 { animation-delay: 520ms; }
-  .ks .k5 { animation-delay: 575ms; }
-  .ks .k6 { animation-delay: 630ms; }
-  .ks .k7 { animation-delay: 685ms; }
-  .ks .k8 { animation-delay: 740ms; }
-  .ks .k9 { animation-delay: 795ms; }
-  .ks .k10 { animation-delay: 850ms; }
-  .ks .k11 { animation-delay: 905ms; }
-  .ks .k12 { animation-delay: 960ms; }
-  .ks .k13 { animation-delay: 1015ms; }
-  @keyframes ks-blade { 0% { opacity: 1; transform: translate(0,0) rotate(0); } 100% { opacity: 0; transform: translate(var(--bx, 0), -26px) rotate(80deg); } }
-  .ks .arms { transform-box: view-box; transform-origin: 0 -70px; animation: ks-pump 0.32s ease-in-out 1.1s 6 alternate both; }
-  @keyframes ks-pump { to { transform: translateY(-6px) scale(1.06); } }
-  .ks .shout { transform-box: fill-box; transform-origin: center; animation: ks-shout 0.32s ease-in-out 1.1s 6 alternate both; }
-  @keyframes ks-shout { to { transform: scale(1.3, 1.5); } }
+  .stadium .rain { animation: mo-rain 0.55s linear infinite; }
+  @keyframes mo-rain { from { translate: 0 0; } to { translate: -39px 300px; } }
+  .stadium .flick { transform-box: fill-box; transform-origin: 50% 100%; animation: mo-flick 0.14s steps(2) infinite alternate; }
+  .stadium .flick.f2 { animation-duration: 0.11s; }
+  @keyframes mo-flick { to { scale: 1.08 1.25; } }
   .goal .fan { animation: fan-jump 0.36s ease-out 1.1s 6 alternate both; }
   @keyframes fan-jump { to { transform: translateY(-5px); } }
   .goal .flash { animation: mo-flash 0.45s ease-out 1.08s forwards; }
@@ -444,29 +426,13 @@ table.league { width: 100%; border-collapse: collapse; font-size: 15px; font-var
   @keyframes cam-drain { from { filter: none; } to { filter: grayscale(0.75) brightness(0.8); } }
   @keyframes cam-shake { 0%,100% { transform: none; } 20% { transform: translate(-4px, 2px); } 40% { transform: translate(4px, -2px); } 60% { transform: translate(-3px, 1px); } 80% { transform: translate(2px, -1px); } }
   @keyframes cam-shake-big { 0%,100% { transform: none; } 15% { transform: translate(-9px, 5px) rotate(-0.8deg); } 30% { transform: translate(8px, -5px) rotate(0.8deg); } 50% { transform: translate(-6px, 3px); } 70% { transform: translate(4px, -2px); } 85% { transform: translate(-2px, 1px); } }
-  .nm .ball { transform-box: view-box; transform-origin: 0 0; animation: nm-roll 1.1s cubic-bezier(.25,.1,.25,1) 0.05s both; }
-  @keyframes nm-roll { 0% { transform: translate(150px, 300px) scale(1) rotate(0); } 78% { transform: translate(200px, 224px) scale(0.3) rotate(540deg); } 100% { transform: translate(216px, 211px) scale(0.18) rotate(640deg); } }
-  .nm .net { transform-box: view-box; transform-origin: 200px 214px; animation: nm-net 0.5s ease-out 1.12s both; }
-  @keyframes nm-net { 30% { transform: translateY(-3px) scale(1.06, 1.12); } 100% { transform: none; } }
-  .nm .keeper.stand { animation: show-until 1.3s steps(1, end) both; }
-  .nm .keeper.raise { animation: show-between 1.95s steps(1, end) both; }
-  .nm .keeper.slam { animation: show-from 1.95s steps(1, end) both; }
-  @keyframes show-until { 0% { opacity: 1; } 100% { opacity: 0; } }
-  @keyframes show-between { 0%, 66% { opacity: 0; } 67%, 99% { opacity: 1; } 100% { opacity: 0; } }
-  @keyframes show-from { 0%, 99% { opacity: 0; } 100% { opacity: 1; } }
-  .nm .keeper.stand { transform-box: view-box; transform-origin: 200px 226px; }
-  .nm .puff { transform-box: fill-box; transform-origin: center; animation: nm-puff 0.6s ease-out 1.95s forwards; }
-  .nm .p0 { --px: -10px; } .nm .p1 { --px: -5px; } .nm .p2 { --px: 0px; } .nm .p3 { --px: 6px; } .nm .p4 { --px: 11px; }
-  @keyframes nm-puff { 0% { opacity: 0.9; transform: translate(0, 0) scale(0.5); } 100% { opacity: 0; transform: translate(var(--px), -10px) scale(2.2); } }
-  .nm .st { transform-box: fill-box; transform-origin: center; animation: nm-steam 0.9s ease-out infinite; }
-  .nm .s0 { animation-delay: 2.15s; } .nm .s1 { animation-delay: 2.35s; } .nm .s2 { animation-delay: 2.55s; }
-  @keyframes nm-steam { 0% { opacity: 0.85; transform: translateY(0) scale(0.6); } 100% { opacity: 0; transform: translateY(-22px) scale(1.8); } }
   .concede .fan { animation: fan-slump 0.6s ease-out 1.2s both; }
   @keyframes fan-slump { from { transform: none; opacity: 1; } to { transform: translateY(2px); opacity: 0.75; } }
   .concede .slam { animation: slam-thud 0.4s cubic-bezier(.5,0,.75,0) 1.2s both, slam-shake 0.45s linear 1.95s; }
   @keyframes slam-thud { 0% { opacity: 0; transform: translateY(-60px) scale(1.15); } 100% { opacity: 1; transform: none; } }
   @keyframes slam-shake { 0%,100% { transform: none; } 20% { transform: translateX(-8px) rotate(-1deg); } 40% { transform: translateX(7px) rotate(1deg); } 60% { transform: translateX(-4px); } 80% { transform: translateX(3px); } }
   .concede .moment-cap { animation: cap-in 0.4s ease-out 1.6s both; }
+  .moment.m-last-act .cam { animation: cam-shake 0.35s linear 1.15s, cam-shake-big 0.45s linear 1.95s; }
   .concede .vignette { animation: vig 0.6s ease-out 1.15s both; }
   @keyframes vig { from { opacity: 0; } to { opacity: 1; } }
 }
