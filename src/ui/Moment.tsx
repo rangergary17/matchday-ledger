@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SCENES } from "./moments/scenes";
 import type { MomentDef } from "../lib/moments";
 
@@ -35,10 +35,14 @@ export function Moment({ moment, onDone }: { moment: MomentDef; onDone: () => vo
     return () => { clearTimeout(id); window.removeEventListener("keydown", key); };
   }, [onDone]);
   const Scene = SCENES[moment.id];
+  const clip = useClip(moment.video);
   const goal = moment.kind === "goal";
   return (
     <div className={`moment ${moment.kind} m-${moment.id}`} onClick={onDone} role="status">
-      <div className="cam">{Scene && <Scene />}</div>
+      <div className="cam">
+        {Scene && <Scene />}
+        {clip.src && <video ref={clip.ref} className={`moment-video${clip.ready ? " on" : ""}`} src={clip.src} muted playsInline autoPlay preload="auto" onPlaying={clip.onPlaying} onError={clip.fail} />}
+      </div>
       <div className="vignette" />
       <div className="flash" />
       {goal && <Confetti />}
@@ -52,4 +56,29 @@ export function Moment({ moment, onDone }: { moment: MomentDef; onDone: () => vo
       <span className="moment-skip" aria-hidden="true">Tap to skip</span>
     </div>
   );
+}
+
+/**
+ * A clip only takes over if it starts playing within 300ms; otherwise the
+ * drawn scene plays and the clip is dropped. Skipped for reduced motion
+ * and data saver.
+ */
+function useClip(video?: string) {
+  const ref = useRef<HTMLVideoElement>(null);
+  const [state, setState] = useState<"wait" | "on" | "off">("wait");
+  const skip = !video || typeof window === "undefined" || matchMedia("(prefers-reduced-motion: reduce)").matches
+    || Boolean((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData);
+  useEffect(() => {
+    if (skip) return;
+    const id = setTimeout(() => setState((s) => (s === "wait" ? "off" : s)), 300);
+    return () => clearTimeout(id);
+  }, [skip]);
+  useEffect(() => { if (state === "off") ref.current?.pause(); }, [state]);
+  return {
+    ref,
+    src: skip || state === "off" ? undefined : `/moments/${video}`,
+    ready: state === "on",
+    onPlaying: () => setState((s) => (s === "wait" ? "on" : s)),
+    fail: () => setState("off"),
+  };
 }

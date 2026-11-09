@@ -13,6 +13,8 @@ export interface MomentDef {
   kind: MomentKind;
   title: string;
   quip: string;
+  /** Optional video clip in public/moments/. Plays instead of the drawn scene when it loads in time. */
+  video?: string;
 }
 
 export const MOMENTS: MomentDef[] = [

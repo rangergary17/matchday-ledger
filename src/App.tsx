@@ -26,6 +26,7 @@ import { Intro } from "./ui/Intro";
 import { TabBar, type Tab } from "./ui/TabBar";
 import { Moment } from "./ui/Moment";
 import { pickMoment, previewMoment, type MomentDef } from "./lib/moments";
+import { CastSheet, castParam } from "./ui/moments/CastSheet";
 import { reducedMotion } from "./ui/fmt";
 
 const { season, matches } = pack;
@@ -58,6 +59,12 @@ function todayInfo() {
 }
 
 export function App() {
+  const cast = castParam();
+  if (cast !== null) return <CastSheet only={cast} />;
+  return <Game />;
+}
+
+function Game() {
   const [data, setData] = useState<SaveData>(() => load(store));
   const [today, setToday] = useState(todayInfo);
   const [screen, setScreen] = useState<Screen>({ s: "hub" });
