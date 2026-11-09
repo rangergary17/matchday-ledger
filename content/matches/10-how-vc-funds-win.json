@@ -1,0 +1,202 @@
+{
+  "number": 10,
+  "topic": "How VC Funds Win",
+  "skill": "TRM",
+  "opponent": "Northmere City",
+  "talk": "A VC fund backs many startups knowing most will fail. A handful of huge winners pay for everything, which is called the power law. That's why investors ask whether a company could be enormous, not just whether it will work.",
+  "terms": [
+    {
+      "term": "Power law",
+      "meaning": "A few outcomes are far bigger than all the rest combined."
+    },
+    {
+      "term": "Fund returner",
+      "meaning": "One investment that pays back the whole fund on its own."
+    },
+    {
+      "term": "Money multiple",
+      "meaning": "What came back divided by what went in."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "A $100M fund invests $5M each in 20 startups. 14 fail completely, 5 return just their money, and 1 returns $250M. What does the fund get back in total?",
+      "options": [
+        "$250M",
+        "$255M",
+        "$275M",
+        "$300M"
+      ],
+      "answer": 2,
+      "hint": "Add the survivors to the big winner.",
+      "working": [
+        "5 x $5M = $25M from the five that returned their money.",
+        "$25M + $250M = $275M in total."
+      ],
+      "whyNot": [
+        "$250M is the one big winner. The 5 that returned their money add $25M.",
+        "$250M + $5M = $255M counts just one of the five.",
+        null,
+        "$250M + 10 x $5M = $300M counts 10 survivors. Only 5 returned their money."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "n": 5,
+          "each": 5000000,
+          "big": 250000000
+        },
+        "formula": "n * each + big"
+      }
+    },
+    {
+      "prompt": "What's the fund's money multiple: total back divided by the $100M in?",
+      "options": [
+        "3 times",
+        "2.75 times",
+        "2.5 times",
+        "1.75 times"
+      ],
+      "answer": 1,
+      "hint": "Everything back divided by everything in.",
+      "working": [
+        "$275M / $100M = 2.75 times."
+      ],
+      "whyNot": [
+        "$300M / $100M = 3 would need $300M back. The fund got $275M.",
+        null,
+        "$250M / $100M = 2.5 counts only the big winner.",
+        "($275M - $100M) / $100M = 1.75 is the gain on top. The money multiple counts everything that came back."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "back": 275000000,
+          "fund": 100000000
+        },
+        "formula": "back / fund"
+      }
+    },
+    {
+      "prompt": "Without the one big winner, how much would the fund get back?",
+      "options": [
+        "$0",
+        "$25M",
+        "$75M",
+        "$100M"
+      ],
+      "answer": 1,
+      "hint": "Only the survivors.",
+      "working": [
+        "Only the 5 that returned their money: 5 x $5M = $25M.",
+        "$25M back on $100M in. The one big winner is the whole game."
+      ],
+      "whyNot": [
+        "The 5 that returned their money still count: 5 x $5M = $25M.",
+        null,
+        "$100M - $25M = $75M is what the fund would lose, not what it gets back.",
+        "Breaking even needs a big winner. Without it, only $25M comes back."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "n": 5,
+          "each": 5000000
+        },
+        "formula": "n * each"
+      }
+    }
+  ],
+  "penalty": {
+    "where": [
+      "n * each <= fund"
+    ],
+    "vars": {
+      "n": {
+        "value": 5,
+        "min": 2,
+        "max": 10,
+        "step": 1,
+        "fmt": "int"
+      },
+      "each": {
+        "value": 5000000,
+        "min": 2000000,
+        "max": 10000000,
+        "step": 1000000,
+        "fmt": "usd"
+      },
+      "big": {
+        "value": 250000000,
+        "min": 50000000,
+        "max": 500000000,
+        "step": 50000000,
+        "fmt": "usd"
+      },
+      "fund": {
+        "value": 100000000,
+        "min": 100000000,
+        "max": 100000000,
+        "step": 1,
+        "fmt": "usd"
+      }
+    },
+    "prompt": "A {fund} fund gets back {each} from each of {n} survivors and {big} from one big winner. Everything else fails. What's the money multiple?",
+    "answer": "(n * each + big) / fund",
+    "fmt": "num",
+    "whole": 0.05,
+    "tol": 0.02,
+    "hint": "Everything back divided by everything in.",
+    "working": [
+      "{n} x {each} = {n * each|usd} from the survivors.",
+      "{n * each|usd} + {big} = {n * each + big|usd} back.",
+      "{n * each + big|usd} / {fund} = {(n * each + big) / fund|num} times."
+    ],
+    "traps": [
+      {
+        "formula": "big / fund",
+        "why": "That counts only the big winner. Add the survivors."
+      },
+      {
+        "formula": "(n * each + big - fund) / fund",
+        "why": "That's the gain on top. The money multiple counts everything that came back."
+      }
+    ]
+  },
+  "call": {
+    "title": "Matching the investor",
+    "prompt": "A big fund will put in $5M for 20%, but only if your plan could make the club worth $200M, enough to return their whole fund. Your honest plan gets to about $40M. A smaller fund that's happy with a $40M outcome offers $2M for 15%, enough for about 1,000 more fans a match. The big money would add about 1,500.",
+    "options": [
+      {
+        "label": "Pitch the $200M dream to the big fund",
+        "effects": {
+          "dilute": 0.2,
+          "fans": 1500
+        },
+        "result": "Overpromising wins the money, but a $200M target becomes your boss.",
+        "later": {
+          "after": 10,
+          "text": "The big targets are missed. The investor forces costly changes: $10,000 a matchday in new staff.",
+          "effects": {
+            "fixed": 10000
+          }
+        }
+      },
+      {
+        "label": "Take $2M from the smaller fund",
+        "effects": {
+          "dilute": 0.15,
+          "fans": 1000
+        },
+        "result": "Good call. Match the investor to the plan. A $40M outcome is a great result for a fund that expects one, and 1,000 x $18 = $18,000 a matchday."
+      },
+      {
+        "label": "Raise from neither",
+        "effects": {},
+        "result": "The smaller raise would have added 1,000 x $18 = $18,000 a matchday."
+      }
+    ],
+    "best": 1
+  },
+  "takeaway": "VC funds need a few giant wins. Pick investors whose maths fits your plan."
+}

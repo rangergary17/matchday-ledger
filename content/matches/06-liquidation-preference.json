@@ -1,0 +1,188 @@
+{
+  "number": 6,
+  "topic": "Liquidation Preference",
+  "skill": "TRM",
+  "opponent": "Emberly Vale",
+  "talk": "A liquidation preference says who gets paid first when the company is sold. With a 1x preference, investors can take their money back before anyone else gets anything. It barely matters in a big sale and matters a lot in a small one.",
+  "terms": [
+    {
+      "term": "Liquidation preference",
+      "meaning": "Investors' right to get their money back first in a sale."
+    },
+    {
+      "term": "Non-participating",
+      "meaning": "Investors take either their money back or their share of the sale, whichever is more."
+    },
+    {
+      "term": "Participating",
+      "meaning": "Investors take their money back and then their share of what's left too."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "An investor put in $4M for 20%, with a 1x non-participating preference. The club sells for $10M. What does the investor take?",
+      "options": [
+        "$10M",
+        "$6M",
+        "$4M",
+        "$2M"
+      ],
+      "answer": 2,
+      "hint": "Compare their money back with their share of the sale.",
+      "working": [
+        "Share of the sale: $10M x 20% = $2M.",
+        "Money back: $4M.",
+        "Non-participating means they pick the bigger one: $4M."
+      ],
+      "whyNot": [
+        "They get paid first, but only up to their preference.",
+        "$4M + $2M = $6M is participating. Non-participating means one or the other.",
+        null,
+        "$2M is their 20% share. Their preference lets them take their $4M back instead."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "inv": 4000000,
+          "sale": 10000000,
+          "share": 0.2
+        },
+        "formula": "max(inv, sale * share)"
+      }
+    },
+    {
+      "prompt": "What's left for everyone else?",
+      "options": [
+        "$4M",
+        "$6M",
+        "$8M",
+        "$10M"
+      ],
+      "answer": 1,
+      "hint": "The sale price minus what the investor took.",
+      "working": [
+        "$10M - $4M = $6M."
+      ],
+      "whyNot": [
+        "$4M is the investor's take.",
+        null,
+        "$10M - $2M = $8M assumes the investor took their 20% share. They took their $4M back instead.",
+        "The investor gets paid first."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "sale": 10000000,
+          "inv": 4000000
+        },
+        "formula": "sale - inv"
+      }
+    },
+    {
+      "prompt": "Same deal, but now the club sells for $50M. What does the investor take?",
+      "options": [
+        "$46M",
+        "$14M",
+        "$10M",
+        "$4M"
+      ],
+      "answer": 2,
+      "hint": "In a big sale, which is bigger: the money back or the share?",
+      "working": [
+        "Share of the sale: $50M x 20% = $10M.",
+        "Money back: $4M.",
+        "$10M is bigger, so they take their share: $10M."
+      ],
+      "whyNot": [
+        "$50M - $4M = $46M is what's left after a preference, not the investor's take.",
+        "$10M + $4M = $14M is participating. Non-participating gets one or the other.",
+        null,
+        "In a big sale, 20% beats the money back, so they take their share."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "inv": 4000000,
+          "sale": 50000000,
+          "share": 0.2
+        },
+        "formula": "max(inv, sale * share)"
+      }
+    }
+  ],
+  "penalty": {
+    "where": [],
+    "vars": {
+      "inv": {
+        "value": 4000000,
+        "min": 1000000,
+        "max": 8000000,
+        "step": 1000000,
+        "fmt": "usd"
+      },
+      "share": {
+        "value": 0.2,
+        "min": 0.1,
+        "max": 0.4,
+        "step": 0.05,
+        "fmt": "pct"
+      },
+      "sale": {
+        "value": 10000000,
+        "min": 5000000,
+        "max": 60000000,
+        "step": 5000000,
+        "fmt": "usd"
+      }
+    },
+    "prompt": "An investor put in {inv} for {share}, with a 1x non-participating preference. The club sells for {sale}. What does the investor take?",
+    "answer": "max(inv, sale * share)",
+    "fmt": "usd",
+    "whole": 100000,
+    "hint": "Money back or share of the sale, whichever is bigger.",
+    "working": [
+      "Share of the sale: {sale} x {share} = {sale * share|usd}.",
+      "Money back: {inv}.",
+      "They take the bigger one: {max(inv, sale * share)|usd}."
+    ],
+    "traps": [
+      {
+        "formula": "inv + sale * share",
+        "why": "That's participating. Non-participating takes one or the other."
+      },
+      {
+        "formula": "min(inv, sale * share)",
+        "why": "They take the bigger of the two, not the smaller."
+      }
+    ]
+  },
+  "call": {
+    "title": "Two term sheets",
+    "prompt": "Both investors offer $5M to build a new stand, worth about 1,500 more fans a match. The first values the club at $20M pre-money with a 1x non-participating preference. The second values it at $25M pre-money but wants a 2x participating preference. You expect to sell the club for about $40M one day.",
+    "options": [
+      {
+        "label": "$20M pre-money, 1x non-participating",
+        "effects": {
+          "dilute": 0.2,
+          "fans": 1500
+        },
+        "result": "Good call. $20M + $5M = $25M post-money, so they own $5M / $25M = 20%. At a $40M sale they take $40M x 20% = $8M, leaving $40M - $8M = $32M for everyone else."
+      },
+      {
+        "label": "$25M pre-money, 2x participating",
+        "effects": {
+          "dilute": 0.375,
+          "fans": 1500
+        },
+        "result": "The headline is higher, but $25M + $5M = $30M post-money and at a $40M sale they take 2 x $5M = $10M first, then $5M / $30M = about 16.7% of the rest: ($40M - $10M) x 16.7% = about $5M. $10M + $5M = $15M to them, leaving $40M - $15M = $25M. The bigger valuation cost everyone else $32M - $25M = $7M."
+      },
+      {
+        "label": "Take neither",
+        "effects": {},
+        "result": "No deal, no stand. The money would have added 1,500 x $18 = $27,000 a matchday."
+      }
+    ],
+    "best": 0
+  },
+  "takeaway": "Terms can matter more than the valuation. Always ask: who gets paid first, and how much?"
+}

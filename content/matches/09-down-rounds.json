@@ -1,0 +1,182 @@
+{
+  "number": 9,
+  "topic": "Down Rounds",
+  "skill": "TRM",
+  "opponent": "Stonecross Albion",
+  "talk": "A down round means raising money at a lower price than last time. It dilutes everyone more, and investors with anti-dilution protection get extra shares to make up for it. Founders usually pay for most of that protection.",
+  "terms": [
+    {
+      "term": "Down round",
+      "meaning": "A round priced lower than the one before."
+    },
+    {
+      "term": "Anti-dilution",
+      "meaning": "A term that gives earlier investors extra shares if a later round is cheaper."
+    },
+    {
+      "term": "Full ratchet",
+      "meaning": "The harshest version: earlier investors are repriced to the new, lower price."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "Last round, investors paid $2 a share. Now the club raises at $1.50 a share. By what percentage did the price fall?",
+      "options": [
+        "75%",
+        "50%",
+        "33%",
+        "25%"
+      ],
+      "answer": 3,
+      "hint": "Measure the drop against the old price.",
+      "working": [
+        "$2 - $1.50 = $0.50 drop.",
+        "$0.50 / $2 = 25%."
+      ],
+      "whyNot": [
+        "$1.50 / $2 = 75% is what's left of the price, not how much it fell.",
+        "$0.50 / $2 = 25%, not 50%.",
+        "$0.50 / $1.50 = about 33% divides by the new price. Measure the fall against where you started, $2.",
+        null
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "old": 2,
+          "now": 1.5
+        },
+        "formula": "(old - now) / old"
+      }
+    },
+    {
+      "prompt": "An earlier investor bought 1M shares at $2 with full ratchet protection. Repriced to $1.50, how many shares do they hold now?",
+      "options": [
+        "2M",
+        "1.5M",
+        "About 1.33M",
+        "1M"
+      ],
+      "answer": 2,
+      "hint": "Their money divided by the new price.",
+      "working": [
+        "They paid 1M x $2 = $2M.",
+        "Repriced at $1.50: $2M / $1.50 = about 1.33M shares."
+      ],
+      "whyNot": [
+        "$2M is the money they paid, not the shares.",
+        "1M x 1.5 = 1.5M multiplies by the new price instead of dividing the money by it.",
+        null,
+        "Without protection they'd stay at 1M. Full ratchet reprices their whole $2M."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "paid": 2000000,
+          "now": 1.5
+        },
+        "formula": "paid / now"
+      }
+    },
+    {
+      "prompt": "Who pays for those extra shares?",
+      "options": [
+        "Founders and other owners without protection",
+        "The new investor",
+        "The protected investor",
+        "Nobody, new shares are free"
+      ],
+      "answer": 0,
+      "hint": "Who ends up with a smaller slice?",
+      "working": [
+        "The extra shares go to the protected investor with no new money coming in.",
+        "Everyone without protection owns a smaller slice. That's usually the founders and staff."
+      ],
+      "whyNot": [
+        null,
+        "The new investor pays the new price and gets exactly what they paid for.",
+        "The protected investor is the one receiving the extra shares.",
+        "New shares always come out of someone's slice."
+      ],
+      "kind": "concept"
+    }
+  ],
+  "penalty": {
+    "where": [
+      "now < old",
+      "whole: shares * old / now / 1000"
+    ],
+    "vars": {
+      "old": {
+        "value": 2,
+        "min": 1,
+        "max": 4,
+        "step": 0.5,
+        "fmt": "usd"
+      },
+      "now": {
+        "value": 1.6,
+        "min": 0.8,
+        "max": 3.2,
+        "step": 0.2,
+        "fmt": "usd"
+      },
+      "shares": {
+        "value": 1000000,
+        "min": 500000,
+        "max": 3000000,
+        "step": 500000,
+        "fmt": "int"
+      }
+    },
+    "prompt": "An earlier investor bought {shares} shares at {old} with full ratchet protection. The new round is priced at {now} a share. How many shares do they hold after repricing?",
+    "answer": "shares * old / now",
+    "fmt": "int",
+    "whole": 1000,
+    "hint": "Their money divided by the new price.",
+    "working": [
+      "They paid {shares} x {old} = {shares * old|usd}.",
+      "Repriced: {shares * old|usd} / {now} = {shares * old / now|int} shares."
+    ],
+    "traps": [
+      {
+        "formula": "shares",
+        "why": "Without protection they'd keep {shares}. Full ratchet reprices their whole investment."
+      },
+      {
+        "formula": "shares * now / old",
+        "why": "Upside down. A lower price means more shares for the same money."
+      }
+    ]
+  },
+  "call": {
+    "title": "The down round",
+    "prompt": "The club needs $3M and the only offer values it at $6M pre-money, half your last valuation. Earlier investors have full ratchet protection, which would hand them another 10% of the club. The money would add about 1,000 fans a match. Deep cuts instead would lose about 800.",
+    "options": [
+      {
+        "label": "Take it, ratchet and all",
+        "effects": {
+          "dilute": 0.43,
+          "fans": 1000
+        },
+        "result": "$6M + $3M = $9M post-money, so the new investor gets $3M / $9M = about 33%. The ratchet adds 10% more, all out of everyone without protection, you included."
+      },
+      {
+        "label": "Ask earlier investors to waive the ratchet for a 2% sweetener",
+        "effects": {
+          "dilute": 0.353,
+          "fans": 1000
+        },
+        "result": "Good call. Earlier investors often waive protection when the alternative is a club in trouble. Giving 2% to save 10% - 2% = 8% of the club is a good trade."
+      },
+      {
+        "label": "No raise, make deep cuts",
+        "effects": {
+          "fans": -800
+        },
+        "result": "Avoiding the round costs 800 fans a match: 800 x $18 = $14,400 every matchday."
+      }
+    ],
+    "best": 1
+  },
+  "takeaway": "In a down round, protection for some investors is paid by everyone else. Negotiate it."
+}

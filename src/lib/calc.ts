@@ -7,7 +7,7 @@ type Tok = { t: "num"; v: number } | { t: "id"; v: string } | { t: "op"; v: stri
 
 function lex(src: string): Tok[] {
   const out: Tok[] = [];
-  const re = /\s*(?:(\d+(?:\.\d+)?)|([A-Za-z_]\w*)|([-+*/()]))/y;
+  const re = /\s*(?:(\d+(?:\.\d+)?)|([A-Za-z_]\w*)|([-+*/(),]))/y;
   let i = 0;
   while (i < src.length) {
     if (/^\s*$/.test(src.slice(i))) break;
@@ -32,6 +32,14 @@ export function evaluate(formula: string, vars: Record<string, number> = {}): nu
     const tok = toks[p++];
     if (!tok) throw new Error(`Formula ends early: ${formula}`);
     if (tok.t === "num") return tok.v;
+    if (tok.t === "id" && (tok.v === "max" || tok.v === "min") && isOp("(")) {
+      p++;
+      const args = [expr()];
+      while (isOp(",")) { p++; args.push(expr()); }
+      if (!isOp(")")) throw new Error(`Missing ) in ${formula}`);
+      p++;
+      return tok.v === "max" ? Math.max(...args) : Math.min(...args);
+    }
     if (tok.t === "id") {
       if (!(tok.v in vars)) throw new Error(`Unknown variable "${tok.v}" in ${formula}`);
       return vars[tok.v];

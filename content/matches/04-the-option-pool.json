@@ -1,0 +1,188 @@
+{
+  "number": 4,
+  "topic": "The Option Pool",
+  "skill": "RAI",
+  "opponent": "Glenmoor Celtic",
+  "talk": "An option pool is a slice of shares set aside to hire great people. Investors usually ask for it to be created before their money goes in, so it comes out of the founders' share, not theirs. Know where the pool sits and you know who's paying for it.",
+  "terms": [
+    {
+      "term": "Option pool",
+      "meaning": "Shares set aside for future staff."
+    },
+    {
+      "term": "Pre-money pool",
+      "meaning": "A pool created before the round, so only existing owners are diluted."
+    },
+    {
+      "term": "Effective pre-money",
+      "meaning": "The real price you got once the pool is taken out."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "Investors offer $2M at an $8M pre-money, and want a pool of 10% of the post-money created before they invest. You own 100% now. What do you end up with?",
+      "options": [
+        "90%",
+        "80%",
+        "72%",
+        "70%"
+      ],
+      "answer": 3,
+      "hint": "Investor's share and the pool both come out of you.",
+      "working": [
+        "$8M + $2M = $10M post-money.",
+        "Investor: $2M / $10M = 20%.",
+        "100% - 20% - 10% = 70% for you."
+      ],
+      "whyNot": [
+        "90% forgets the investor's 20%.",
+        "80% ignores the pool. It comes out of your share.",
+        "80% x 90% = 72% treats the pool as if it were added after the round. Here it's created before, so it all comes out of you.",
+        null
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "pre": 8000000,
+          "inv": 2000000,
+          "pool": 0.1
+        },
+        "formula": "1 - inv / (pre + inv) - pool"
+      }
+    },
+    {
+      "prompt": "The pool is 10% of a $10M post-money. What's that slice worth?",
+      "options": [
+        "$800,000",
+        "$1.0M",
+        "$2M",
+        "$10M"
+      ],
+      "answer": 1,
+      "hint": "10% of the post-money.",
+      "working": [
+        "$10M x 10% = $1M."
+      ],
+      "whyNot": [
+        "$8M x 10% = $800,000 uses the pre-money. The pool is 10% of the post-money, $10M.",
+        null,
+        "$2M is the investor's money, not the pool.",
+        "$10M is the whole club."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "post": 10000000,
+          "pool": 0.1
+        },
+        "formula": "post * pool"
+      }
+    },
+    {
+      "prompt": "So what pre-money valuation did you really get, once the pool is taken out?",
+      "options": [
+        "$7M",
+        "$8M",
+        "$9M",
+        "$10M"
+      ],
+      "answer": 0,
+      "hint": "The pool's value comes out of your side of the deal.",
+      "working": [
+        "The pool's $1M is paid for by you alone.",
+        "$8M - $1M = $7M effective pre-money."
+      ],
+      "whyNot": [
+        null,
+        "$8M is the headline. $1M of it pays for the pool, which only you are diluted by.",
+        "$8M + $1M = $9M adds the pool. It's taken from you, not given.",
+        "$10M is post-money, after the investor's $2M."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "pre": 8000000,
+          "poolValue": 1000000
+        },
+        "formula": "pre - poolValue"
+      }
+    }
+  ],
+  "penalty": {
+    "where": [
+      "pre - (pre + inv) * pool > 0"
+    ],
+    "vars": {
+      "pre": {
+        "value": 8000000,
+        "min": 4000000,
+        "max": 20000000,
+        "step": 1000000,
+        "fmt": "usd"
+      },
+      "inv": {
+        "value": 2000000,
+        "min": 1000000,
+        "max": 5000000,
+        "step": 500000,
+        "fmt": "usd"
+      },
+      "pool": {
+        "value": 0.1,
+        "min": 0.05,
+        "max": 0.2,
+        "step": 0.05,
+        "fmt": "pct"
+      }
+    },
+    "prompt": "Investors offer {inv} at a {pre} pre-money, with a pool of {pool} of the post-money created before they invest. What's your effective pre-money valuation?",
+    "answer": "pre - (pre + inv) * pool",
+    "fmt": "usd",
+    "whole": 100000,
+    "hint": "Work out what the pool is worth, then take it off the headline pre-money.",
+    "working": [
+      "{pre} + {inv} = {pre + inv|usd} post-money.",
+      "Pool: {pre + inv|usd} x {pool} = {(pre + inv) * pool|usd}.",
+      "{pre} - {(pre + inv) * pool|usd} = {pre - (pre + inv) * pool|usd} effective pre-money."
+    ],
+    "traps": [
+      {
+        "formula": "pre",
+        "why": "That's the headline. The pool comes out of your side of the deal."
+      },
+      {
+        "formula": "pre + (pre + inv) * pool",
+        "why": "The pool is taken from you, not added."
+      }
+    ]
+  },
+  "call": {
+    "title": "Sizing the pool",
+    "prompt": "Investors offer $3M at a $12M pre-money, so they get $3M / $15M = 20%. They want a 15% option pool created before the round. Your hiring plan for the next two years only needs 5%. The money is worth about 2,000 more fans a match.",
+    "options": [
+      {
+        "label": "Accept the 15% pool",
+        "effects": {
+          "dilute": 0.35,
+          "fans": 2000
+        },
+        "result": "Every point of a pre-money pool comes out of your share. That's 15% - 5% = 10% of the club handed over for hires you don't plan to make."
+      },
+      {
+        "label": "Push back to a 5% pool",
+        "effects": {
+          "dilute": 0.25,
+          "fans": 2000
+        },
+        "result": "Good call. Size the pool to the hiring plan. You keep 100% - 20% - 5% = 75%, and the money still adds 2,000 x $18 = $36,000 a matchday."
+      },
+      {
+        "label": "Walk away",
+        "effects": {},
+        "result": "You keep 100% of a club that doesn't grow. The money would have added 2,000 x $18 = $36,000 a matchday."
+      }
+    ],
+    "best": 1
+  },
+  "takeaway": "A pool created before the round is paid for by the founders. Size it to the hiring plan."
+}

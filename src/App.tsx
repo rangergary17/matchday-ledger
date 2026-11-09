@@ -4,7 +4,8 @@ import { browserStore } from "./lib/storage";
 import { load, recordCall, recordDrill, recordMatch, recordReplay, save as persist, score, streak, type SaveData } from "./lib/save";
 import { dateKey, matchIndexFor, matchdayFor } from "./lib/schedule";
 import { screen as track } from "./lib/analytics";
-import { buildClub } from "./lib/club";
+import { buildClub, cfgOf, wealth } from "./lib/club";
+import { money } from "./ui/fmt";
 import { ordinal, seasonOf, table } from "./lib/league";
 import { ratings } from "./lib/skills";
 import { dueToday } from "./lib/drills";
@@ -135,7 +136,7 @@ export function App() {
       case "hub": {
         const pendingCalls = club.pendingCalls.map((r) => ({ record: r, match: byNumber.get(r.match)! }));
         return (
-          <Hub ref={setFocus} day={today.day} match={matches[today.matchIndex]} today={todayRecord} inProgress={!!progressToday}
+          <Hub ref={setFocus} act={(() => { const n = ((today.day - 1) % N) + 1; const i = season.acts.findIndex((a) => n >= a.from && n <= a.to); return i >= 0 ? { n: i + 1, title: season.acts[i].title, blurb: season.acts[i].blurb } : null; })()} day={today.day} match={matches[today.matchIndex]} today={todayRecord} inProgress={!!progressToday}
             pendingCalls={pendingCalls}
             drills={drills.map((d) => ({ due: d, match: byNumber.get(d.match)! }))}
             missed={missed}
@@ -262,8 +263,8 @@ export function App() {
       <a className="skip" href="#stage">Skip to the game</a>
       <header className="top">
         <div>
-          <p className="eyebrow">Matchday {today.day} · {rows.find((r) => r.you)!.p ? ordinal(position) : "pre-season"} · rating {rate.overall}</p>
-          <h1>Matchday Ledger</h1>
+          <p className="eyebrow">Matchday {today.day} · {rows.find((r) => r.you)!.p ? ordinal(position) : "pre-season"} · worth {money(wealth(club.state, cfgOf(season)))}</p>
+          <h1>BizBall</h1>
         </div>
         <div className="top-right">
           <span className="streak" aria-label={`${s} day streak`}>{s ? `${s}-day streak` : "Start a streak"}</span>

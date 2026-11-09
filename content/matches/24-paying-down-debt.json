@@ -1,0 +1,197 @@
+{
+  "number": 24,
+  "topic": "Paying Down Debt",
+  "skill": "BUY",
+  "opponent": "Quarrytown Athletic",
+  "talk": "After a buyout, the company uses its spare cash to pay down the debt. Every dollar repaid is a dollar more for the owners when the company is sold, even if the business doesn't grow at all. It's the quiet engine of private equity returns.",
+  "terms": [
+    {
+      "term": "Deleveraging",
+      "meaning": "Paying debt down over time."
+    },
+    {
+      "term": "Free cash flow",
+      "meaning": "Cash left after running costs, tax and investment, available to repay debt."
+    },
+    {
+      "term": "Equity value",
+      "meaning": "Company value minus debt."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "A club is worth $50M and has $30M of debt. What's the owners' equity worth?",
+      "options": [
+        "$20M",
+        "$30M",
+        "$50M",
+        "$80M"
+      ],
+      "answer": 0,
+      "hint": "Value minus debt.",
+      "working": [
+        "$50M - $30M = $20M."
+      ],
+      "whyNot": [
+        null,
+        "$30M is the debt, which belongs to the lenders.",
+        "$50M is the whole club. The debt comes off first.",
+        "$50M + $30M = $80M adds the debt. It comes off."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "value": 50000000,
+          "debt": 30000000
+        },
+        "formula": "value - debt"
+      }
+    },
+    {
+      "prompt": "The club makes $4M of free cash flow a year and uses all of it to repay debt. After 5 years, how much debt is left?",
+      "options": [
+        "$30M",
+        "$26M",
+        "$20M",
+        "$10M"
+      ],
+      "answer": 3,
+      "hint": "Years times cash flow, off the debt.",
+      "working": [
+        "5 x $4M = $20M repaid.",
+        "$30M - $20M = $10M left."
+      ],
+      "whyNot": [
+        "The cash flow goes to paying the debt down.",
+        "$30M - $4M = $26M is after one year.",
+        "$20M is how much was repaid, not what's left.",
+        null
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "debt": 30000000,
+          "fcf": 4000000,
+          "years": 5
+        },
+        "formula": "debt - fcf * years"
+      }
+    },
+    {
+      "prompt": "The club is still worth $50M after those 5 years. What's the owners' equity worth now?",
+      "options": [
+        "$60M",
+        "$50M",
+        "$40M",
+        "$20M"
+      ],
+      "answer": 2,
+      "hint": "Same value, less debt.",
+      "working": [
+        "$50M - $10M = $40M.",
+        "$40M / $20M = 2, so the owners doubled their money without the club growing at all."
+      ],
+      "whyNot": [
+        "$50M + $10M = $60M adds the debt.",
+        "The $10M of debt left still comes off.",
+        null,
+        "$20M was before the debt was repaid."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "value": 50000000,
+          "debt": 10000000
+        },
+        "formula": "value - debt"
+      }
+    }
+  ],
+  "penalty": {
+    "where": [
+      "debt - fcf * years > 0",
+      "value > debt"
+    ],
+    "vars": {
+      "value": {
+        "value": 50000000,
+        "min": 20000000,
+        "max": 100000000,
+        "step": 5000000,
+        "fmt": "usd"
+      },
+      "debt": {
+        "value": 30000000,
+        "min": 10000000,
+        "max": 60000000,
+        "step": 5000000,
+        "fmt": "usd"
+      },
+      "fcf": {
+        "value": 4000000,
+        "min": 1000000,
+        "max": 8000000,
+        "step": 1000000,
+        "fmt": "usd"
+      },
+      "years": {
+        "value": 5,
+        "min": 2,
+        "max": 7,
+        "step": 1,
+        "fmt": "int"
+      }
+    },
+    "prompt": "A club worth {value} has {debt} of debt. It uses {fcf} of free cash flow a year to repay debt for {years} years. If it's still worth {value}, what's the owners' equity worth then?",
+    "answer": "value - (debt - fcf * years)",
+    "fmt": "usd",
+    "whole": 1000000,
+    "hint": "Work out the debt left, then take it off the value.",
+    "working": [
+      "{years} x {fcf} = {years * fcf|usd} repaid.",
+      "{debt} - {years * fcf|usd} = {debt - years * fcf|usd} of debt left.",
+      "{value} - {debt - years * fcf|usd} = {value - (debt - years * fcf)|usd} for the owners."
+    ],
+    "traps": [
+      {
+        "formula": "value - debt",
+        "why": "That's before any debt was repaid."
+      },
+      {
+        "formula": "value",
+        "why": "The {debt - years * fcf|usd} of debt left still comes off."
+      }
+    ]
+  },
+  "call": {
+    "title": "Spare cash",
+    "prompt": "The club has $1M of spare cash and a bank loan. Each $1M of the loan costs $2,500 a matchday in interest. Repay $1M of the loan, pay a $1M bonus to the owners (you get your share), or keep the cash in the bank.",
+    "options": [
+      {
+        "label": "Repay $1M of debt",
+        "effects": {
+          "cash": -1000000,
+          "debt": -1000000,
+          "fixed": -2500
+        },
+        "result": "Good call. It saves $2,500 a matchday in interest, and every dollar of debt repaid is a dollar more for the owners when the club is sold."
+      },
+      {
+        "label": "Pay a $1M owners' bonus",
+        "effects": {
+          "recap": 1000000,
+          "debt": -1000000,
+          "cash": -1000000
+        },
+        "result": "The money leaves the club. You get your share now, but the interest keeps running on the loan."
+      },
+      {
+        "label": "Keep it in the bank",
+        "effects": {},
+        "result": "Cash in the bank earns nothing here while the loan costs $2,500 a matchday."
+      }
+    ],
+    "best": 0
+  },
+  "takeaway": "Paying down debt grows the owners' slice, even when the business stands still."
+}

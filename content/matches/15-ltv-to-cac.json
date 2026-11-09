@@ -1,5 +1,5 @@
 {
-  "number": 25,
+  "number": 15,
   "topic": "LTV to CAC",
   "skill": "GRO",
   "opponent": "Redcastle Harriers",
@@ -157,7 +157,7 @@
   },
   "call": {
     "title": "The agency pitch",
-    "prompt": "A marketing agency offers 1,000 new fans for $400,000, which is $400 each. Your referral scheme can bring 300 fans at $50 each. Over 20 matchdays a fan is worth 20 x $18 = $360.",
+    "prompt": "A marketing agency offers 1,000 new fans for $400,000, which is $400 each, but they come from a one-off ticket giveaway. Your referral scheme brings 300 fans at $50 each, and referred fans tend to stay. Over 20 matchdays a fan who stays is worth 20 x $18 = $360.",
     "options": [
       {
         "label": "Sign the agency",
@@ -165,7 +165,14 @@
           "cash": -400000,
           "fans": 1000
         },
-        "result": "$360 / $400 = 0.9, so 0.9 to 1. You pay more for each fan than they're worth."
+        "result": "$360 / $400 = 0.9, so 0.9 to 1 even if they stayed, and they don't. Cheap-looking growth that churns is the most expensive kind.",
+        "later": {
+          "after": 5,
+          "text": "The agency's fans were one-match tourists. Almost none come back.",
+          "effects": {
+            "fans": -1000
+          }
+        }
       },
       {
         "label": "Run the referral scheme",
@@ -181,7 +188,14 @@
           "cash": -415000,
           "fans": 1300
         },
-        "result": "The referral fans are a great deal, but the agency half loses money. Don't let a good deal hide a bad one."
+        "result": "The referral fans are a great deal, but the agency half loses money. Don't let a good deal hide a bad one.",
+        "later": {
+          "after": 5,
+          "text": "The agency's fans drift away. The referral fans stay.",
+          "effects": {
+            "fans": -1000
+          }
+        }
       }
     ],
     "best": 1

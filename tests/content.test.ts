@@ -11,6 +11,11 @@ const REAL = [
   "Paris Saint", "Ajax", "PSV", "Feyenoord", "Benfica", "Porto", "Sporting", "Galatasaray", "LA Galaxy",
   "Inter Miami", "Premier League", "La Liga", "Bundesliga", "Serie A", "Ligue 1", "Champions League",
   "MLS", "Wrexham", "Messi", "Ronaldo", "Haaland", "Mbapp", "Beckham",
+  // Real investment firms
+  "Sequoia", "Andreessen", "a16z", "Accel", "Kleiner", "Lightspeed", "Index Ventures", "Founders Fund", "Y Combinator",
+  "SoftBank", "Tiger Global", "Insight Partners", "General Atlantic", "KKR", "Blackstone", "Carlyle", "Apollo", "TPG",
+  "Bain Capital", "Warburg", "Silver Lake", "Vista Equity", "Thoma Bravo", "EQT", "CVC", "Permira", "Advent International",
+  "RedBird", "Clearlake", "777 Partners", "Elliott",
 ];
 
 function allText(): string[] {
@@ -79,7 +84,7 @@ describe("writing rules", () => {
     expect(text.filter((t) => /[—–]/.test(t))).toEqual([]);
   });
   it("no real clubs, leagues or players", () => {
-    const hits = text.flatMap((t) => REAL.filter((r) => t.toLowerCase().includes(r.toLowerCase())).map((r) => `${r}: ${t.slice(0, 60)}`));
+    const hits = text.flatMap((t) => REAL.filter((r) => new RegExp(`\\b${r}\\b`, r === r.toUpperCase() ? "" : "i").test(t)).map((r) => `${r}: ${t.slice(0, 60)}`));
     expect(hits).toEqual([]);
   });
   it("no HTML in content", () => {

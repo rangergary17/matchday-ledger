@@ -42,7 +42,7 @@ export async function cardPng(opts: { name: string; club: string; overall: numbe
     });
     g.fillStyle = "#eef2e8";
     g.font = "600 40px 'Barlow Condensed', sans-serif";
-    g.fillText("MATCHDAY LEDGER · " + opts.site.replace(/^https?:\/\//, "").toUpperCase(), 140, 1230);
+    g.fillText("BIZBALL · " + opts.site.replace(/^https?:\/\//, "").toUpperCase(), 140, 1230);
     return await new Promise((res) => c.toBlob((b) => res(b), "image/png"));
   } catch {
     return null;

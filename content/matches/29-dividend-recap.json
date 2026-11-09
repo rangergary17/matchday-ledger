@@ -1,0 +1,184 @@
+{
+  "number": 29,
+  "topic": "Dividend Recap",
+  "skill": "BUY",
+  "opponent": "Hollowmere Town",
+  "talk": "In a dividend recap, a company borrows new money and pays it straight out to its owners. The owners get cash back early, which boosts their returns, but the company carries more debt. Done carefully it can work, done greedily it sinks companies.",
+  "terms": [
+    {
+      "term": "Recapitalisation",
+      "meaning": "Changing the mix of debt and equity."
+    },
+    {
+      "term": "Dividend",
+      "meaning": "Cash paid out to owners."
+    },
+    {
+      "term": "Leverage ratio",
+      "meaning": "Debt divided by EBITDA. Above about 6 is risky."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "A club has EBITDA of $10M and debt of $30M. What's its leverage ratio?",
+      "options": [
+        "30",
+        "4",
+        "3",
+        "About 0.33"
+      ],
+      "answer": 2,
+      "hint": "Debt divided by EBITDA.",
+      "working": [
+        "$30M / $10M = 3 times."
+      ],
+      "whyNot": [
+        "$30M is the debt, not the ratio.",
+        "$30M + $10M = $40M, and $40M / $10M = 4 would need $10M more debt.",
+        null,
+        "$10M / $30M = about 0.33 is upside down. Debt goes on top."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "debt": 30000000,
+          "ebitda": 10000000
+        },
+        "formula": "debt / ebitda"
+      }
+    },
+    {
+      "prompt": "The owners borrow $20M more and pay it out as a dividend. What's the leverage ratio now?",
+      "options": [
+        "2",
+        "3",
+        "5",
+        "6"
+      ],
+      "answer": 2,
+      "hint": "New total debt divided by EBITDA.",
+      "working": [
+        "$30M + $20M = $50M of debt.",
+        "$50M / $10M = 5 times."
+      ],
+      "whyNot": [
+        "$20M / $10M = 2 counts only the new loan.",
+        "3 was before the recap.",
+        null,
+        "6 is the danger line. You're at $50M / $10M = 5."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "debt": 50000000,
+          "ebitda": 10000000
+        },
+        "formula": "debt / ebitda"
+      }
+    },
+    {
+      "prompt": "Interest is 8% a year. How much does the club now pay in interest each year?",
+      "options": [
+        "$10M",
+        "$4M",
+        "$2.4M",
+        "$1.6M"
+      ],
+      "answer": 1,
+      "hint": "All the debt times the rate.",
+      "working": [
+        "$50M x 8% = $4M a year.",
+        "That's $4M / $10M = 40% of EBITDA gone on interest before anything else."
+      ],
+      "whyNot": [
+        "$10M is all of EBITDA.",
+        null,
+        "$30M x 8% = $2.4M was the interest bill before the recap.",
+        "$20M x 8% = $1.6M counts only the new loan."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "debt": 50000000,
+          "rate": 0.08
+        },
+        "formula": "debt * rate"
+      }
+    }
+  ],
+  "penalty": {
+    "where": [],
+    "vars": {
+      "ebitda": {
+        "value": 10000000,
+        "min": 5000000,
+        "max": 20000000,
+        "step": 1000000,
+        "fmt": "usd"
+      },
+      "debt": {
+        "value": 30000000,
+        "min": 10000000,
+        "max": 60000000,
+        "step": 5000000,
+        "fmt": "usd"
+      },
+      "added": {
+        "value": 20000000,
+        "min": 5000000,
+        "max": 40000000,
+        "step": 5000000,
+        "fmt": "usd"
+      }
+    },
+    "prompt": "A club has EBITDA of {ebitda} and debt of {debt}. The owners borrow {added} more for a dividend. What's the leverage ratio now?",
+    "answer": "(debt + added) / ebitda",
+    "fmt": "num",
+    "whole": 0.5,
+    "tol": 0.1,
+    "hint": "New total debt divided by EBITDA.",
+    "working": [
+      "{debt} + {added} = {debt + added|usd} of debt.",
+      "{debt + added|usd} / {ebitda} = {(debt + added) / ebitda|num} times EBITDA."
+    ],
+    "traps": [
+      {
+        "formula": "debt / ebitda",
+        "why": "That's before the recap."
+      },
+      {
+        "formula": "added / ebitda",
+        "why": "That counts only the new loan."
+      }
+    ]
+  },
+  "call": {
+    "title": "The recap proposal",
+    "prompt": "Your partners propose borrowing $6M and paying it straight out to the owners, costing $15,000 a matchday in interest. A smaller $2M recap would cost $5,000 a matchday. Or no recap.",
+    "options": [
+      {
+        "label": "The full $6M recap",
+        "effects": {
+          "recap": 6000000,
+          "fixed": 15000
+        },
+        "result": "Owners get cash now, the club carries the risk. $15,000 a matchday of interest eats into the value of the stake you still hold."
+      },
+      {
+        "label": "A smaller $2M recap",
+        "effects": {
+          "recap": 2000000,
+          "fixed": 5000
+        },
+        "result": "Safer, but you still pay interest to receive money that was already yours."
+      },
+      {
+        "label": "No recap",
+        "effects": {},
+        "result": "Good call. A recap is your own club's future profit, borrowed back at interest. With a club valued at a multiple of profit, the interest costs more than the early cash is worth."
+      }
+    ],
+    "best": 2
+  },
+  "takeaway": "A recap pays owners early with borrowed money. Watch the leverage ratio."
+}

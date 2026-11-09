@@ -292,3 +292,11 @@ table.league { width: 100%; border-collapse: collapse; font-size: 15px; font-var
 .tabbar svg { width: 24px; height: 24px; fill: currentColor; }
 .tabbar button.on { color: var(--flood); }
 .tabbar .dot { position: absolute; top: 9px; left: calc(50% + 10px); width: 9px; height: 9px; border-radius: 50%; background: var(--red); }
+
+/* BizBall: wealth + acts */
+.wealth { border: 2px solid var(--flood); border-radius: 6px; padding: 14px 16px; background: var(--board); display: flex; flex-direction: column; gap: 2px; }
+.wealth > span { font: 600 13px var(--cond); letter-spacing: 0.14em; text-transform: uppercase; color: var(--chalk-dim); }
+.wealth > b { font: 900 46px/1 var(--display); color: var(--flood); font-variant-numeric: tabular-nums; }
+.wealth .equation { margin-top: 6px; color: var(--chalk-dim); }
+.act { margin: 0; padding: 10px 12px; border-left: 3px solid var(--flood); background: rgba(244,194,77,0.08); font-size: 15px; color: var(--chalk-dim); }
+.act b { display: block; font: 800 18px var(--display); text-transform: uppercase; letter-spacing: 0.04em; color: var(--chalk); }

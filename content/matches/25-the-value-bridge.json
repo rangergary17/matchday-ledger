@@ -1,0 +1,202 @@
+{
+  "number": 25,
+  "topic": "The Value Bridge",
+  "skill": "RET",
+  "opponent": "Westholm United",
+  "talk": "PE firms explain their returns with a value bridge: how much came from growing profit, how much from selling at a higher multiple, and how much from paying down debt. Growing profit is the part buyers trust most, and multiple expansion is partly luck.",
+  "terms": [
+    {
+      "term": "EBITDA growth",
+      "meaning": "Making more profit than when you bought."
+    },
+    {
+      "term": "Multiple expansion",
+      "meaning": "Selling at a higher multiple than you bought at."
+    },
+    {
+      "term": "Value bridge",
+      "meaning": "Splitting a gain into growth, multiple and debt paydown."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "You bought a club at 8 times its $5M EBITDA. What did you pay?",
+      "options": [
+        "$13M",
+        "$40M",
+        "$50M",
+        "$80M"
+      ],
+      "answer": 1,
+      "hint": "EBITDA times the multiple.",
+      "working": [
+        "$5M x 8 = $40M."
+      ],
+      "whyNot": [
+        "That adds the multiple to EBITDA. Multiply: $5M x 8 = $40M.",
+        null,
+        "$5M x 10 = $50M uses a multiple of 10. You paid 8 times.",
+        "$80M is double the price. $5M x 8 = $40M."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "ebitda": 5000000,
+          "m": 8
+        },
+        "formula": "ebitda * m"
+      }
+    },
+    {
+      "prompt": "Years later you sell at 10 times EBITDA, which has grown to $7M. What's it worth now?",
+      "options": [
+        "$50M",
+        "$56M",
+        "$70M",
+        "$75M"
+      ],
+      "answer": 2,
+      "hint": "New EBITDA times the new multiple.",
+      "working": [
+        "$7M x 10 = $70M."
+      ],
+      "whyNot": [
+        "$5M x 10 = $50M uses the old EBITDA.",
+        "$7M x 8 = $56M uses the old multiple. You sold at 10 times.",
+        null,
+        "$70M + $5M = $75M adds the old EBITDA on top. Value is just EBITDA times the multiple."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "ebitda": 7000000,
+          "m": 10
+        },
+        "formula": "ebitda * m"
+      }
+    },
+    {
+      "prompt": "The gain is $70M - $40M = $30M. How much of it came from growing EBITDA, valued at the old multiple of 8?",
+      "options": [
+        "$14M",
+        "$16M",
+        "$20M",
+        "$30M"
+      ],
+      "answer": 1,
+      "hint": "Extra EBITDA times the old multiple.",
+      "working": [
+        "($7M - $5M) x 8 = $16M from growth.",
+        "$30M - $16M = $14M came from the higher multiple."
+      ],
+      "whyNot": [
+        "$14M is the part from the higher multiple.",
+        null,
+        "($7M - $5M) x 10 = $20M uses the exit multiple. Measure growth at the entry multiple.",
+        "$30M is the whole gain, growth and multiple together."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "e1": 5000000,
+          "e2": 7000000,
+          "m1": 8
+        },
+        "formula": "(e2 - e1) * m1"
+      }
+    }
+  ],
+  "penalty": {
+    "where": [
+      "e2 > e1",
+      "m2 > m1"
+    ],
+    "vars": {
+      "e1": {
+        "value": 5000000,
+        "min": 2000000,
+        "max": 10000000,
+        "step": 1000000,
+        "fmt": "usd"
+      },
+      "e2": {
+        "value": 7000000,
+        "min": 3000000,
+        "max": 15000000,
+        "step": 1000000,
+        "fmt": "usd"
+      },
+      "m1": {
+        "value": 8,
+        "min": 5,
+        "max": 12,
+        "step": 1,
+        "fmt": "num"
+      },
+      "m2": {
+        "value": 10,
+        "min": 6,
+        "max": 14,
+        "step": 1,
+        "fmt": "num"
+      }
+    },
+    "prompt": "You bought at {m1} times EBITDA of {e1} and sold at {m2} times EBITDA of {e2}. How much of the gain came from growing EBITDA, measured at the entry multiple?",
+    "answer": "(e2 - e1) * m1",
+    "fmt": "usd",
+    "whole": 1000000,
+    "hint": "Extra EBITDA times the entry multiple.",
+    "working": [
+      "Bought at {e1} x {m1} = {e1 * m1|usd}. Sold at {e2} x {m2} = {e2 * m2|usd}.",
+      "Growth part: ({e2} - {e1}) x {m1} = {(e2 - e1) * m1|usd}.",
+      "The rest of the gain came from the higher multiple."
+    ],
+    "traps": [
+      {
+        "formula": "(e2 - e1) * m2",
+        "why": "That uses the exit multiple. Measure growth at the entry multiple, {m1}."
+      },
+      {
+        "formula": "e2 * m2 - e1 * m1",
+        "why": "That's the whole gain, not just the growth part."
+      }
+    ]
+  },
+  "call": {
+    "title": "Where to focus before the sale",
+    "prompt": "Your partners want to sell in two seasons. You could spend $2M modernising the shop and hospitality, adding $20,000 of profit a matchday. Or spend $2M on a PR campaign to excite buyers and hope for a higher multiple. Or cut the youth academy for $10,000 more profit a matchday now, losing about 1,000 fans later.",
+    "options": [
+      {
+        "label": "Modernise shop and hospitality",
+        "effects": {
+          "cash": -2000000,
+          "fixed": -20000
+        },
+        "result": "Good call. Real profit growth is the part of the bridge buyers trust and pay a multiple for."
+      },
+      {
+        "label": "PR campaign for a higher multiple",
+        "effects": {
+          "cash": -2000000
+        },
+        "result": "Buyers see through hype. The multiple mostly follows the market, not your marketing."
+      },
+      {
+        "label": "Cut the academy",
+        "effects": {
+          "fixed": -10000
+        },
+        "result": "Short-term profit up, fans down later. Buyers check the trend.",
+        "later": {
+          "after": 10,
+          "text": "Without the academy, about 1,000 fans drift away.",
+          "effects": {
+            "fans": -1000
+          }
+        }
+      }
+    ],
+    "best": 0
+  },
+  "takeaway": "Returns come from growth, a better multiple and paying down debt. Growth is the one you control."
+}

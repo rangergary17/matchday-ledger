@@ -1,7 +1,7 @@
 {
-  "name": "Matchday Ledger",
-  "short_name": "Matchday",
-  "description": "A free daily soccer game that teaches business finance.",
+  "name": "BizBall",
+  "short_name": "BizBall",
+  "description": "A daily football game that teaches venture capital, private equity and business finance.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

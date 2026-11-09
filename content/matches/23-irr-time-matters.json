@@ -1,0 +1,168 @@
+{
+  "number": 23,
+  "topic": "IRR: Time Matters",
+  "skill": "RET",
+  "opponent": "Silverbeck Rangers",
+  "talk": "The money multiple tells you how many times your money grew. IRR (internal rate of return) tells you how fast, as a yearly rate. A shortcut: money doubles in about 72 divided by the yearly percentage, the rule of 72.",
+  "terms": [
+    {
+      "term": "Money multiple",
+      "meaning": "Money back divided by money in. Also called MOIC."
+    },
+    {
+      "term": "IRR",
+      "meaning": "The yearly growth rate that turns money in into money back."
+    },
+    {
+      "term": "Rule of 72",
+      "meaning": "Years to double is about 72 divided by the yearly percentage."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "Fund A turns $10M into $20M in 4 years. Fund B turns $10M into $20M in 8 years. Which has the higher IRR?",
+      "options": [
+        "Fund B",
+        "Same, both doubled",
+        "Can't tell",
+        "Fund A"
+      ],
+      "answer": 3,
+      "hint": "Same multiple. Who got there faster?",
+      "working": [
+        "Both have a money multiple of $20M / $10M = 2.",
+        "Fund A got there in half the time, so its yearly rate is much higher."
+      ],
+      "whyNot": [
+        "Same money, twice the wait. A slower double is a lower yearly rate.",
+        "Same multiple, but IRR is about speed. A got there in 4 years, B in 8.",
+        "You can tell: same start, same end, different time.",
+        null
+      ],
+      "kind": "concept"
+    },
+    {
+      "prompt": "Using the rule of 72, roughly what yearly return doubles money in 4 years?",
+      "options": [
+        "9%",
+        "18%",
+        "25%",
+        "50%"
+      ],
+      "answer": 1,
+      "hint": "72 divided by the years.",
+      "working": [
+        "72 / 4 = 18, so about 18% a year."
+      ],
+      "whyNot": [
+        "72 / 8 = 9 is the 8-year fund.",
+        null,
+        "100% / 4 = 25% spreads the gain evenly, but returns compound. Use 72 / 4 = 18.",
+        "50% a year would more than double money in 2 years."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "years": 4
+        },
+        "formula": "0.72 / years"
+      }
+    },
+    {
+      "prompt": "Using the rule of 72, about how many years does money take to double at 12% a year?",
+      "options": [
+        "3",
+        "6",
+        "9",
+        "12"
+      ],
+      "answer": 1,
+      "hint": "72 divided by the rate.",
+      "working": [
+        "72 / 12 = 6 years."
+      ],
+      "whyNot": [
+        "3 years would need a 24 percent return: 72 / 3 = 24.",
+        null,
+        "9 years would mean 72 / 9 = 8 percent a year. You have 12%.",
+        "12 is the rate, not the years."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "rate": 12
+        },
+        "formula": "72 / rate"
+      }
+    }
+  ],
+  "penalty": {
+    "where": [
+      "whole: 72 / rate"
+    ],
+    "vars": {
+      "rate": {
+        "value": 12,
+        "min": 3,
+        "max": 24,
+        "step": 1,
+        "fmt": "num"
+      }
+    },
+    "prompt": "Money grows {rate}% a year. Using the rule of 72, about how many years does it take to double?",
+    "answer": "72 / rate",
+    "fmt": "num",
+    "whole": 1,
+    "hint": "72 divided by the yearly percentage.",
+    "working": [
+      "72 / {rate} = {72 / rate|num} years."
+    ],
+    "traps": [
+      {
+        "formula": "100 / rate",
+        "why": "That ignores compounding. Use 72, not 100."
+      }
+    ]
+  },
+  "call": {
+    "title": "Quick money or more money",
+    "prompt": "You have $1M to put into one club project. A pop-up fan festival pays back $1.5M within 5 matchdays. A hotel partnership pays back $1.8M, but only after a full season. Or do nothing.",
+    "options": [
+      {
+        "label": "The fan festival",
+        "effects": {
+          "cash": -1000000
+        },
+        "result": "Good call. $1.5M / $1M = 1.5 times in 5 matchdays beats $1.8M / $1M = 1.8 times over a full season, because the faster money can go to work again. That's what IRR measures.",
+        "later": {
+          "after": 5,
+          "text": "The fan festival pays back $1.5M.",
+          "effects": {
+            "cash": 1500000
+          }
+        }
+      },
+      {
+        "label": "The hotel partnership",
+        "effects": {
+          "cash": -1000000
+        },
+        "result": "More dollars in the end, but your money is stuck for a whole season. A bigger multiple can be the worse deal when it takes far longer.",
+        "later": {
+          "after": 30,
+          "text": "The hotel partnership pays back $1.8M.",
+          "effects": {
+            "cash": 1800000
+          }
+        }
+      },
+      {
+        "label": "Do nothing",
+        "effects": {},
+        "result": "Cash sitting still earns nothing."
+      }
+    ],
+    "best": 0
+  },
+  "takeaway": "Money multiple says how much. IRR says how fast. Investors care about both."
+}

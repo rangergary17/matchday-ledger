@@ -1,0 +1,195 @@
+{
+  "number": 28,
+  "topic": "The Waterfall",
+  "skill": "RET",
+  "opponent": "Tidewater Athletic",
+  "talk": "A waterfall sets the order in which a fund's money is paid out. Investors get their money back first, then a preferred return (often 8%), and only after that do the managers share in the profit. Real waterfalls usually add a catch-up step, and this is the simple version.",
+  "terms": [
+    {
+      "term": "Return of capital",
+      "meaning": "Investors get the money they put in back first."
+    },
+    {
+      "term": "Hurdle",
+      "meaning": "The minimum return investors get before managers earn carry, often 8%."
+    },
+    {
+      "term": "Waterfall",
+      "meaning": "The order money flows out of a fund."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "Investors put $100M into a fund with an 8% hurdle. How much must they get back before the managers earn any carry?",
+      "options": [
+        "$8M",
+        "$100M",
+        "$108M",
+        "$180M"
+      ],
+      "answer": 2,
+      "hint": "Their money back plus the hurdle.",
+      "working": [
+        "$100M x 8% = $8M preferred return.",
+        "$100M + $8M = $108M."
+      ],
+      "whyNot": [
+        "$8M is just the hurdle. Investors get their $100M back first too.",
+        "$100M only returns their money. The 8% hurdle comes first as well.",
+        null,
+        "$180M is far too much. The hurdle is $100M x 8% = $8M, so investors need $100M + $8M = $108M."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "fund": 100000000,
+          "hurdle": 0.08
+        },
+        "formula": "fund * (1 + hurdle)"
+      }
+    },
+    {
+      "prompt": "The fund returns $158M. How much is left after investors get their $108M?",
+      "options": [
+        "$8M",
+        "$50M",
+        "$58M",
+        "$158M"
+      ],
+      "answer": 1,
+      "hint": "Total minus what investors get first.",
+      "working": [
+        "$158M - $108M = $50M."
+      ],
+      "whyNot": [
+        "$8M is the hurdle, already paid to investors.",
+        null,
+        "$158M - $100M = $58M forgets the 8% hurdle.",
+        "$158M is the whole amount, before investors are paid."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "back": 158000000,
+          "first": 108000000
+        },
+        "formula": "back - first"
+      }
+    },
+    {
+      "prompt": "The managers take 20% of that $50M. How much carry do they get?",
+      "options": [
+        "$10M",
+        "$11.6M",
+        "$40M",
+        "$50M"
+      ],
+      "answer": 0,
+      "hint": "20% of what's left after the hurdle.",
+      "working": [
+        "$50M x 20% = $10M of carry.",
+        "Investors get the other $50M - $10M = $40M, so $108M + $40M = $148M in total."
+      ],
+      "whyNot": [
+        null,
+        "$158M - $100M = $58M of profit, and $58M x 20% = $11.6M takes carry on all of it. With a hurdle, the first $8M goes to investors only.",
+        "$40M is the investors' share of the $50M.",
+        "The managers get 20% of it, not all of it."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "left": 50000000,
+          "carry": 0.2
+        },
+        "formula": "left * carry"
+      }
+    }
+  ],
+  "penalty": {
+    "where": [
+      "back > fund * (1 + hurdle)",
+      "whole: (back - fund * (1 + hurdle)) * carry / 100000"
+    ],
+    "vars": {
+      "fund": {
+        "value": 100000000,
+        "min": 50000000,
+        "max": 300000000,
+        "step": 50000000,
+        "fmt": "usd"
+      },
+      "hurdle": {
+        "value": 0.08,
+        "min": 0.06,
+        "max": 0.1,
+        "step": 0.01,
+        "fmt": "pct"
+      },
+      "back": {
+        "value": 158000000,
+        "min": 110000000,
+        "max": 450000000,
+        "step": 1000000,
+        "fmt": "usd"
+      },
+      "carry": {
+        "value": 0.2,
+        "min": 0.2,
+        "max": 0.2,
+        "step": 0.05,
+        "fmt": "pct"
+      }
+    },
+    "prompt": "Investors put {fund} into a fund with a {hurdle} hurdle. The fund returns {back}. Managers take {carry} of what's left after investors get their money and the hurdle. How much carry?",
+    "answer": "(back - fund * (1 + hurdle)) * carry",
+    "fmt": "usd",
+    "whole": 100000,
+    "hint": "Investors first, then 20% of what's left.",
+    "working": [
+      "Investors first: {fund} x {1 + hurdle|pct} = {fund * (1 + hurdle)|usd}.",
+      "Left over: {back} - {fund * (1 + hurdle)|usd} = {back - fund * (1 + hurdle)|usd}.",
+      "Carry: {back - fund * (1 + hurdle)|usd} x {carry} = {(back - fund * (1 + hurdle)) * carry|usd}."
+    ],
+    "traps": [
+      {
+        "formula": "(back - fund) * carry",
+        "why": "That takes carry on all the profit. The hurdle goes to investors first."
+      }
+    ]
+  },
+  "call": {
+    "title": "The bonus pot",
+    "prompt": "The club made $1M more profit than planned. The shareholder deal says owners first get an 8% return on the $5M they put in, then staff share 20% of anything above that.",
+    "options": [
+      {
+        "label": "Follow the waterfall",
+        "effects": {
+          "cash": -120000
+        },
+        "result": "Good call. Owners first: $5M x 8% = $400,000. Above that: $1M - $400,000 = $600,000, and staff get $600,000 x 20% = $120,000."
+      },
+      {
+        "label": "Give staff 20% of the whole $1M",
+        "effects": {
+          "cash": -200000
+        },
+        "result": "$1M x 20% = $200,000 skips the hurdle. The owners' 8% comes first."
+      },
+      {
+        "label": "Pay staff nothing this year",
+        "effects": {},
+        "result": "Breaking the deal saves $120,000 and costs you your best people.",
+        "later": {
+          "after": 3,
+          "text": "Two key coaches leave after the bonus row. About 800 fans follow them out.",
+          "effects": {
+            "fans": -800
+          }
+        }
+      }
+    ],
+    "best": 0
+  },
+  "takeaway": "Waterfall: money back, then the hurdle, then the profit split."
+}

@@ -1,0 +1,189 @@
+{
+  "number": 26,
+  "topic": "Buy and Build",
+  "skill": "BUY",
+  "opponent": "Falconridge FC",
+  "talk": "In a buy-and-build, a PE firm buys one larger platform company at a high multiple, then adds smaller companies bought at lower multiples. Once combined, the whole group is valued at the higher multiple. Many multi-club football groups work the same way.",
+  "terms": [
+    {
+      "term": "Platform",
+      "meaning": "The first, larger company a buy-and-build is built on."
+    },
+    {
+      "term": "Add-on",
+      "meaning": "A smaller company bought and merged into the platform."
+    },
+    {
+      "term": "Multiple arbitrage",
+      "meaning": "Buying at a low multiple and being valued at a higher one."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "Your club group is valued at 10 times EBITDA. A smaller club makes $1M of EBITDA and can be bought at 5 times. What do you pay?",
+      "options": [
+        "$15M",
+        "$10M",
+        "$5M",
+        "$1M"
+      ],
+      "answer": 2,
+      "hint": "Its EBITDA times its own multiple.",
+      "working": [
+        "$1M x 5 = $5M."
+      ],
+      "whyNot": [
+        "$10M + $5M = $15M adds two different values together.",
+        "$1M x 10 = $10M uses your group's multiple. The seller only gets 5 times.",
+        null,
+        "$1M is its yearly EBITDA, not its price."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "e": 1000000,
+          "m": 5
+        },
+        "formula": "e * m"
+      }
+    },
+    {
+      "prompt": "Once it's part of your group, what's that $1M of EBITDA worth at the group's 10 times?",
+      "options": [
+        "$5M",
+        "$10M",
+        "$11M",
+        "$15M"
+      ],
+      "answer": 1,
+      "hint": "Same EBITDA, the group's multiple.",
+      "working": [
+        "$1M x 10 = $10M."
+      ],
+      "whyNot": [
+        "$5M is what you paid. Inside the group it's valued at 10 times.",
+        null,
+        "$10M + $1M = $11M counts the EBITDA twice.",
+        "$10M + $5M = $15M adds what you paid. The value is just $1M x 10."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "e": 1000000,
+          "m": 10
+        },
+        "formula": "e * m"
+      }
+    },
+    {
+      "prompt": "How much value did the deal create on day one, before improving anything?",
+      "options": [
+        "$15M",
+        "$10M",
+        "$5M",
+        "$0"
+      ],
+      "answer": 2,
+      "hint": "Value inside the group minus what you paid.",
+      "working": [
+        "$10M - $5M = $5M of value created."
+      ],
+      "whyNot": [
+        "$10M + $5M = $15M adds the price paid instead of taking it off.",
+        "$10M is the value, not the gain. Take off the $5M you paid.",
+        null,
+        "The club is worth more inside the group than it cost: $10M against $5M."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "e": 1000000,
+          "buy": 5,
+          "group": 10
+        },
+        "formula": "e * (group - buy)"
+      }
+    }
+  ],
+  "penalty": {
+    "where": [
+      "group > buy"
+    ],
+    "vars": {
+      "e": {
+        "value": 1000000,
+        "min": 500000,
+        "max": 5000000,
+        "step": 500000,
+        "fmt": "usd"
+      },
+      "buy": {
+        "value": 5,
+        "min": 3,
+        "max": 8,
+        "step": 1,
+        "fmt": "num"
+      },
+      "group": {
+        "value": 12,
+        "min": 6,
+        "max": 14,
+        "step": 1,
+        "fmt": "num"
+      }
+    },
+    "prompt": "Your group is valued at {group} times EBITDA. You buy a smaller company with {e} of EBITDA at {buy} times. How much value does that create on day one?",
+    "answer": "e * (group - buy)",
+    "fmt": "usd",
+    "whole": 500000,
+    "hint": "Value inside the group minus the price you paid.",
+    "working": [
+      "Cost: {e} x {buy} = {e * buy|usd}.",
+      "Value in the group: {e} x {group} = {e * group|usd}.",
+      "{e * group|usd} - {e * buy|usd} = {e * (group - buy)|usd} created."
+    ],
+    "traps": [
+      {
+        "formula": "e * group",
+        "why": "That's the value. Take off the price you paid."
+      },
+      {
+        "formula": "e * buy",
+        "why": "That's what you paid, not the gain."
+      }
+    ]
+  },
+  "call": {
+    "title": "The add-on",
+    "prompt": "Your club is valued at 8 times yearly profit. Three smaller businesses are for sale, each making $600,000 a year ($20,000 a matchday). A sports bar chain for $3M (5 times). A merchandise company for $6M (10 times). Or a famous but loss-making club for $2M that loses $5,000 a matchday and brings 500 fans to your games.",
+    "options": [
+      {
+        "label": "The sports bar chain at 5 times",
+        "effects": {
+          "cash": -3000000,
+          "fixed": -20000
+        },
+        "result": "Good call. $600,000 x 5 = $3M to buy, and inside a club valued at 8 times it's worth $600,000 x 8 = $4.8M. That's $4.8M - $3M = $1.8M created on day one."
+      },
+      {
+        "label": "The merchandise company at 10 times",
+        "effects": {
+          "cash": -6000000,
+          "fixed": -20000
+        },
+        "result": "$600,000 x 10 = $6M is more than the $600,000 x 8 = $4.8M it's worth to you. Paying a higher multiple than your own destroys value."
+      },
+      {
+        "label": "The famous loss-making club",
+        "effects": {
+          "cash": -2000000,
+          "fixed": 5000,
+          "fans": 500
+        },
+        "result": "A famous name doesn't pay the bills. It loses money every matchday."
+      }
+    ],
+    "best": 0
+  },
+  "takeaway": "Buy at a lower multiple than you're valued at, and the deal creates value on day one."
+}

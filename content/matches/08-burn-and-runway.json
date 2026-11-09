@@ -1,0 +1,175 @@
+{
+  "number": 8,
+  "topic": "Burn and Runway",
+  "skill": "TRM",
+  "opponent": "Oakhollow Athletic",
+  "talk": "Investors judge a growing company on two numbers: how many months of cash are left, and how much cash it burns to add each dollar of new yearly revenue. That second number is the burn multiple: under 1 is excellent, over 2 is a warning sign. Raise money while you still have time, not when you're desperate.",
+  "terms": [
+    {
+      "term": "Burn",
+      "meaning": "Cash going out minus cash coming in, per month."
+    },
+    {
+      "term": "Runway",
+      "meaning": "Cash divided by monthly burn: the months you have left."
+    },
+    {
+      "term": "Burn multiple",
+      "meaning": "Cash burned divided by new yearly revenue added."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "The club's new streaming app burns $200,000 a month and has $3M in the bank. How many months of runway?",
+      "options": [
+        "10",
+        "12",
+        "15",
+        "20"
+      ],
+      "answer": 2,
+      "hint": "Cash divided by monthly burn.",
+      "working": [
+        "$3M / $200,000 = 15 months."
+      ],
+      "whyNot": [
+        "10 x $200,000 = $2M. You have $3M.",
+        "12 x $200,000 = $2.4M. You'd still have money left.",
+        null,
+        "20 x $200,000 = $4M, more than you have."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "cash": 3000000,
+          "burn": 200000
+        },
+        "formula": "cash / burn"
+      }
+    },
+    {
+      "prompt": "Over the year the app burned $2.4M and added $1.6M of new yearly subscription revenue. What's the burn multiple?",
+      "options": [
+        "About 0.67",
+        "1.5",
+        "2.4",
+        "4"
+      ],
+      "answer": 1,
+      "hint": "Burn divided by new yearly revenue.",
+      "working": [
+        "$2.4M / $1.6M = 1.5.",
+        "You burn $1.50 for every $1 of new yearly revenue. Between 1 and 2 is OK, not great."
+      ],
+      "whyNot": [
+        "$1.6M / $2.4M = about 0.67 is upside down. Burn goes on top.",
+        null,
+        "$2.4M is the burn, not the ratio.",
+        "$2.4M + $1.6M = $4M adds them. Divide instead."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "burn": 2400000,
+          "added": 1600000
+        },
+        "formula": "burn / added"
+      }
+    },
+    {
+      "prompt": "You have 15 months of runway and raising money usually takes about 6 months. When should you start?",
+      "options": [
+        "Month 9, the last possible moment",
+        "Month 14",
+        "When the money runs out",
+        "Around month 3, with lots of runway left"
+      ],
+      "answer": 3,
+      "hint": "Raises slip. Investors can smell desperation.",
+      "working": [
+        "15 - 6 = 9, so month 9 is the very latest, if nothing slips.",
+        "Start around month 3, with 15 - 3 = 12 months left, and you negotiate from strength."
+      ],
+      "whyNot": [
+        "Month 9 is the last possible moment, if nothing slips. Something always slips.",
+        "With 15 - 14 = 1 month left, investors know you're desperate. The terms get worse.",
+        "Too late. No cash means no wages.",
+        null
+      ],
+      "kind": "concept"
+    }
+  ],
+  "penalty": {
+    "where": [
+      "burn != added"
+    ],
+    "vars": {
+      "burn": {
+        "value": 2400000,
+        "min": 600000,
+        "max": 4800000,
+        "step": 600000,
+        "fmt": "usd"
+      },
+      "added": {
+        "value": 1600000,
+        "min": 400000,
+        "max": 3200000,
+        "step": 400000,
+        "fmt": "usd"
+      }
+    },
+    "prompt": "Over a year the app burned {burn} and added {added} of new yearly revenue. What's the burn multiple?",
+    "answer": "burn / added",
+    "fmt": "num",
+    "whole": 0.25,
+    "tol": 0.05,
+    "hint": "Burn divided by new yearly revenue.",
+    "working": [
+      "{burn} / {added} = {burn / added|num}."
+    ],
+    "traps": [
+      {
+        "formula": "added / burn",
+        "why": "Upside down. Divide the burn by the new revenue."
+      }
+    ]
+  },
+  "call": {
+    "title": "When to raise",
+    "prompt": "The club's app burns $200,000 a month with 15 months of runway. You can cut its marketing by $50,000 a month, saving 12 x $50,000 = $600,000 a year, but slowing growth by about 200 fans a match. Or raise $2M now by selling 10%. Or keep spending and raise later.",
+    "options": [
+      {
+        "label": "Cut marketing",
+        "effects": {
+          "cash": 600000,
+          "fans": -200
+        },
+        "result": "Saving $600,000 a year helps, but slower growth costs 200 x $18 = $3,600 every matchday."
+      },
+      {
+        "label": "Raise $2M now for 10%",
+        "effects": {
+          "cash": 2000000,
+          "dilute": 0.1
+        },
+        "result": "Good call. Raising with 15 months left means you set the terms. $2M for 10% values the club at $2M / 10% = $20M."
+      },
+      {
+        "label": "Keep spending, raise later",
+        "effects": {},
+        "result": "Waiting until cash is short is how founders end up selling a bigger slice for the same money.",
+        "later": {
+          "after": 8,
+          "text": "Cash is running low. The only offer is $2M for 25% of the club.",
+          "effects": {
+            "cash": 2000000,
+            "dilute": 0.25
+          }
+        }
+      }
+    ],
+    "best": 1
+  },
+  "takeaway": "Raise while you have runway. A burn multiple under 2 keeps investors interested."
+}

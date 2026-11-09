@@ -38,14 +38,28 @@ export interface Question {
   benchmarks?: string[];
 }
 
-export type SkillKey = "PRF" | "PRI" | "CSH" | "GRO" | "PLN" | "INV";
+export type SkillKey = "RAI" | "TRM" | "PRF" | "GRO" | "BUY" | "RET";
 
-/** Changes to the club. cash is one-off; fans, contrib (per fan) and fixed (per matchday) last. */
+/**
+ * Changes to the club. cash is one-off; fans, contrib (per fan) and fixed
+ * (per matchday) last. The rest are ownership and money moves:
+ *  - dilute: share of the club sold to new investors (your stake shrinks by this share)
+ *  - debt: borrowed (+) or repaid (-)
+ *  - banked: cash paid to you personally
+ *  - recap: the club borrows this and pays it out to owners as a dividend
+ *  - sellFraction / sellMultiple: you sell this share of your stake at this multiple of yearly profit
+ */
 export interface Effects {
   cash?: number;
   fans?: number;
   contrib?: number;
   fixed?: number;
+  dilute?: number;
+  debt?: number;
+  banked?: number;
+  recap?: number;
+  sellFraction?: number;
+  sellMultiple?: number;
 }
 
 export interface CallOption {
@@ -96,12 +110,29 @@ export interface ClubState {
   fixed: number;
   /** Board confidence, 0 to 100. */
   board: number;
+  /** Your share of the club, 0 to 1. */
+  stake: number;
+  /** What the club owes lenders. */
+  debt: number;
+  /** Money you've taken off the table personally. */
+  banked: number;
+}
+
+export interface Act {
+  from: number;
+  to: number;
+  title: string;
+  blurb: string;
 }
 
 export interface Season {
   id: string;
   name: string;
   club: { name: string; role: string; start: ClubState; capacity: number };
+  /** Club value = multiple x yearly profit, where a year is this many matchdays. */
+  multiple: number;
+  matchdaysPerYear: number;
+  acts: Act[];
   skills: { key: SkillKey; name: string }[];
   /** Local date (YYYY-MM-DD) of matchday 1. */
   startDate: string;

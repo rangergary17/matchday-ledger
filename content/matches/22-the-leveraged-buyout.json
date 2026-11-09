@@ -1,0 +1,199 @@
+{
+  "number": 22,
+  "topic": "The Leveraged Buyout",
+  "skill": "BUY",
+  "opponent": "Highgrove Wanderers",
+  "talk": "In a leveraged buyout (LBO), a private equity firm buys a company with a little of its own money and a lot of borrowed money. The company itself repays the loan from its profits. If it works, the owners' money grows fast; if it doesn't, the debt bites.",
+  "terms": [
+    {
+      "term": "LBO",
+      "meaning": "Buying a company mostly with borrowed money."
+    },
+    {
+      "term": "Leverage",
+      "meaning": "Using debt to control something bigger than your own money could buy."
+    },
+    {
+      "term": "Equity cheque",
+      "meaning": "The buyer's own money in the deal."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "A PE firm buys a club for $100M, paying $40M of its own money and borrowing the rest. How much debt?",
+      "options": [
+        "$40M",
+        "$60M",
+        "$100M",
+        "$140M"
+      ],
+      "answer": 1,
+      "hint": "Price minus the firm's own money.",
+      "working": [
+        "$100M - $40M = $60M of debt."
+      ],
+      "whyNot": [
+        "$40M is the firm's own money, the equity.",
+        null,
+        "$100M is the whole price.",
+        "$100M + $40M = $140M adds the equity on top of the price. The equity is part of the price."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "price": 100000000,
+          "equity": 40000000
+        },
+        "formula": "price - equity"
+      }
+    },
+    {
+      "prompt": "Five years later the firm sells for $150M, and profits have paid the debt down to $30M. What does the firm get?",
+      "options": [
+        "$180M",
+        "$150M",
+        "$120M",
+        "$90M"
+      ],
+      "answer": 2,
+      "hint": "Lenders get repaid first.",
+      "working": [
+        "$150M - $30M = $120M for the firm."
+      ],
+      "whyNot": [
+        "$150M + $30M = $180M adds the debt. It comes off.",
+        "Lenders get repaid first: $30M comes off.",
+        null,
+        "$150M - $60M = $90M uses the original debt. Profits paid it down to $30M."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "sale": 150000000,
+          "debt": 30000000
+        },
+        "formula": "sale - debt"
+      }
+    },
+    {
+      "prompt": "What's the firm's money multiple on its $40M?",
+      "options": [
+        "1.5 times",
+        "2 times",
+        "3 times",
+        "3.75 times"
+      ],
+      "answer": 2,
+      "hint": "What came back divided by what went in.",
+      "working": [
+        "$120M / $40M = 3 times.",
+        "The club only grew $150M / $100M = 1.5 times. Debt turned that into 3 times for the owners."
+      ],
+      "whyNot": [
+        "$150M / $100M = 1.5 is how much the whole club grew. Leverage made the equity grow faster.",
+        "($120M - $40M) / $40M = 2 is the gain on top. The money multiple counts everything back.",
+        null,
+        "$150M / $40M = 3.75 forgets the $30M of debt still to repay."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "back": 120000000,
+          "equity": 40000000
+        },
+        "formula": "back / equity"
+      }
+    }
+  ],
+  "penalty": {
+    "where": [
+      "equity < price",
+      "left <= price - equity",
+      "sale > left + equity",
+      "whole: (sale - left) / equity * 4"
+    ],
+    "vars": {
+      "price": {
+        "value": 100000000,
+        "min": 50000000,
+        "max": 200000000,
+        "step": 10000000,
+        "fmt": "usd"
+      },
+      "equity": {
+        "value": 40000000,
+        "min": 20000000,
+        "max": 100000000,
+        "step": 10000000,
+        "fmt": "usd"
+      },
+      "sale": {
+        "value": 150000000,
+        "min": 60000000,
+        "max": 300000000,
+        "step": 10000000,
+        "fmt": "usd"
+      },
+      "left": {
+        "value": 30000000,
+        "min": 0,
+        "max": 100000000,
+        "step": 10000000,
+        "fmt": "usd"
+      }
+    },
+    "prompt": "A PE firm buys a club for {price} with {equity} of its own money and borrows the rest. It later sells for {sale} with {left} of debt still owed. What's the firm's money multiple?",
+    "answer": "(sale - left) / equity",
+    "fmt": "num",
+    "whole": 0.25,
+    "tol": 0.05,
+    "hint": "Sale price minus debt still owed, divided by the firm's own money.",
+    "working": [
+      "{sale} - {left} = {sale - left|usd} for the firm.",
+      "{sale - left|usd} / {equity} = {(sale - left) / equity|num} times."
+    ],
+    "traps": [
+      {
+        "formula": "sale / equity",
+        "why": "That forgets the {left} of debt still to repay."
+      },
+      {
+        "formula": "sale / price",
+        "why": "That's how much the whole club grew, not the firm's money."
+      }
+    ]
+  },
+  "call": {
+    "title": "The buyout offer",
+    "prompt": "A PE firm wants 70% of your stake. Offer one: they pay 8.5 times yearly profit for it, but load $5M of new debt onto the club, costing $15,000 a matchday in interest. Offer two: they pay 8 times, with no new debt. Either way their team should add about 2,000 fans a match. Or stay independent.",
+    "options": [
+      {
+        "label": "8.5 times, plus $5M of debt",
+        "effects": {
+          "sellFraction": 0.7,
+          "sellMultiple": 8.5,
+          "debt": 5000000,
+          "fixed": 15000,
+          "fans": 2000
+        },
+        "result": "More up front, but the club now carries $5M more debt and $15,000 a matchday of interest. The 100% - 70% = 30% you kept is worth much less."
+      },
+      {
+        "label": "8 times, no new debt",
+        "effects": {
+          "sellFraction": 0.7,
+          "sellMultiple": 8,
+          "fans": 2000
+        },
+        "result": "Good call. Cash in your pocket today, and your remaining 100% - 70% = 30% sits in a club with no new debt and the firm's help to grow."
+      },
+      {
+        "label": "Stay independent",
+        "effects": {},
+        "result": "Fine, but the firm's plan adds 2,000 x $18 = $36,000 a matchday, and you'd bank money you can never lose."
+      }
+    ],
+    "best": 1
+  },
+  "takeaway": "Debt magnifies returns both ways. The company pays back the money used to buy it."
+}

@@ -1,5 +1,5 @@
 {
-  "number": 3,
+  "number": 16,
   "topic": "The P&L",
   "skill": "PRF",
   "opponent": "Kestrel Town",
@@ -22,22 +22,22 @@
     {
       "prompt": "Season revenue: tickets $2.0M, TV $3.0M, shop $0.5M. Direct costs (shop stock, matchday costs) are $1.0M. What's gross profit?",
       "options": [
-        "$1.0M",
-        "$3.5M",
+        "$5.5M",
         "$4.5M",
-        "$5.5M"
+        "$3.5M",
+        "$1.0M"
       ],
-      "answer": 2,
+      "answer": 1,
       "hint": "Add up the revenue, then take off direct costs.",
       "working": [
         "$2.0M + $3.0M + $0.5M = $5.5M of revenue.",
         "$5.5M - $1.0M = $4.5M gross profit."
       ],
       "whyNot": [
-        "$1.0M is the direct costs themselves, not what's left after them.",
-        "$5.5M - $2.0M = $3.5M takes off the ticket money as if it were a cost. Tickets are revenue. Only the $1.0M of direct costs comes off.",
+        "$5.5M is total revenue, before any costs. Gross profit takes off the direct costs of what you sold.",
         null,
-        "$5.5M is total revenue, before any costs. Gross profit takes off the direct costs of what you sold."
+        "$5.5M - $2.0M = $3.5M takes off the ticket money as if it were a cost. Tickets are revenue. Only the $1.0M of direct costs comes off.",
+        "$1.0M is the direct costs themselves, not what's left after them."
       ],
       "kind": "calc",
       "calc": {
@@ -83,12 +83,12 @@
     {
       "prompt": "What share of revenue goes on wages?",
       "options": [
-        "About 36%",
-        "About 64%",
+        "About 175%",
         "About 78%",
-        "About 175%"
+        "About 64%",
+        "About 36%"
       ],
-      "answer": 1,
+      "answer": 2,
       "hint": "Wages divided by total revenue.",
       "working": [
         "$3.5M / $5.5M = about 64% of revenue goes on wages.",
@@ -96,10 +96,10 @@
         "Every business has its wage bill line. Find yours."
       ],
       "whyNot": [
-        "That's the share left over after wages: 100% - 64% = 36%. The question asks what goes on them.",
-        null,
+        "$3.5M / $2.0M = 175% compares wages to ticket money only. Wages are paid out of all revenue: tickets, TV and the shop.",
         "$3.5M / $4.5M = about 78% divides by gross profit. The wage share uses total revenue, $5.5M.",
-        "$3.5M / $2.0M = 175% compares wages to ticket money only. Wages are paid out of all revenue: tickets, TV and the shop."
+        null,
+        "That's the share left over after wages: 100% - 64% = 36%. The question asks what goes on them."
       ],
       "kind": "calc",
       "calc": {

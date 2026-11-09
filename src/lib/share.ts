@@ -16,8 +16,8 @@ export function shareText(o: ShareInput): string {
   const verb = { win: "Won", draw: "Drew", loss: "Lost" }[outcome(o.goals, o.pen)];
   const balls = o.goals.map((g) => (g ? "⚽" : "❌")).join("");
   const site = o.site.replace(/^https?:\/\//, "").replace(/\/$/, "");
-  const extra = [o.rating ? `Chairman rating ${o.rating}` : "", o.position ? `${o.position} in the league` : ""].filter(Boolean).join(" · ");
-  return [`Matchday Ledger #${o.day} - ${o.topic}`, `${balls} pen ${o.pen ? "⚽" : "❌"} ${verb} ${us}-${them}`, extra, site].filter(Boolean).join("\n");
+  const extra = [o.rating ? `Rating ${o.rating}` : "", o.position ? `${o.position} in the league` : ""].filter(Boolean).join(" · ");
+  return [`BizBall #${o.day} - ${o.topic}`, `${balls} pen ${o.pen ? "⚽" : "❌"} ${verb} ${us}-${them}`, extra, site].filter(Boolean).join("\n");
 }
 
 /** Copies text. Uses the Clipboard API, falls back to a hidden textarea for older browsers. */

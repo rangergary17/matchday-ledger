@@ -25,7 +25,7 @@ export const CardView = forwardRef<HTMLHeadingElement, Props>(function CardView(
     const file = new File([blob], "chairman-card.png", { type: "image/png" });
     try {
       if (navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file], text: `My Matchday Ledger chairman rating: ${p.overall}. ${SITE_URL}` });
+        await navigator.share({ files: [file], text: `My BizBall chairman rating: ${p.overall}. ${SITE_URL}` });
         return;
       }
     } catch { /* user cancelled or not allowed: fall back to download */ }

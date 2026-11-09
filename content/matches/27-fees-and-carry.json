@@ -1,0 +1,209 @@
+{
+  "number": 27,
+  "topic": "Fees and Carry",
+  "skill": "RET",
+  "opponent": "Bramblewood City",
+  "talk": "PE and VC funds usually charge 2 and 20: a 2% yearly management fee on the money committed, and 20% of the profits, called carried interest or carry. The fee keeps the lights on. The carry is where fund managers get rich, but only if their investors make money first.",
+  "terms": [
+    {
+      "term": "Management fee",
+      "meaning": "A yearly charge on the money in the fund, often 2%."
+    },
+    {
+      "term": "Carried interest",
+      "meaning": "The managers' share of the profits, often 20%."
+    },
+    {
+      "term": "LPs and GPs",
+      "meaning": "Limited partners put the money in. General partners run the fund."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "A $200M fund charges a 2% yearly management fee. How much is that a year?",
+      "options": [
+        "$400,000",
+        "$4M",
+        "$20M",
+        "$40M"
+      ],
+      "answer": 1,
+      "hint": "2% of $200M.",
+      "working": [
+        "$200M x 2% = $4M a year."
+      ],
+      "whyNot": [
+        "$400,000 is 10 times too small. $200M x 2% = $4M.",
+        null,
+        "$20M is 10 times too big. $200M x 2% = $4M.",
+        "$200M x 20% = $40M uses the carry rate. The fee is 2%."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "fund": 200000000,
+          "fee": 0.02
+        },
+        "formula": "fund * fee"
+      },
+      "benchmarks": [
+        "20"
+      ]
+    },
+    {
+      "prompt": "The fund runs for 10 years. How much in management fees in total?",
+      "options": [
+        "$4M",
+        "$20M",
+        "$40M",
+        "$200M"
+      ],
+      "answer": 2,
+      "hint": "Yearly fee times years.",
+      "working": [
+        "10 x $4M = $40M."
+      ],
+      "whyNot": [
+        "$4M is one year.",
+        "$20M is 5 years of fees.",
+        null,
+        "$200M is the whole fund."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "yearly": 4000000,
+          "years": 10
+        },
+        "formula": "yearly * years"
+      }
+    },
+    {
+      "prompt": "The fund turns $200M into $500M. With 20% carry on the profit, how much do the managers get?",
+      "options": [
+        "$40M",
+        "$60M",
+        "$100M",
+        "$300M"
+      ],
+      "answer": 1,
+      "hint": "Profit first, then 20% of it.",
+      "working": [
+        "$500M - $200M = $300M profit.",
+        "$300M x 20% = $60M of carry."
+      ],
+      "whyNot": [
+        "$40M is 10 years of fees, not the carry.",
+        null,
+        "$500M x 20% = $100M takes carry on everything. Carry is only on the profit.",
+        "$300M is the whole profit. The managers get 20% of it."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "back": 500000000,
+          "fund": 200000000,
+          "carry": 0.2
+        },
+        "formula": "(back - fund) * carry"
+      }
+    }
+  ],
+  "penalty": {
+    "where": [
+      "back > fund"
+    ],
+    "vars": {
+      "fund": {
+        "value": 200000000,
+        "min": 50000000,
+        "max": 500000000,
+        "step": 50000000,
+        "fmt": "usd"
+      },
+      "back": {
+        "value": 500000000,
+        "min": 100000000,
+        "max": 1500000000,
+        "step": 50000000,
+        "fmt": "usd"
+      },
+      "carry": {
+        "value": 0.2,
+        "min": 0.1,
+        "max": 0.3,
+        "step": 0.05,
+        "fmt": "pct"
+      }
+    },
+    "prompt": "A {fund} fund turns into {back}. The managers take {carry} carry on the profit. How much carry do they get?",
+    "answer": "(back - fund) * carry",
+    "fmt": "usd",
+    "whole": 1000000,
+    "hint": "Profit first, then the carry share of it.",
+    "working": [
+      "{back} - {fund} = {back - fund|usd} profit.",
+      "{back - fund|usd} x {carry} = {(back - fund) * carry|usd} of carry."
+    ],
+    "traps": [
+      {
+        "formula": "back * carry",
+        "why": "Carry is a share of the profit, not of everything returned."
+      },
+      {
+        "formula": "fund * carry",
+        "why": "That's a share of the money put in. Carry is on the profit."
+      }
+    ]
+  },
+  "call": {
+    "title": "Choosing a fund",
+    "prompt": "The board wants to put $1M of club cash into a sports investment fund for 5 years. Each fund expects to turn $1M into $2M before costs. Fund one: 2% a year fee and 20% carry. Fund two: 3% fee and 30% carry. Fund three: 1.5% fee and 20% carry.",
+    "options": [
+      {
+        "label": "2% and 20%",
+        "effects": {
+          "cash": -1000000
+        },
+        "result": "Fees: 5 x 2% = 10%, so $1M x 10% = $100,000. Carry: ($1M - $100,000) x 20% = $180,000. You get $2M - $100,000 - $180,000 = $1.72M.",
+        "later": {
+          "after": 10,
+          "text": "The fund pays out $1.72M.",
+          "effects": {
+            "cash": 1720000
+          }
+        }
+      },
+      {
+        "label": "3% and 30%",
+        "effects": {
+          "cash": -1000000
+        },
+        "result": "Fees: 5 x 3% = 15%, so $1M x 15% = $150,000. Carry: ($1M - $150,000) x 30% = $255,000. You get $2M - $150,000 - $255,000 = $1.595M.",
+        "later": {
+          "after": 10,
+          "text": "The fund pays out $1.595M.",
+          "effects": {
+            "cash": 1595000
+          }
+        }
+      },
+      {
+        "label": "1.5% and 20%",
+        "effects": {
+          "cash": -1000000
+        },
+        "result": "Good call. Fees: 5 x 1.5% = 7.5%, so $1M x 7.5% = $75,000. Carry: ($1M - $75,000) x 20% = $185,000. You get $2M - $75,000 - $185,000 = $1.74M.",
+        "later": {
+          "after": 10,
+          "text": "The fund pays out $1.74M.",
+          "effects": {
+            "cash": 1740000
+          }
+        }
+      }
+    ],
+    "best": 2
+  },
+  "takeaway": "2 and 20: a 2% yearly fee plus 20% of the profit. Small differences add up."
+}

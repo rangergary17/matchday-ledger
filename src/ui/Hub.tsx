@@ -6,6 +6,7 @@ import { formatCountdown, msUntilMidnight } from "../lib/schedule";
 import type { Due } from "../lib/drills";
 
 interface Props {
+  act: { n: number; title: string; blurb: string } | null;
   day: number;
   match: Match;
   today: MatchRecord | null;
@@ -31,6 +32,9 @@ export const Hub = forwardRef<HTMLHeadingElement, Props>(function Hub(p, ref) {
   const played = p.today;
   return (
     <div className="hub">
+      {p.act && (
+        <p className="act"><b>Act {p.act.n}: {p.act.title}</b> {p.act.blurb}</p>
+      )}
       <section className="fixture-card" aria-labelledby="hub-title">
         <p className="eyebrow">Today · Matchday {p.day}</p>
         <h2 id="hub-title" ref={ref} tabIndex={-1}>v {p.match.opponent}</h2>

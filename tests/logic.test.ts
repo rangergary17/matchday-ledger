@@ -57,7 +57,7 @@ describe("save, streak and replays", () => {
   });
   it("survives garbage and a store that throws", () => {
     const s = memoryStore();
-    s.set("matchday-ledger:v2", "{not json");
+    s.set("bizball:v1", "{not json");
     expect(load(s)).toEqual(emptySave());
     const broken: KeyValueStore = { get: () => { throw new Error("x"); }, set: () => { throw new Error("x"); }, remove: () => { throw new Error("x"); } };
     expect(load(broken)).toEqual(emptySave());
@@ -79,15 +79,16 @@ describe("club", () => {
     expect(after.state.board).toBe(s0.board + RESULT.win.board + 3);
   });
   it("later consequences land after the right number of matchdays", () => {
-    const m4 = matches[3];
-    const bad = m4.call.options.findIndex((o) => o.later?.effects.cash);
-    let d = play(emptySave(), 4, "2026-11-05", [true, true, true], true);
-    d = recordCall(d, 4, bad);
+    const m = matches.find((x) => x.call.options.some((o) => o.later && o.later.after === 3))!;
+    const day = m.number;
+    const pick = m.call.options.findIndex((o) => o.later && o.later.after === 3);
+    let d = play(emptySave(), day, "2026-11-05", [true, true, true], true);
+    d = recordCall(d, day, pick);
     const cashAt = (x: SaveData) => buildClub(Object.values(x.records), matches, season).news.filter((n) => n.kind === "event").length;
-    d = play(d, 5, "2026-11-06", [true, true, true], true);
-    d = play(d, 6, "2026-11-07", [true, true, true], true);
+    d = play(d, day + 1, "2026-11-06", [true, true, true], true);
+    d = play(d, day + 2, "2026-11-07", [true, true, true], true);
     expect(cashAt(d)).toBe(0);
-    d = play(d, 7, "2026-11-08", [true, true, true], true);
+    d = play(d, day + 3, "2026-11-08", [true, true, true], true);
     expect(cashAt(d)).toBe(1);
   });
 });
@@ -145,7 +146,7 @@ describe("input and formatting", () => {
 describe("share text", () => {
   it("is spoiler-free and shows the penalty", () => {
     expect(shareText({ day: 14, topic: "Unit Economics", goals: [true, true, false], pen: true, site: "https://matchdayledger.com/", rating: 64, position: "4th" })).toBe(
-      "Matchday Ledger #14 - Unit Economics\n⚽⚽❌ pen ⚽ Won 3-1\nChairman rating 64 · 4th in the league\nmatchdayledger.com",
+      "BizBall #14 - Unit Economics\n⚽⚽❌ pen ⚽ Won 3-1\nRating 64 · 4th in the league\nmatchdayledger.com",
     );
   });
 });

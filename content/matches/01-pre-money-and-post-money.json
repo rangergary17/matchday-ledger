@@ -1,0 +1,177 @@
+{
+  "number": 1,
+  "topic": "Pre-money and Post-money",
+  "skill": "RAI",
+  "opponent": "Wolfden Athletic",
+  "talk": "Before an investor puts money in, you agree what the club is worth. That's the pre-money valuation, and adding the new money gives the post-money valuation. The investor's share is their money divided by the post-money value.",
+  "terms": [
+    {
+      "term": "Pre-money",
+      "meaning": "What the company is worth just before the new money goes in."
+    },
+    {
+      "term": "Post-money",
+      "meaning": "Pre-money plus the new money."
+    },
+    {
+      "term": "Ownership",
+      "meaning": "Your money divided by the post-money value."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "An investor puts $2M into the club at an $8M pre-money valuation. What's the post-money valuation?",
+      "options": [
+        "$6M",
+        "$8M",
+        "$10M",
+        "$16M"
+      ],
+      "answer": 2,
+      "hint": "Pre-money plus the new money.",
+      "working": [
+        "$8M + $2M = $10M post-money.",
+        "The new money sits in the club's bank, so the club is now worth more."
+      ],
+      "whyNot": [
+        "$8M - $2M = $6M takes the money away. New money adds to the value, because it's sitting in the club's bank.",
+        "$8M is the value before the money arrives. After, the club also holds the $2M.",
+        null,
+        "$8M x 2 = $16M doubles it. Just add the money: $8M + $2M = $10M."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "pre": 8000000,
+          "inv": 2000000
+        },
+        "formula": "pre + inv"
+      }
+    },
+    {
+      "prompt": "What share of the club does the investor now own?",
+      "options": [
+        "20%",
+        "25%",
+        "80%",
+        "$2M"
+      ],
+      "answer": 0,
+      "hint": "The investor's money divided by the post-money value.",
+      "working": [
+        "$2M / $10M = 20%."
+      ],
+      "whyNot": [
+        null,
+        "$2M / $8M = 25% divides by the pre-money. The investor's share is their money over the post-money value.",
+        "80% is what the existing owners keep: 100% - 20% = 80%.",
+        "$2M is the money, not the share. Divide it by the post-money: $2M / $10M = 20%."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "inv": 2000000,
+          "post": 10000000
+        },
+        "formula": "inv / post"
+      }
+    },
+    {
+      "prompt": "You owned 100% before this round, so you keep 80%. Next year a second investor buys 25% of the bigger club. What do you own then?",
+      "options": [
+        "55%",
+        "60%",
+        "75%",
+        "80%"
+      ],
+      "answer": 1,
+      "hint": "A new round shrinks every existing slice by the same share.",
+      "working": [
+        "The new round takes 25%, so every existing owner keeps 100% - 25% = 75% of what they had.",
+        "80% x 75% = 60%."
+      ],
+      "whyNot": [
+        "80% - 25% = 55% takes the whole 25% off your share. A new round shrinks everyone's slice in proportion: 80% x 75% = 60%.",
+        null,
+        "75% is what all the old owners keep together, not your share of it.",
+        "80% was before the second round. New shares mean a smaller slice."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "mine": 0.8,
+          "sold": 0.25
+        },
+        "formula": "mine * (1 - sold)"
+      }
+    }
+  ],
+  "penalty": {
+    "where": [],
+    "vars": {
+      "pre": {
+        "value": 8000000,
+        "min": 2000000,
+        "max": 20000000,
+        "step": 1000000,
+        "fmt": "usd"
+      },
+      "inv": {
+        "value": 2000000,
+        "min": 500000,
+        "max": 5000000,
+        "step": 500000,
+        "fmt": "usd"
+      }
+    },
+    "prompt": "An investor puts {inv} into the club at a {pre} pre-money valuation. What share of the club do they own? (As a percentage.)",
+    "answer": "inv / (pre + inv)",
+    "fmt": "pct",
+    "whole": 0.01,
+    "tol": 0.25,
+    "hint": "Post-money first, then the investor's money divided by it.",
+    "working": [
+      "{pre} + {inv} = {pre + inv|usd} post-money.",
+      "{inv} / {pre + inv|usd} = {inv / (pre + inv)|pct}."
+    ],
+    "traps": [
+      {
+        "formula": "inv / pre",
+        "why": "That divides by the pre-money. Divide by the post-money: {pre + inv|usd}."
+      },
+      {
+        "formula": "pre / (pre + inv)",
+        "why": "That's what the existing owners keep, not the investor's share."
+      }
+    ]
+  },
+  "call": {
+    "title": "The first investor",
+    "prompt": "Two investors each offer $3M to build a new family stand, worth about 1,500 more fans a match. The first values the club at $12M pre-money. The second values it at $9M pre-money. Or you can skip the raise and grow slowly.",
+    "options": [
+      {
+        "label": "Take $3M at a $12M pre-money",
+        "effects": {
+          "dilute": 0.2,
+          "fans": 1500
+        },
+        "result": "Good call. $12M + $3M = $15M post-money, so you sell $3M / $15M = 20%. The stand adds 1,500 x $18 = $27,000 profit every matchday. You keep 100% - 20% = 80% of a bigger club, which beats 100% of a smaller one."
+      },
+      {
+        "label": "Take $3M at a $9M pre-money",
+        "effects": {
+          "dilute": 0.25,
+          "fans": 1500
+        },
+        "result": "$9M + $3M = $12M post-money, so you sell $3M / $12M = 25% for the same money. Same stand, but 25% - 20% = 5% more of the club given away."
+      },
+      {
+        "label": "Skip the raise",
+        "effects": {},
+        "result": "Safe, but the stand would have added 1,500 x $18 = $27,000 every matchday. Growth you can't fund is growth you don't get."
+      }
+    ],
+    "best": 0
+  },
+  "takeaway": "Investor's share = their money / post-money. Post-money = pre-money + the money."
+}

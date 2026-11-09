@@ -7,13 +7,14 @@ export function Intro({ club, onStart }: { club: string; onStart: () => void }) 
     <section className="intro" aria-labelledby="intro-title">
       <p className="eyebrow">Welcome, Chairman</p>
       <h2 id="intro-title" ref={ref} tabIndex={-1}>You've just bought {club}</h2>
-      <p>8,000 fans. $2M in the bank. A board that wants a top 10 finish and no money lost.</p>
+      <p>8,000 fans, $2M in the bank, a $3M loan and big plans. You own 100% of it. For now.</p>
       <ul className="intro-list">
-        <li><b>One match a day.</b> Same match for everyone. About 3 minutes.</li>
-        <li><b>Get the numbers right to score.</b> 3 chances, then a penalty where you type the answer.</li>
-        <li><b>Then make the Chairman's call.</b> Use today's idea on your own club. Good calls grow it.</li>
-        <li><b>Train your weak spots.</b> Missed topics come back with fresh numbers and raise your rating.</li>
+        <li><b>Act 1, The Raise.</b> Sell slices of the club to venture investors without giving it away.</li>
+        <li><b>Act 2, Run It Like an Owner.</b> The numbers every investor checks.</li>
+        <li><b>Act 3, The Buyout.</b> A private equity firm comes calling. Debt, multiples, the exit.</li>
+        <li><b>One match a day.</b> Get the numbers right to score: 3 chances, then a penalty where you type the answer. Then make the Chairman's call on your own club.</li>
       </ul>
+      <p className="dim small">Your score is your wealth: what you've banked, plus your stake of what the club is worth.</p>
       <button className="btn" onClick={onStart}>Take your seat</button>
     </section>
   );

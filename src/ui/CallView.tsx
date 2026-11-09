@@ -8,6 +8,12 @@ function chips(e: Effects): string[] {
   if (e.fans) out.push(`${e.fans > 0 ? "+" : "-"}${count(Math.abs(e.fans))} fans a match`);
   if (e.contrib) out.push(`${e.contrib > 0 ? "+" : "-"}${money(Math.abs(e.contrib)).replace(/\.00$/, "")} profit per fan`);
   if (e.fixed) out.push(`${e.fixed > 0 ? "+" : "-"}${money(Math.abs(e.fixed))} ${e.fixed > 0 ? "costs" : "income"} a matchday`);
+  const pc = (x: number) => `${Math.round(x * 1000) / 10}%`;
+  if (e.sellFraction) out.push(`Sell ${pc(e.sellFraction)} of your stake at ${e.sellMultiple ?? 8} times yearly profit`);
+  if (e.dilute) out.push(`Sell ${pc(e.dilute)} of the club`);
+  if (e.recap) out.push(`Borrow ${money(e.recap)} and pay it to owners`);
+  if (e.debt) out.push(`${e.debt > 0 ? "+" : "-"}${money(Math.abs(e.debt))} debt`);
+  if (e.banked) out.push(`+${money(e.banked)} to you`);
   return out.length ? out : ["No change now"];
 }
 
@@ -31,7 +37,7 @@ export const CallView = forwardRef<HTMLHeadingElement, Props>(function CallView(
       <p className="eyebrow">Chairman's call</p>
       <h2 id="call-title" ref={ref} tabIndex={-1}>{call.title}</h2>
       <p>{call.prompt}</p>
-      <p className="dim small">Do the sums. Your choice changes the club's money for the rest of the season.</p>
+      <p className="dim small">Do the sums. Your choice changes the club, your stake and your wealth for the rest of the season.</p>
       <ul className="choices">
         {call.options.map((o, i) => (
           <li key={i}>

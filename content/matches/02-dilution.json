@@ -1,0 +1,178 @@
+{
+  "number": 2,
+  "topic": "Dilution",
+  "skill": "RAI",
+  "opponent": "Saltmarsh City",
+  "talk": "Every time you raise money, you sell a slice of the company, and everyone who already owns a piece ends up with a smaller share. That's dilution. It's fine as long as the pie grows faster than your slice shrinks.",
+  "terms": [
+    {
+      "term": "Dilution",
+      "meaning": "Your share getting smaller because new shares were issued."
+    },
+    {
+      "term": "Round",
+      "meaning": "One fundraise: seed, Series A, Series B and so on."
+    },
+    {
+      "term": "Stake value",
+      "meaning": "Your share times what the whole company is worth."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "You own 60% of the club. A new investor buys 20% in a new round. What do you own after?",
+      "options": [
+        "12%",
+        "40%",
+        "48%",
+        "60%"
+      ],
+      "answer": 2,
+      "hint": "Everyone keeps 80% of what they had.",
+      "working": [
+        "Everyone keeps 100% - 20% = 80% of what they had.",
+        "60% x 80% = 48%."
+      ],
+      "whyNot": [
+        "60% x 20% = 12% is the part of your stake that's diluted away, not what's left.",
+        "60% - 20% = 40% takes the whole 20% from you. All the old owners share the dilution.",
+        null,
+        "Your share can't stay the same when new shares are issued."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "stake": 0.6,
+          "sold": 0.2
+        },
+        "formula": "stake * (1 - sold)"
+      }
+    },
+    {
+      "prompt": "Before the round the club was worth $10M. The investor put in $2.5M for 20%, so it's now worth $12.5M. What's your 48% worth?",
+      "options": [
+        "$4.8M",
+        "$6M",
+        "$7.5M",
+        "$12.5M"
+      ],
+      "answer": 1,
+      "hint": "Your new share times the new value.",
+      "working": [
+        "$12.5M x 48% = $6M.",
+        "Before the round your 60% was worth $10M x 60% = $6M. Your slice shrank, the pie grew, and your stake is worth the same."
+      ],
+      "whyNot": [
+        "$10M x 48% = $4.8M uses the old value. After the round the club is worth $12.5M.",
+        null,
+        "$12.5M x 60% = $7.5M forgets the dilution. You own 48% now.",
+        "$12.5M is the whole club, not your 48%."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "value": 12500000,
+          "stake": 0.48
+        },
+        "formula": "value * stake"
+      }
+    },
+    {
+      "prompt": "The money builds a new stand and a year later the club is worth $20M. What's your 48% worth now?",
+      "options": [
+        "$6M",
+        "$9.6M",
+        "$12M",
+        "$20M"
+      ],
+      "answer": 1,
+      "hint": "Same share, bigger club.",
+      "working": [
+        "$20M x 48% = $9.6M.",
+        "Without the raise you'd own 60% of a $10M club, worth $6M. Dilution paid off because the club grew."
+      ],
+      "whyNot": [
+        "$6M is what your stake was worth before the club grew.",
+        null,
+        "$20M x 60% = $12M forgets the dilution. You own 48%.",
+        "$20M is the whole club, not your 48%."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "value": 20000000,
+          "stake": 0.48
+        },
+        "formula": "value * stake"
+      }
+    }
+  ],
+  "penalty": {
+    "where": [],
+    "vars": {
+      "stake": {
+        "value": 0.6,
+        "min": 0.3,
+        "max": 0.9,
+        "step": 0.1,
+        "fmt": "pct"
+      },
+      "sold": {
+        "value": 0.2,
+        "min": 0.1,
+        "max": 0.3,
+        "step": 0.05,
+        "fmt": "pct"
+      }
+    },
+    "prompt": "You own {stake} of the club. A new investor buys {sold} in a new round. What do you own after? (As a percentage.)",
+    "answer": "stake * (1 - sold)",
+    "fmt": "pct",
+    "whole": 0.01,
+    "tol": 0.25,
+    "hint": "Everyone keeps the same share of what they had.",
+    "working": [
+      "Everyone keeps {1 - sold|pct} of what they had.",
+      "{stake} x {1 - sold|pct} = {stake * (1 - sold)|pct}."
+    ],
+    "traps": [
+      {
+        "formula": "stake - sold",
+        "why": "That takes the whole round out of your stake. All the old owners share the dilution."
+      },
+      {
+        "formula": "stake * sold",
+        "why": "That's the slice diluted away, not what you keep."
+      }
+    ]
+  },
+  "call": {
+    "title": "How much to raise",
+    "prompt": "Investors value the club at $10M before the money. Raise $2.5M by selling 20% to modernise the stadium, worth 1,000 more fans a match. Or raise $10M by selling 50% for the stadium and a training centre, worth 1,500 more fans a match. Or raise nothing.",
+    "options": [
+      {
+        "label": "Raise $2.5M for 20%",
+        "effects": {
+          "dilute": 0.2,
+          "fans": 1000
+        },
+        "result": "Good call. The stadium adds 1,000 x $18 = $18,000 profit a matchday, and you keep most of the club."
+      },
+      {
+        "label": "Raise $10M for 50%",
+        "effects": {
+          "dilute": 0.5,
+          "fans": 1500
+        },
+        "result": "1,500 x $18 = $27,000 a matchday is only $27,000 - $18,000 = $9,000 more than the smaller raise, for 50% - 20% = 30% more of your club."
+      },
+      {
+        "label": "Raise nothing",
+        "effects": {},
+        "result": "No dilution, but no growth either. 1,000 x $18 = $18,000 a matchday left on the table."
+      }
+    ],
+    "best": 0
+  },
+  "takeaway": "Dilution is fine when the pie grows faster than your slice shrinks."
+}

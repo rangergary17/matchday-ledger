@@ -1,5 +1,5 @@
 {
-  "number": 7,
+  "number": 14,
   "topic": "Churn",
   "skill": "GRO",
   "opponent": "Fernhill Albion",
@@ -84,12 +84,12 @@
     {
       "prompt": "Each holder is worth $600 a year. You cut churn from 15% to 10% on 10,000 fans. What's that worth a year?",
       "options": [
-        "$60,000",
-        "$150,000",
+        "$600,000",
         "$300,000",
-        "$600,000"
+        "$150,000",
+        "$60,000"
       ],
-      "answer": 2,
+      "answer": 1,
       "hint": "How many fans did you keep?",
       "working": [
         "15% - 10% = 5% fewer leave.",
@@ -98,10 +98,10 @@
         "Keeping 500 fans is often cheaper than winning 500 new ones."
       ],
       "whyNot": [
-        "100 x $600 = $60,000 counts 100 fans kept. You keep 500.",
-        "500 x $300 = $150,000 values each fan at half a year. Each holder is worth $600 a year.",
+        "1,000 x $600 = $600,000 counts 1,000 fans kept, as if churn fell by 10 points. It fell by 5 points, from 15% to 10%.",
         null,
-        "1,000 x $600 = $600,000 counts 1,000 fans kept, as if churn fell by 10 points. It fell by 5 points, from 15% to 10%."
+        "500 x $300 = $150,000 values each fan at half a year. Each holder is worth $600 a year.",
+        "100 x $600 = $60,000 counts 100 fans kept. You keep 500."
       ],
       "kind": "calc",
       "calc": {

@@ -1,0 +1,179 @@
+{
+  "number": 30,
+  "topic": "The Exit",
+  "skill": "BUY",
+  "opponent": "Greystone Celtic",
+  "talk": "Every buyout ends with an exit: selling to a bigger company (a trade sale), selling to another PE firm (a secondary buyout), or listing shares on a stock market (an IPO). The best route is the one that pays the most, most certainly. A higher price you might get later is worth less than a good price you get today.",
+  "terms": [
+    {
+      "term": "Trade sale",
+      "meaning": "Selling to a company in the same business."
+    },
+    {
+      "term": "Secondary buyout",
+      "meaning": "Selling to another PE firm."
+    },
+    {
+      "term": "IPO",
+      "meaning": "Listing shares on a stock market so the public can buy them."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "A media group offers 10 times EBITDA for the club. EBITDA is $6M. What's the offer?",
+      "options": [
+        "$16M",
+        "$60M",
+        "$66M",
+        "$80M"
+      ],
+      "answer": 1,
+      "hint": "EBITDA times the multiple.",
+      "working": [
+        "$6M x 10 = $60M."
+      ],
+      "whyNot": [
+        "$6M + 10 adds the multiple. Multiply: $6M x 10 = $60M.",
+        null,
+        "$6M x 11 = $66M is the IPO valuation, not the trade sale.",
+        "$80M doesn't come from these numbers. $6M x 10 = $60M."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "ebitda": 6000000,
+          "m": 10
+        },
+        "formula": "ebitda * m"
+      }
+    },
+    {
+      "prompt": "In an IPO you'd sell only 30% of the club at first, at 11 times EBITDA. How much cash comes in on day one?",
+      "options": [
+        "$66M",
+        "$60M",
+        "$19.8M",
+        "$18M"
+      ],
+      "answer": 2,
+      "hint": "Whole club value, then the 30% you sell.",
+      "working": [
+        "$6M x 11 = $66M for the whole club.",
+        "$66M x 30% = $19.8M on day one."
+      ],
+      "whyNot": [
+        "$66M is the whole club's value. You only sell 30% at first.",
+        "$60M is the trade sale for 100%.",
+        null,
+        "$60M x 30% = $18M uses the trade sale price."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "ebitda": 6000000,
+          "m": 11,
+          "float": 0.3
+        },
+        "formula": "ebitda * m * float"
+      }
+    },
+    {
+      "prompt": "The club has $20M of debt. In the trade sale, what do the owners get?",
+      "options": [
+        "$80M",
+        "$60M",
+        "$46M",
+        "$40M"
+      ],
+      "answer": 3,
+      "hint": "Lenders first.",
+      "working": [
+        "$60M - $20M = $40M."
+      ],
+      "whyNot": [
+        "$60M + $20M = $80M adds the debt. It comes off.",
+        "Lenders get repaid first: $20M comes off.",
+        "$66M - $20M = $46M uses the IPO value, but most of that isn't cash yet.",
+        null
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "offer": 60000000,
+          "debt": 20000000
+        },
+        "formula": "offer - debt"
+      }
+    }
+  ],
+  "penalty": {
+    "where": [],
+    "vars": {
+      "ebitda": {
+        "value": 6000000,
+        "min": 2000000,
+        "max": 12000000,
+        "step": 1000000,
+        "fmt": "usd"
+      },
+      "m": {
+        "value": 11,
+        "min": 6,
+        "max": 14,
+        "step": 1,
+        "fmt": "num"
+      },
+      "float": {
+        "value": 0.3,
+        "min": 0.2,
+        "max": 0.5,
+        "step": 0.05,
+        "fmt": "pct"
+      }
+    },
+    "prompt": "In an IPO the club is valued at {m} times EBITDA of {ebitda}. You sell {float} of it on day one. How much cash comes in?",
+    "answer": "ebitda * m * float",
+    "fmt": "usd",
+    "whole": 100000,
+    "hint": "Whole club value first, then the share you sell.",
+    "working": [
+      "{ebitda} x {m} = {ebitda * m|usd} for the whole club.",
+      "{ebitda * m|usd} x {float} = {ebitda * m * float|usd} on day one."
+    ],
+    "traps": [
+      {
+        "formula": "ebitda * m",
+        "why": "That's the whole club. An IPO sells only {float} at first."
+      }
+    ]
+  },
+  "call": {
+    "title": "The exit",
+    "prompt": "Season's end. A media group offers 10 times yearly profit for all of your stake, in cash. Or list the club and sell 30% of your stake now at 11 times, keeping the rest. Or hold on for another season.",
+    "options": [
+      {
+        "label": "Trade sale: sell everything at 10 times",
+        "effects": {
+          "sellFraction": 1,
+          "sellMultiple": 10
+        },
+        "result": "Good call. A good multiple, all in cash, today. Certain money beats possible money."
+      },
+      {
+        "label": "IPO: sell 30% at 11 times",
+        "effects": {
+          "sellFraction": 0.3,
+          "sellMultiple": 11
+        },
+        "result": "A higher multiple, but only on 30% now. The rest depends on the stock market later."
+      },
+      {
+        "label": "Hold another season",
+        "effects": {},
+        "result": "Holding is a bet that next season beats a 10 times offer in hand."
+      }
+    ],
+    "best": 0
+  },
+  "takeaway": "The best exit pays the most, most certainly. Lenders are paid before owners."
+}

@@ -1,5 +1,5 @@
 {
-  "number": 1,
+  "number": 11,
   "topic": "Unit Economics",
   "skill": "PRF",
   "opponent": "Dockside United",
@@ -22,22 +22,22 @@
     {
       "prompt": "A matchday ticket costs $30. Each fan costs you $12 (stewards, cleaning, card fees). What does each fan contribute?",
       "options": [
-        "$12",
-        "$18",
+        "$42",
         "$30",
-        "$42"
+        "$18",
+        "$12"
       ],
-      "answer": 1,
+      "answer": 2,
       "hint": "Price minus cost per fan.",
       "working": [
         "$30 - $12 = $18 per fan.",
         "That $18 is what you play with. It pays for the stadium, the wages and everything else."
       ],
       "whyNot": [
-        "$12 is what each fan costs you, not what they leave behind. Contribution is what's left after that cost: $30 - $12 = $18.",
-        null,
+        "That adds the cost to the price: $30 + $12 = $42. Costs come off the price, they don't add to it.",
         "$30 is the ticket price. Some of it goes straight back out on stewards, cleaning and card fees, so you don't keep all of it.",
-        "That adds the cost to the price: $30 + $12 = $42. Costs come off the price, they don't add to it."
+        null,
+        "$12 is what each fan costs you, not what they leave behind. Contribution is what's left after that cost: $30 - $12 = $18."
       ],
       "kind": "calc",
       "calc": {

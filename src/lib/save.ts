@@ -56,7 +56,7 @@ export interface SaveData {
   settings: { sound: boolean; introSeen: boolean; name: string };
 }
 
-const KEY = "matchday-ledger:v2";
+const KEY = "bizball:v1";
 
 export function emptySave(): SaveData {
   return { version: 2, seq: 0, records: {}, replays: {}, drills: [], progress: null, settings: { sound: false, introSeen: false, name: "" } };

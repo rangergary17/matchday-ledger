@@ -1,7 +1,7 @@
 {
-  "number": 4,
+  "number": 18,
   "topic": "Cash vs Profit",
-  "skill": "CSH",
+  "skill": "GRO",
   "opponent": "Ironbridge Rangers",
   "talk": "Profit is the scoreline and cash is your fitness. You can be winning on the P&L and still collapse because the bank account is empty. Clubs rarely die from losses, they die from running out of cash.",
   "terms": [
@@ -79,22 +79,22 @@
     {
       "prompt": "You have $6M in the bank and burn $500K a month. How many months of runway do you have?",
       "options": [
-        "6",
-        "12",
+        "24",
         "18",
-        "24"
+        "12",
+        "6"
       ],
-      "answer": 1,
+      "answer": 2,
       "hint": "Cash divided by monthly burn.",
       "working": [
         "$6M / $500K = 12 months.",
         "That's the number that tells you when you need to raise money or start winning."
       ],
       "whyNot": [
-        "After 6 months you've only burned 6 x $500K = $3M. Half your cash is still there.",
-        null,
+        "24 months would need 24 x $500K = $12M. Double what you have.",
         "18 months would need 18 x $500K = $9M in the bank. You have $6M.",
-        "24 months would need 24 x $500K = $12M. Double what you have."
+        null,
+        "After 6 months you've only burned 6 x $500K = $3M. Half your cash is still there."
       ],
       "kind": "calc",
       "calc": {

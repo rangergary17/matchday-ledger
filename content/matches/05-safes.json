@@ -1,0 +1,174 @@
+{
+  "number": 5,
+  "topic": "SAFEs",
+  "skill": "RAI",
+  "opponent": "Ashcombe Town",
+  "talk": "A SAFE (simple agreement for future equity) lets an investor give you money now and get shares later, at your next priced round. A valuation cap sets the most they'll pay, and a discount gives them a cheaper price than new investors. They get whichever deal is better for them.",
+  "terms": [
+    {
+      "term": "SAFE",
+      "meaning": "Money now, shares later, at the next priced round."
+    },
+    {
+      "term": "Valuation cap",
+      "meaning": "The highest valuation the SAFE turns into shares at."
+    },
+    {
+      "term": "Discount",
+      "meaning": "A percentage off the price new investors pay."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "An investor gives you $500,000 on a SAFE with a $5M post-money cap. If the next round values the club above $5M, what share does the SAFE turn into?",
+      "options": [
+        "50%",
+        "20%",
+        "10%",
+        "5%"
+      ],
+      "answer": 2,
+      "hint": "With a post-money cap, divide the money by the cap.",
+      "working": [
+        "$500,000 / $5M = 10%."
+      ],
+      "whyNot": [
+        "50% would mean the investor paid half the cap. They paid $500,000 / $5M = 10% of it.",
+        "20% is double the right answer. $500,000 / $5M = 10%.",
+        null,
+        "5% is half the right answer. $500,000 / $5M = 10%."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "inv": 500000,
+          "cap": 5000000
+        },
+        "formula": "inv / cap"
+      }
+    },
+    {
+      "prompt": "At the next round, new investors pay $2 a share. The SAFE has a 20% discount. What price does the SAFE investor pay with the discount?",
+      "options": [
+        "$0.40",
+        "$1.60",
+        "$2",
+        "$2.40"
+      ],
+      "answer": 1,
+      "hint": "Take 20% off $2.",
+      "working": [
+        "$2 x 20% = $0.40 off.",
+        "$2 - $0.40 = $1.60 a share."
+      ],
+      "whyNot": [
+        "$0.40 is the discount, not the price.",
+        null,
+        "$2 is what new investors pay. The SAFE gets 20% off.",
+        "$2 + $0.40 = $2.40 adds the discount. It comes off."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "price": 2,
+          "disc": 0.2
+        },
+        "formula": "price * (1 - disc)"
+      }
+    },
+    {
+      "prompt": "The cap works out at $1.25 a share and the discount at $1.60. What price does the SAFE investor get?",
+      "options": [
+        "$2.85",
+        "$2",
+        "$1.60",
+        "$1.25"
+      ],
+      "answer": 3,
+      "hint": "They get whichever is better for them.",
+      "working": [
+        "They get the lower of the two prices: $1.25.",
+        "For the same money they get $2 / $1.25 = 1.6 times as many shares as a new investor. That's their reward for backing you early."
+      ],
+      "whyNot": [
+        "$1.25 + $1.60 = $2.85 adds them. The investor gets the lower of the two, not the sum.",
+        "$2 is what new investors pay. SAFE investors are rewarded for coming in early.",
+        "$1.60 is higher than the cap price, so the investor takes the cap.",
+        null
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "cap": 1.25,
+          "disc": 1.6
+        },
+        "formula": "min(cap, disc)"
+      }
+    }
+  ],
+  "penalty": {
+    "where": [],
+    "vars": {
+      "inv": {
+        "value": 500000,
+        "min": 100000,
+        "max": 2000000,
+        "step": 100000,
+        "fmt": "usd"
+      },
+      "cap": {
+        "value": 5000000,
+        "min": 2000000,
+        "max": 20000000,
+        "step": 1000000,
+        "fmt": "usd"
+      }
+    },
+    "prompt": "An investor puts {inv} into a SAFE with a {cap} post-money cap. What share of the club does it turn into? (As a percentage.)",
+    "answer": "inv / cap",
+    "fmt": "pct",
+    "whole": 0.01,
+    "tol": 0.25,
+    "hint": "With a post-money cap, divide the money by the cap.",
+    "working": [
+      "{inv} / {cap} = {inv / cap|pct}."
+    ],
+    "traps": [
+      {
+        "formula": "inv / (cap + inv)",
+        "why": "That treats the cap as a pre-money. With a post-money cap, divide by the cap itself."
+      }
+    ]
+  },
+  "call": {
+    "title": "Money for the pitch",
+    "prompt": "The pitch must be repaired in the next month or matches get cancelled. It costs $1M. Option one: a SAFE with a $10M cap. Option two: a SAFE with a $4M cap from an investor who can wire money today. Option three: a priced round at a $6M pre-money, which takes six weeks and $50,000 of legal fees, closing a stand while you wait.",
+    "options": [
+      {
+        "label": "SAFE with a $10M cap",
+        "effects": {
+          "dilute": 0.1
+        },
+        "result": "Good call. At most $1M / $10M = 10% of the club, and the money arrives this week."
+      },
+      {
+        "label": "SAFE with a $4M cap",
+        "effects": {
+          "dilute": 0.25
+        },
+        "result": "$1M / $4M = 25% for the same money. A low cap is an expensive way to raise fast."
+      },
+      {
+        "label": "Priced round at $6M pre-money",
+        "effects": {
+          "dilute": 0.142857,
+          "cash": -50000,
+          "fans": -300
+        },
+        "result": "$6M + $1M = $7M post-money, so $1M / $7M = about 14%, plus $50,000 of legal fees and a closed stand while you wait."
+      }
+    ],
+    "best": 0
+  },
+  "takeaway": "A SAFE turns into shares later. A high cap is good for you, a low cap is good for the investor."
+}

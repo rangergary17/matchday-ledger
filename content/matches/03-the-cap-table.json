@@ -1,0 +1,197 @@
+{
+  "number": 3,
+  "topic": "The Cap Table",
+  "skill": "RAI",
+  "opponent": "Copperfield Rovers",
+  "talk": "A cap table (short for capitalization table) is the list of who owns what. Ownership is the shares you hold divided by all the shares that exist. Investors read it before almost anything else, so keep it clean.",
+  "terms": [
+    {
+      "term": "Cap table",
+      "meaning": "The list of every owner and how many shares they hold."
+    },
+    {
+      "term": "Shares outstanding",
+      "meaning": "The total number of shares that exist."
+    },
+    {
+      "term": "Fully diluted",
+      "meaning": "Counting every share that could exist, including options promised to staff."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "The club has 8M shares. You hold 6M and your co-founder holds 2M. An investor buys 2M new shares. What do you own now?",
+      "options": [
+        "80%",
+        "75%",
+        "60%",
+        "50%"
+      ],
+      "answer": 2,
+      "hint": "Your shares divided by the new total.",
+      "working": [
+        "8M + 2M = 10M shares in total.",
+        "6M / 10M = 60%."
+      ],
+      "whyNot": [
+        "8M / 10M = 80% is what you and your co-founder own together.",
+        "6M / 8M = 75% was your share before the investor came in.",
+        null,
+        "(6M - 2M) / 8M = 50% takes the investor's shares out of yours. New shares are created, not taken from you."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "mine": 6000000,
+          "total": 8000000,
+          "added": 2000000
+        },
+        "formula": "mine / (total + added)"
+      }
+    },
+    {
+      "prompt": "The investor paid $1 a share. What's the club's post-money valuation?",
+      "options": [
+        "$2M",
+        "$8M",
+        "$10M",
+        "$12M"
+      ],
+      "answer": 2,
+      "hint": "Every share times the price the investor paid.",
+      "working": [
+        "10M x $1 = $10M."
+      ],
+      "whyNot": [
+        "$2M is what the investor paid. Value every share at the same price.",
+        "8M x $1 = $8M is the pre-money: the shares before the round.",
+        null,
+        "12M shares don't exist. There are 8M + 2M = 10M."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "shares": 10000000,
+          "price": 1
+        },
+        "formula": "shares * price"
+      }
+    },
+    {
+      "prompt": "Before the round, the club also promised staff options on 1M more shares. Counting those (fully diluted), what do you own?",
+      "options": [
+        "About 50%",
+        "About 55%",
+        "60%",
+        "About 67%"
+      ],
+      "answer": 1,
+      "hint": "Add the promised shares to the total.",
+      "working": [
+        "8M + 2M + 1M = 11M shares fully diluted.",
+        "6M / 11M = about 55%."
+      ],
+      "whyNot": [
+        "(6M - 1M) / 10M = 50% takes the staff options from you alone. They dilute everyone.",
+        null,
+        "60% ignores the staff options. Fully diluted counts every promised share.",
+        "6M / (8M + 1M) = about 67% leaves out the investor's 2M shares."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "mine": 6000000,
+          "total": 11000000
+        },
+        "formula": "mine / total"
+      }
+    }
+  ],
+  "penalty": {
+    "where": [
+      "total > mine"
+    ],
+    "vars": {
+      "mine": {
+        "value": 6000000,
+        "min": 1000000,
+        "max": 8000000,
+        "step": 1000000,
+        "fmt": "int"
+      },
+      "total": {
+        "value": 8000000,
+        "min": 5000000,
+        "max": 10000000,
+        "step": 1000000,
+        "fmt": "int"
+      },
+      "added": {
+        "value": 2000000,
+        "min": 1000000,
+        "max": 4000000,
+        "step": 1000000,
+        "fmt": "int"
+      }
+    },
+    "prompt": "The club has {total} shares and you hold {mine}. An investor buys {added} new shares. What do you own now? (As a percentage.)",
+    "answer": "mine / (total + added)",
+    "fmt": "pct",
+    "whole": 0.01,
+    "tol": 0.25,
+    "hint": "Your shares divided by the new total.",
+    "working": [
+      "{total} + {added} = {total + added|int} shares.",
+      "{mine} / {total + added|int} = {mine / (total + added)|pct}."
+    ],
+    "traps": [
+      {
+        "formula": "mine / total",
+        "why": "That's before the new shares. Divide by the new total: {total + added|int}."
+      },
+      {
+        "formula": "total / (total + added)",
+        "why": "That's every owner before the round together, not just you."
+      }
+    ]
+  },
+  "call": {
+    "title": "The messy cap table",
+    "prompt": "Years ago an early helper was promised 5% of the club and hasn't been involved since. A lawyer can buy those shares back now for $200,000. Investors in the next round say a messy cap table will knock $1M off their offer.",
+    "options": [
+      {
+        "label": "Buy the shares back",
+        "effects": {
+          "cash": -200000
+        },
+        "result": "Good call. $1M - $200,000 = $800,000 better than letting investors price in the mess."
+      },
+      {
+        "label": "Leave it",
+        "effects": {},
+        "result": "Investors price in the mess, and $1M / $200,000 = 5 times what fixing it would have cost.",
+        "later": {
+          "after": 3,
+          "text": "The new investors knock $1M off their offer because of the messy cap table.",
+          "effects": {
+            "cash": -1000000
+          }
+        }
+      },
+      {
+        "label": "Offer the helper a new deal to earn the shares",
+        "effects": {},
+        "result": "A halfway fix still worries investors.",
+        "later": {
+          "after": 3,
+          "text": "The new deal falls apart. Investors still knock $500,000 off.",
+          "effects": {
+            "cash": -500000
+          }
+        }
+      }
+    ],
+    "best": 0
+  },
+  "takeaway": "Your share = your shares / all the shares that exist, including ones promised to staff."
+}

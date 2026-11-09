@@ -1,0 +1,165 @@
+{
+  "number": 7,
+  "topic": "Vesting and Cliffs",
+  "skill": "TRM",
+  "opponent": "Larkspur United",
+  "talk": "Vesting means you earn your shares over time instead of getting them all on day one. The usual deal is 4 years with a 1-year cliff: nothing until the first anniversary, then a quarter, then the rest month by month. It protects everyone if someone leaves early.",
+  "terms": [
+    {
+      "term": "Vesting",
+      "meaning": "Earning your shares over time."
+    },
+    {
+      "term": "Cliff",
+      "meaning": "The waiting period before any shares are earned."
+    },
+    {
+      "term": "Unvested shares",
+      "meaning": "Shares not earned yet. The company gets them back if you leave."
+    }
+  ],
+  "questions": [
+    {
+      "prompt": "A new head coach gets 48,000 shares, vesting over 4 years with a 1-year cliff. They leave after 10 months. How many shares have they earned?",
+      "options": [
+        "0",
+        "10,000",
+        "12,000",
+        "48,000"
+      ],
+      "answer": 0,
+      "hint": "Has the cliff passed?",
+      "working": [
+        "10 months is before the 1-year cliff.",
+        "Before the cliff, nothing is earned: 0 shares."
+      ],
+      "whyNot": [
+        null,
+        "That counts monthly vesting from day one: 4 x 12 = 48 months, and 48,000 / 48 x 10 = 10,000. The cliff means nothing vests in the first year until the anniversary.",
+        "48,000 / 4 = 12,000 is what vests at the 1-year cliff. They left 2 months short.",
+        "48,000 is the full grant, earned only after 4 years."
+      ],
+      "kind": "concept"
+    },
+    {
+      "prompt": "Another coach with the same deal leaves after exactly 2 years. How many of their 48,000 shares have vested?",
+      "options": [
+        "12,000",
+        "24,000",
+        "36,000",
+        "48,000"
+      ],
+      "answer": 1,
+      "hint": "What share of the 4 years have they worked?",
+      "working": [
+        "2 years out of 4 is half.",
+        "48,000 x 2 / 4 = 24,000."
+      ],
+      "whyNot": [
+        "12,000 is just the cliff amount. Vesting carries on month by month after year one.",
+        null,
+        "48,000 x 3 / 4 = 36,000 is 3 years.",
+        "Full vesting takes 4 years."
+      ],
+      "kind": "calc",
+      "calc": {
+        "vars": {
+          "grant": 48000,
+          "years": 2
+        },
+        "formula": "grant * years / 4"
+      }
+    },
+    {
+      "prompt": "Why do investors want founders on vesting too?",
+      "options": [
+        "So a founder who leaves early doesn't keep a big stake for free",
+        "To lower the valuation",
+        "Because the law requires it",
+        "So founders pay less tax"
+      ],
+      "answer": 0,
+      "hint": "Think about a co-founder who quits in month 3.",
+      "working": [
+        "If a co-founder quits early with a big stake, everyone still working carries a passenger.",
+        "Vesting means shares are earned by staying and building."
+      ],
+      "whyNot": [
+        null,
+        "Vesting doesn't change the valuation. It changes who earns the shares.",
+        "It's a contract term, not a law.",
+        "Vesting is about earning shares, not about tax."
+      ],
+      "kind": "concept"
+    }
+  ],
+  "penalty": {
+    "where": [
+      "whole: grant * months / 48"
+    ],
+    "vars": {
+      "grant": {
+        "value": 48000,
+        "min": 12000,
+        "max": 96000,
+        "step": 12000,
+        "fmt": "int"
+      },
+      "months": {
+        "value": 24,
+        "min": 12,
+        "max": 47,
+        "step": 1,
+        "fmt": "int"
+      }
+    },
+    "prompt": "A coach gets {grant} shares vesting over 4 years (48 months) with a 1-year cliff. They leave after {months} months. How many shares have vested?",
+    "answer": "grant * months / 48",
+    "fmt": "int",
+    "whole": 1,
+    "hint": "After the cliff, shares vest month by month over 48 months.",
+    "working": [
+      "{months} months is past the 1-year cliff, so vesting counts from the start.",
+      "{grant} x {months} / 48 = {grant * months / 48|int} shares."
+    ],
+    "traps": [
+      {
+        "formula": "grant / 4",
+        "why": "That's only the cliff amount. Vesting continues month by month after year one."
+      },
+      {
+        "formula": "grant",
+        "why": "Full vesting takes 48 months."
+      }
+    ]
+  },
+  "call": {
+    "title": "Your co-founder wants out",
+    "prompt": "Your co-founder owns 30% of the club and wants to leave after 8 months. There's no vesting agreement. Replacing them means giving a new hire 10% of the club, unless you get shares back to use.",
+    "options": [
+      {
+        "label": "Let them keep all 30%",
+        "effects": {
+          "dilute": 0.1
+        },
+        "result": "They walk off with 30% for 8 months of work, and you hand over 10% more to hire their replacement."
+      },
+      {
+        "label": "Negotiate: they keep 5%, the rest comes back",
+        "effects": {
+          "cash": -50000
+        },
+        "result": "Good call. 30% - 5% = 25% comes back, so you can hire the replacement without new dilution. $50,000 of legal fees is cheap next to 10% of the club. Next time, put everyone on vesting."
+      },
+      {
+        "label": "Hire a replacement on a bigger salary instead",
+        "effects": {
+          "fixed": 5000
+        },
+        "result": "$5,000 a matchday adds up fast, and they still keep 30% of the club for 8 months of work."
+      }
+    ],
+    "best": 1
+  },
+  "takeaway": "Shares should be earned. 4 years with a 1-year cliff is the standard."
+}

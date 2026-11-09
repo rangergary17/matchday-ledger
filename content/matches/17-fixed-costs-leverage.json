@@ -1,5 +1,5 @@
 {
-  "number": 10,
+  "number": 17,
   "topic": "Fixed Costs & Leverage",
   "skill": "PRF",
   "opponent": "Marrowgate FC",
@@ -81,12 +81,12 @@
     {
       "prompt": "A cup run lifts revenue 10% to $8.8M. How much does profit grow?",
       "options": [
-        "10%",
-        "48%",
+        "100%",
         "60%",
-        "100%"
+        "48%",
+        "10%"
       ],
-      "answer": 2,
+      "answer": 1,
       "hint": "Work out the new profit and compare it to $0.8M.",
       "working": [
         "$8.8M x 60% = $5.28M.",
@@ -95,10 +95,10 @@
         "A 10% rise in revenue gave a 60% rise in profit. That's leverage."
       ],
       "whyNot": [
-        "Profit would only grow 10% if every cost grew with revenue. Fixed costs stay at $4M, so profit jumps much faster.",
-        "$1.28M - $0.8M = $0.48M is the extra profit in dollars. As a share of the old $0.8M it's 60%.",
+        "Doubling would mean 2 x $0.8M = $1.6M of profit. You made $1.28M.",
         null,
-        "Doubling would mean 2 x $0.8M = $1.6M of profit. You made $1.28M."
+        "$1.28M - $0.8M = $0.48M is the extra profit in dollars. As a share of the old $0.8M it's 60%.",
+        "Profit would only grow 10% if every cost grew with revenue. Fixed costs stay at $4M, so profit jumps much faster."
       ],
       "kind": "calc",
       "calc": {
