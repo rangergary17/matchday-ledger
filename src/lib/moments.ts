@@ -15,11 +15,18 @@ export interface MomentDef {
   quip: string;
   /** Optional video clip in public/moments/. Plays instead of the drawn scene when it loads in time. */
   video?: string;
+  /** For a clip: when the ball hits the net (or the bad moment lands), in ms. */
+  beat?: number;
+  /** For a clip: how long the moment stays up, in ms. */
+  length?: number;
+  /** Still frame shown when a clip-only moment cannot play its clip. */
+  poster?: string;
 }
 
 export const MOMENTS: MomentDef[] = [
   { id: "thunderbolt", kind: "goal", title: "The captain's thunderbolt", quip: "Thirty-five yards, deep in stoppage time. Of course it was him." },
-  { id: "rain-slide", kind: "goal", title: "The rain slide", quip: "He has been praying for a wet pitch all season.", video: "rain-slide.mp4" },
+  { id: "rain-slide", kind: "goal", title: "The rain slide", quip: "He has been praying for a wet pitch all season.", video: "rain-slide.mp4", beat: 1200, length: 12000 },
+  { id: "into-the-crowd", kind: "goal", title: "Into the crowd", quip: "He scored for them. Now he belongs to them.", video: "into-the-crowd.mp4", beat: 1100, length: 8000, poster: "into-the-crowd.jpg" },
   { id: "overhead", kind: "goal", title: "The overhead", quip: "Upside down, back to goal, top corner. Physics was consulted afterwards." },
   { id: "the-chip", kind: "goal", title: "The chip", quip: "The keeper went early. The ball took its time." },
   { id: "the-slip", kind: "concede", title: "The slip", quip: "Rain, a final, the winning kick. The grass had other plans." },

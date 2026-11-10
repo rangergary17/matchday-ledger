@@ -27,42 +27,52 @@ function Confetti() {
 }
 
 export function Moment({ moment, onDone }: { moment: MomentDef; onDone: () => void }) {
-  useEffect(() => {
-    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const id = setTimeout(onDone, reduced ? 2000 : 3400);
-    const key = (e: KeyboardEvent) => { if (e.key === "Escape" || e.key === "Enter" || e.key === " ") onDone(); };
-    window.addEventListener("keydown", key);
-    return () => { clearTimeout(id); window.removeEventListener("keydown", key); };
-  }, [onDone]);
   const Scene = SCENES[moment.id];
   const clip = useClip(moment.video);
   const goal = moment.kind === "goal";
+  // With a clip, the overlay waits for the clip's own beat (the ball hitting the net),
+  // then mounts fresh so its CSS timings (tuned for a beat at 1.1s) line up.
+  const [fx, setFx] = useState<"show" | "hold">("show");
+  const [fxKey, setFxKey] = useState(0);
+  useEffect(() => {
+    if (!clip.ready) return;
+    setFx("hold");
+    const id = setTimeout(() => { setFx("show"); setFxKey((k) => k + 1); }, Math.max(0, (moment.beat ?? 1100) - 1100));
+    return () => clearTimeout(id);
+  }, [clip.ready, moment.beat]);
+  useEffect(() => {
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const ms = reduced ? 2000 : clip.ready ? moment.length ?? 3400 : 3400;
+    const id = setTimeout(onDone, ms);
+    const key = (e: KeyboardEvent) => { if (e.key === "Escape" || e.key === "Enter" || e.key === " ") onDone(); };
+    window.addEventListener("keydown", key);
+    return () => { clearTimeout(id); window.removeEventListener("keydown", key); };
+  }, [onDone, clip.ready, moment.length]);
   return (
     <div className={`moment ${moment.kind} m-${moment.id}${clip.ready ? " has-clip" : ""}`} onClick={onDone} role="status">
       <div className="cam">
-        {Scene && <Scene />}
+        {Scene ? <Scene /> : moment.poster && <img className="moment-poster" src={`/moments/${moment.poster}`} alt="" />}
         {clip.src && <video ref={clip.ref} className={`moment-video${clip.ready ? " on" : ""}`} src={clip.src} muted playsInline autoPlay preload="auto" onPlaying={clip.onPlaying} onError={clip.fail} />}
       </div>
       <div className="vignette" />
-      <div className="flash" />
-      {goal && <Confetti />}
-      <div className="moment-text">
-        <span className="slam" data-text={goal ? "Goal" : "Conceded"}>{goal ? "Goal" : "Conceded"}</span>
-        <div className="moment-cap">
-          <b>{moment.title}</b>
-          <span>{moment.quip}</span>
+      {fx === "show" && (
+        <div className="moment-fx" key={fxKey}>
+          <div className="flash" />
+          {goal && <Confetti />}
+          <div className="moment-text">
+            <span className="slam" data-text={goal ? "Goal" : "Conceded"}>{goal ? "Goal" : "Conceded"}</span>
+            <div className="moment-cap">
+              <b>{moment.title}</b>
+              <span>{moment.quip}</span>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
       <span className="moment-skip" aria-hidden="true">Tap to skip</span>
     </div>
   );
 }
 
-/**
- * A clip only takes over if it starts playing within 300ms; otherwise the
- * drawn scene plays and the clip is dropped. Skipped for reduced motion
- * and data saver.
- */
 function useClip(video?: string) {
   const ref = useRef<HTMLVideoElement>(null);
   const [state, setState] = useState<"wait" | "on" | "off">("wait");

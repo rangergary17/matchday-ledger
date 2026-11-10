@@ -3,28 +3,37 @@
 Eight short clips, one per moment. Each replaces the drawn version in the
 game when it loads in time; the drawn version stays as the fallback.
 
+## Direction (updated)
+
+- **Era:** 1970s and 1980s. Period TV broadcast look: film grain, soft
+  focus, muted colour, hazy floodlights, muddy pitches, terraced
+  standing crowds. Retro kits: tight cotton shirts with wide collars,
+  very short shorts, socks rolled down. Perms, mullets, moustaches.
+- **Realistic, not cartoon.** Every player is an original, made-up
+  face, never based on a real person.
+- **Story, not a pose.** The goal goes in, the scorer runs, the
+  celebration builds. About 8 seconds.
+- **Human connection.** Every clip ends on people together.
+  Goals: teammates pile on, strangers hug on the terraces. Concedes:
+  a teammate pulls the player up or puts an arm round him; fans
+  console each other.
+
 ## Rules for every clip
 
-- **Characters:** use the reference images in `docs/cast/` (one per
-  character, front and side view). Original characters only. Never upload
-  photos of real players, and never name a real player, club or
-  competition in a prompt.
-- **Kit:** our team wears green shirts with white trim, white shorts,
+- **Characters:** original, made-up people only. Never upload photos of
+  real players, and never name a real player, club or competition in a
+  prompt. (The drawings in `docs/cast/` are for the drawn fallback.)
+- **Kit:** our team wears green shirts with a white collar, white shorts,
   green socks. Opponents wear grey. The referee wears black. No logos or
   sponsor text.
-- **Format:** portrait 9:16, 1080 x 1920, 3.5 seconds (5 seconds is fine,
-  I will trim), no sound, no text or captions in the video.
+- **Format:** portrait 9:16, about 8 seconds, no sound, no text or captions in the video.
 - **Framing:** keep the action in the middle of the frame. The top
   third gets covered by "GOAL" or "CONCEDED" from about 1.1 seconds on,
   so keep faces below it in the final shot.
-- **Timing:** the game's effects are fixed to these beats.
-  - Goals: the ball hits the net at about **1.1 seconds**. Hold the
-    celebration until the end.
-  - Concedes: the bad moment lands at about **1.15 seconds**, a second
-    angry beat (a slam, a stamp) at about **1.95 seconds**.
-- **Look:** night match, floodlights, rain where noted, broadcast camera
-  feel, shallow depth of field on close-ups. Pick one style (stylised 3D
-  animation works best with the references) and keep it for all eight.
+- **Timing:** each clip records its own beat (when the ball goes in)
+  in `src/lib/moments.ts`, and the game lands "GOAL" on it.
+- **Look:** night match, floodlights, rain where noted, period broadcast
+  camera. Same look for all eight.
 - **File names:** save as `<name>.mp4` using the names below and drop them
   in `public/moments/`.
 
