@@ -38,7 +38,7 @@ export function Moment({ moment, onDone }: { moment: MomentDef; onDone: () => vo
   const clip = useClip(moment.video);
   const goal = moment.kind === "goal";
   return (
-    <div className={`moment ${moment.kind} m-${moment.id}`} onClick={onDone} role="status">
+    <div className={`moment ${moment.kind} m-${moment.id}${clip.ready ? " has-clip" : ""}`} onClick={onDone} role="status">
       <div className="cam">
         {Scene && <Scene />}
         {clip.src && <video ref={clip.ref} className={`moment-video${clip.ready ? " on" : ""}`} src={clip.src} muted playsInline autoPlay preload="auto" onPlaying={clip.onPlaying} onError={clip.fail} />}

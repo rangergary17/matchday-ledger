@@ -369,6 +369,9 @@ table.league { width: 100%; border-collapse: collapse; font-size: 15px; font-var
 .stadium { width: 100%; height: 100%; display: block; }
 .moment-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; }
 .moment-video.on { opacity: 1; }
+/* Filmed clips keep faces in the top half, so the text moves to the bottom. */
+.moment.has-clip .moment-text { top: auto; bottom: max(9vh, 64px); }
+.moment.has-clip .vignette { background: linear-gradient(to top, rgba(0,0,0,0.7), transparent 45%); }
 @media (min-aspect-ratio: 1/1) { .moment-video { object-fit: contain; background: #030b07; } }
 .vignette { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 80% 70% at 50% 60%, transparent 40%, rgba(0,0,0,0.55) 100%); }
 .flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
