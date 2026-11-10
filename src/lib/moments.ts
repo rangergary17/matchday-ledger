@@ -25,7 +25,7 @@ export interface MomentDef {
 
 export const MOMENTS: MomentDef[] = [
   { id: "thunderbolt", kind: "goal", title: "The captain's thunderbolt", quip: "Thirty-five yards, deep in stoppage time. Of course it was him." },
-  { id: "rain-slide", kind: "goal", title: "The rain slide", quip: "He has been praying for a wet pitch all season.", video: "rain-slide.mp4", beat: 1200, length: 12000 },
+  { id: "rain-slide", kind: "goal", title: "The knee slide", quip: "Forty yards of perfect grass, and he used every blade.", video: "rain-slide.mp4", beat: 1100, length: 12600 },
   { id: "into-the-crowd", kind: "goal", title: "Into the crowd", quip: "He scored for them. Now he belongs to them.", video: "into-the-crowd.mp4", beat: 1100, length: 8000, poster: "into-the-crowd.jpg" },
   { id: "overhead", kind: "goal", title: "The overhead", quip: "Upside down, back to goal, top corner. Physics was consulted afterwards." },
   { id: "the-chip", kind: "goal", title: "The chip", quip: "The keeper went early. The ball took its time." },

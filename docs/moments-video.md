@@ -5,9 +5,10 @@ game when it loads in time; the drawn version stays as the fallback.
 
 ## Direction (updated)
 
-- **Era:** 1970s and 1980s. Period TV broadcast look: film grain, soft
-  focus, muted colour, hazy floodlights, muddy pitches, terraced
-  standing crowds. Retro kits: tight cotton shirts with wide collars,
+- **Era:** 1970s and 1980s players, staged like a cup final at its most
+  glorious: sunlit, sharp, saturated colour, blue sky, an immaculate
+  striped pitch, a packed stadium, flags and ticker tape. Never muddy,
+  grey or dull. Retro kits: tight cotton shirts with wide collars,
   very short shorts, socks rolled down. Perms, mullets, moustaches.
 - **Realistic, not cartoon.** Every player is an original, made-up
   face, never based on a real person.
@@ -32,8 +33,7 @@ game when it loads in time; the drawn version stays as the fallback.
   so keep faces below it in the final shot.
 - **Timing:** each clip records its own beat (when the ball goes in)
   in `src/lib/moments.ts`, and the game lands "GOAL" on it.
-- **Look:** night match, floodlights, rain where noted, period broadcast
-  camera. Same look for all eight.
+- **Look:** vivid, sharp, sunlit cup final. Same look for every clip.
 - **File names:** save as `<name>.mp4` using the names below and drop them
   in `public/moments/`.
 
