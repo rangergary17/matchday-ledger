@@ -80,7 +80,7 @@ function useClip(video?: string) {
     || Boolean((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData);
   useEffect(() => {
     if (skip) return;
-    const id = setTimeout(() => setState((s) => (s === "wait" ? "off" : s)), 300);
+    const id = setTimeout(() => setState((s) => (s === "wait" ? "off" : s)), 600);
     return () => clearTimeout(id);
   }, [skip]);
   useEffect(() => { if (state === "off") ref.current?.pause(); }, [state]);

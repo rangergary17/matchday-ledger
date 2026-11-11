@@ -25,7 +25,7 @@ import { CardView } from "./ui/CardView";
 import { Intro } from "./ui/Intro";
 import { TabBar, type Tab } from "./ui/TabBar";
 import { Moment } from "./ui/Moment";
-import { pickMoment, previewMoment, type MomentDef } from "./lib/moments";
+import { pickMoment, previewMoment, warmClips, type MomentDef } from "./lib/moments";
 import { CastSheet, castParam } from "./ui/moments/CastSheet";
 import { reducedMotion } from "./ui/fmt";
 
@@ -127,6 +127,12 @@ function Game() {
     if (play.kind === "replay") return;
     update({ ...data, progress: { day: play.day, date: play.date, match: matches[play.matchIndex].number, kind: play.kind, goals: play.goals, hints: play.hints } });
   }
+
+  // Warm the clips this chance (or the penalty) could trigger.
+  useEffect(() => {
+    if (screen.s === "chance") warmClips(`${today.date}:${seed(screen.play)}:${screen.q}`);
+    if (screen.s === "penalty") warmClips(`${today.date}:${seed(screen.play)}:pen`);
+  }, [screen, today.date]);
 
   function celebrate(goal: boolean, seed?: string) {
     if (seed) setMoment(pickMoment(goal ? "goal" : "concede", seed));
